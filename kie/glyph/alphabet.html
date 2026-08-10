@@ -178,6 +178,8 @@ body {
 .pip-mid { background: #eaf3de; color: #2d6a2d; }
 .pip-high { background: #e8eef8; color: #1e3a6e; }
 .pip-low { background: #fbf0e8; color: #7a4010; }
+/* numerals have no consonant class — neutral gold pip instead */
+.pip-num { background: var(--gold-light); color: #7a5410; }
 
 /* ── CHOICES ── */
 .choices {
@@ -439,7 +441,11 @@ body {
   width: 44px;
   text-align: center;
   flex-shrink: 0;
+  white-space: nowrap;   /* keep two-glyph icons like ก–ฮ on one line */
 }
+
+/* two glyphs in one icon slot — shrink so they fit the 44px column */
+.option-icon.icon-pair { font-size: 22px; letter-spacing: -1px; }
 
 .option-text strong {
   display: block;
@@ -705,7 +711,7 @@ body {
 <div class="screen active" id="startScreen">
   <div class="start-thai">กขค</div>
   <div class="start-title">Learn Thai Script</div>
-  <div class="start-sub">Recognise all 44 consonants</div>
+  <div class="start-sub">Recognise all 44 consonants and the 10 numerals</div>
 
   <div class="start-options">
     <div class="option-card selected" data-mode="all" onclick="selectMode(this,'all')">
@@ -734,6 +740,20 @@ body {
       <div class="option-text">
         <strong>Low class</strong>
         <span>24 characters</span>
+      </div>
+    </div>
+    <div class="option-card" data-mode="num" onclick="selectMode(this,'num')">
+      <div class="option-icon">๓</div>
+      <div class="option-text">
+        <strong>Numerals ๐–๙</strong>
+        <span>10 characters · digits and their names</span>
+      </div>
+    </div>
+    <div class="option-card" data-mode="everything" onclick="selectMode(this,'everything')">
+      <div class="option-icon icon-pair">ก๙</div>
+      <div class="option-text">
+        <strong>Everything</strong>
+        <span>All 54 characters · consonants and numerals</span>
       </div>
     </div>
   </div>
@@ -883,7 +903,9 @@ function speakText(text) {
 
 function speakCurrent() {
   if (!currentChar) return;
-  speakText(currentChar.th);
+  // A bare numeral glyph is read inconsistently by the speech engines, so speak
+  // the spelled-out Thai word instead. Consonants keep speaking the glyph.
+  speakText(currentChar.cls === 'num' ? currentChar.word : currentChar.th);
 }
 
 function speakExample() {
@@ -978,6 +1000,28 @@ const CHARS = [
   {th:'ฅ',rom:'kh',cls:'low',mean:'person',phon:'khɔɔ khon',word:'คน'},
 ];
 
+// Thai numerals ๐–๙. Same shape as CHARS so every game mode works unchanged:
+//   rom  = the Arabic digit, used as the prompt in "Sound → Thai" mode
+//   phon = the spoken name, used as the answer in "Thai → Name" mode
+//   mean = the value in English, used in "Thai → Meaning" mode
+//   word = the number spelled out in Thai, shown and spoken in the feedback panel
+// Data matches REF.numerals / NUMS in kie/glyph.html — keep the two in step.
+const NUMS = [
+  {th:'๐',rom:'0',cls:'num',mean:'zero',phon:'sǔun',word:'ศูนย์'},
+  {th:'๑',rom:'1',cls:'num',mean:'one',phon:'nɯ̀ng',word:'หนึ่ง'},
+  {th:'๒',rom:'2',cls:'num',mean:'two',phon:'sɔ̌ɔng',word:'สอง'},
+  {th:'๓',rom:'3',cls:'num',mean:'three',phon:'sǎam',word:'สาม'},
+  {th:'๔',rom:'4',cls:'num',mean:'four',phon:'sìi',word:'สี่'},
+  {th:'๕',rom:'5',cls:'num',mean:'five',phon:'hâa',word:'ห้า'},
+  {th:'๖',rom:'6',cls:'num',mean:'six',phon:'hòk',word:'หก'},
+  {th:'๗',rom:'7',cls:'num',mean:'seven',phon:'cèt',word:'เจ็ด'},
+  {th:'๘',rom:'8',cls:'num',mean:'eight',phon:'pɛ̀ɛt',word:'แปด'},
+  {th:'๙',rom:'9',cls:'num',mean:'nine',phon:'kâao',word:'เก้า'},
+];
+
+// true when an entry is a numeral rather than a consonant
+function isNum(c) { return c.cls === 'num'; }
+
 const TOTAL_Q = 20;
 let pool = [], weights = {}, questionMode = 'char';
 let currentChar = null, choices = [], answered = false;
@@ -993,8 +1037,10 @@ function selectMode(el, mode) {
 }
 
 function getPool() {
-  if (selectedSet === 'all') return CHARS;
-  return CHARS.filter(c => c.cls === selectedSet);
+  if (selectedSet === 'all') return CHARS;                 // the 44 consonants
+  if (selectedSet === 'num') return NUMS;                  // the 10 numerals
+  if (selectedSet === 'everything') return CHARS.concat(NUMS);  // all 54
+  return CHARS.filter(c => c.cls === selectedSet);         // mid / high / low
 }
 
 function startGame() {
@@ -1054,9 +1100,9 @@ function nextQuestion() {
 function renderQuestion() {
   const c = currentChar;
 
-  // Class pip
+  // Class pip — numerals have no consonant class, so label them plainly
   const pip = document.getElementById('classPip');
-  pip.textContent = c.cls + ' class';
+  pip.textContent = isNum(c) ? 'numeral' : c.cls + ' class';
   pip.className = 'class-pip pip-' + c.cls;
 
   // Question display & hint
@@ -1067,21 +1113,30 @@ function renderQuestion() {
   display.classList.add('pop');
 
   if (questionMode === 'romanize') {
-    // Show romanisation, pick the Thai
+    // Show romanisation, pick the Thai.
+    // For numerals rom is the Arabic digit, so this reads "3 → ๓" — set larger.
     display.style.fontFamily = "'Crimson Pro', Georgia, serif";
-    display.style.fontSize = '52px';
+    display.style.fontSize = isNum(c) ? '96px' : '52px';
     display.textContent = c.rom;
-    hint.textContent = 'Which Thai character makes this sound?';
+    hint.textContent = isNum(c)
+      ? 'Which Thai numeral is this?'
+      : 'Which Thai character makes this sound?';
   } else {
     display.style.fontFamily = '"Noto Sans Thai","Leelawadee UI","Angsana New",serif';
     display.style.fontSize = '120px';
     display.textContent = c.th;
-    if (questionMode === 'char') hint.textContent = 'What is this character called?';
-    else hint.textContent = 'What does this character\'s name mean?';
+    if (questionMode === 'char') {
+      hint.textContent = isNum(c) ? 'What is this numeral called?' : 'What is this character called?';
+    } else {
+      hint.textContent = isNum(c) ? 'What number is this?' : 'What does this character\'s name mean?';
+    }
   }
 
-  // Build 4 choices: 1 correct + 3 wrong
-  const others = pool.filter(x => x.th !== c.th);
+  // Build 4 choices: 1 correct + 3 wrong.
+  // In the mixed "Everything" set, keep distractors in the same family — offering
+  // consonants against a numeral would give the answer away.
+  const sameKind = pool.filter(x => x.th !== c.th && isNum(x) === isNum(c));
+  const others = sameKind.length >= 3 ? sameKind.slice() : pool.filter(x => x.th !== c.th);
   shuffle(others);
   const distractors = others.slice(0, 3);
   choices = shuffle([c, ...distractors]);
@@ -1216,7 +1271,8 @@ function showResults() {
   if (missed.length > 0) {
     document.getElementById('missSection').style.display = 'block';
     document.getElementById('missChars').innerHTML = missed.map(c =>
-      `<div class="miss-char" onclick="speakText('${c.th}')" title="Tap to hear">${c.th} <small>${c.phon}</small></div>`
+      // numerals speak their spelled-out word — see speakCurrent()
+      `<div class="miss-char" onclick="speakText('${isNum(c) ? c.word : c.th}')" title="Tap to hear">${c.th} <small>${c.phon}</small></div>`
     ).join('');
   } else {
     document.getElementById('missSection').style.display = 'none';

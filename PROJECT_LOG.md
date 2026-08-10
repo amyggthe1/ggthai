@@ -6,7 +6,7 @@ machine. For *how the stroke animations work*, read
 `README.md`. This file is the history and the to-do list.
 
 **Live:** http://gerardlam.free.fr/kie/ · entry point `home.html`
-**Last session:** 9 August 2026
+**Last session:** 10 August 2026
 
 ---
 
@@ -49,7 +49,7 @@ are excluded by `.gitignore` and must not be uploaded.
 | Consonants | 44 letters: stroke animation, tracing canvas, **recorded** pronunciation. |
 | Numerals ๐–๙ | 10 numerals: stroke animation from hand-traced paths. Synthesised audio. |
 | Vowels / tone marks | Reference tables only. No stroke data exists — see HANDOVER §5. |
-| Alphabet quiz | `kie/glyph/alphabet.html` (renamed from `game.html`). |
+| Alphabet quiz | `kie/glyph/alphabet.html` (renamed from `game.html`). Covers the 44 consonants **and** the 10 numerals. |
 | Landing page | `kie/home.html` + `manifest.webmanifest` for Add to Home Screen. |
 
 Published payload is roughly 22 MB, dominated by the stroke GIFs.
@@ -85,6 +85,30 @@ breaks it.
 ---
 
 ## History
+
+### Session 2 — 10 August 2026
+
+**Published to GitHub.** The site now also lives at
+https://github.com/amyggthe1/ggthai, public, with GitHub Pages serving
+https://amyggthe1.github.io/ggthai/. free.fr is unchanged and still live; this is
+an addition, not a migration. The repository root is the project folder, so the
+root `index.html` redirect is what makes the Pages address land on
+`kie/home.html`. `.nojekyll` must stay committed or the IPA-named stroke images
+404. Day-to-day updates are now GitHub Desktop: commit, then push.
+
+**Numerals added to the alphabet quiz** (`kie/glyph/alphabet.html` — hand-written,
+not generated, unlike `glyph.html`):
+- New `NUMS` array of ๐–๙ in the same shape as `CHARS`, so all three question
+  modes work without special-casing: `rom` holds the Arabic digit, `phon` the
+  spoken name, `mean` the value in English, `word` the number spelled out in Thai.
+  Values mirror `REF.numerals` in `glyph.html` — keep the two in step.
+- Two new sets on the start screen: **Numerals ๐–๙** (10) and **Everything** (54).
+  The existing "All consonants" still means the 44 consonants only.
+- In the mixed set, distractors are drawn from the same family as the question.
+  Offering consonants against a numeral gave the answer away.
+- Numerals speak their spelled-out word (สาม), not the glyph — speech engines read
+  a bare numeral inconsistently.
+- Class pip reads "numeral" instead of "<class> class", in a neutral gold.
 
 ### Session 1 — 9 August 2026
 
