@@ -229,9 +229,12 @@ const TABS = [
   ['vowels',  '#/vowels',            'Vowels',     REF.vowelCount],
   ['tones',   '#/tones',             'Tone marks', REF.tones.length],
   ['numbers', '#/numbers',           'Numbers',    NUMS.length || REF.numerals.length],
-  // Leaves the app: the recognition quiz is its own page, so it is marked with
-  // an arrow rather than pretending to be another section of this one.
-  ['quiz',    'glyph/alphabet.html', 'Alphabet quiz', null],
+  // Removed 10 Aug 2026: the "Alphabet quiz" tab next to Numbers. The game is
+  // still reachable from the top bar link and from home.html, so the duplicate
+  // tab was dropped. Previous version kept for reference:
+  //   // Leaves the app: the recognition quiz is its own page, so it is marked with
+  //   // an arrow rather than pretending to be another section of this one.
+  //   ['quiz',    'glyph/alphabet.html', 'Alphabet quiz', null],
 ];
 function tabBar(active){
   return '<nav class="tabs">' + TABS.map(([key,href,label,count]) => {

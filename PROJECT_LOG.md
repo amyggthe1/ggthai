@@ -88,6 +88,17 @@ breaks it.
 
 ### Session 2 — 10 August 2026
 
+**"Alphabet quiz" tab removed** from the section tab bar in `glyph.html`, so the
+bar is now Consonants / Vowels / Tone marks / Numbers only. It was the one tab
+that left the app, and the same game is already one click away from the top bar
+("🎮 Alphabet game") and from a card on `home.html`, so the tab was duplication.
+The edit was made in `glyph_project/scripts/build_index.py` — the source of truth,
+otherwise the next rebuild brings the tab back — with the old line kept commented
+out in place, and mirrored into `glyph_project/output/index.html` and
+`kie/glyph.html` so the artifacts match without a full rebuild. The `tab-ext` CSS
+and the `↗` handling in `tabBar()` were left alone: nothing uses them now, but
+they cost nothing and are needed again the moment an external tab returns.
+
 **Published to GitHub.** The site now also lives at
 https://github.com/amyggthe1/ggthai, public, with GitHub Pages serving
 https://amyggthe1.github.io/ggthai/. free.fr is unchanged and still live; this is
@@ -109,6 +120,25 @@ not generated, unlike `glyph.html`):
 - Numerals speak their spelled-out word (สาม), not the glyph — speech engines read
   a bare numeral inconsistently.
 - Class pip reads "numeral" instead of "<class> class", in a neutral gold.
+
+**Red pen dot restored on the numerals.** The numerals shipped without the pen
+marker; the switch is the `nodot` line in `data/numeral_strokes_metrics.txt`, which
+`generate_gifs.py` reads into `PEN_DOT`. That line is now commented out (kept in
+place, with a note, so the intent stays visible) and the ten GIFs were rebuilt:
+
+```bash
+cd glyph_project
+python scripts/generate_gifs.py numeral_strokes.txt output/thai_numeral_stroke_order
+cp output/thai_numeral_stroke_order/*.gif ../kie/glyph/thai_numeral_stroke_order/
+```
+
+Worth knowing for any future rebuild: running the generator with the metrics file
+untouched reproduced the shipped GIFs **byte for byte**, which is a cheap way to
+prove the toolchain still matches before changing anything. Only the 10 `.gif`
+files differ after the change — the posters and outlines are unchanged, because
+the pen marker is never drawn on the final composed frame. The numerals now match
+the consonants exactly: dot on all 68 animating frames, absent on the closing
+frame.
 
 **App icons.** `manifest.webmanifest` had no `icons` entry, so Chrome refused to
 offer installation at all and iOS fell back to a screenshot. Added `kie/icon-192.png`,
