@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Hobbies – งานอดิเรกของฉัน</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Source+Sans+3:wght@300;400;600;700&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --red:#c0392b; --dark:#1a1a1a; --gold:#d4a012; --cream:#fdf6ec;
+      --slate:#2c3e50; --lgray:#f0ede8; --teal:#1a7a6e; --yellow:#f9e04b; --blue:#2a5fa5;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Source Sans 3', sans-serif; background: var(--cream); color: var(--dark); line-height: 1.6; }
+    .hero { background: var(--dark); padding: 40px 60px; border-bottom: 5px solid var(--gold); }
+    .hero h1 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(2.4rem, 6vw, 4.5rem); color: #fff; letter-spacing: 4px; line-height: 1; }
+    .hero h2 { font-family: 'Playfair Display', serif; font-size: clamp(1rem, 2vw, 1.4rem); color: var(--gold); font-weight: 400; margin-top: 6px; font-style: italic; }
+    .section-title { font-family: 'Playfair Display', serif; font-size: 1.25rem; color: var(--slate); padding: 28px 0 12px; letter-spacing: 1px; border-bottom: 2px solid var(--gold); margin: 0 40px; }
+    .table-wrap { padding: 20px 40px 40px; overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; background: #fff; border-radius: 10px; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
+    thead tr { background: var(--slate); }
+    thead th { padding: 13px 18px; text-align: left; font-size: 0.76rem; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--yellow); }
+    tbody tr { border-bottom: 1px solid var(--lgray); transition: background 0.15s; }
+    tbody tr:last-child { border-bottom: none; }
+    tbody tr:hover { background: #fef9ee; }
+    td { padding: 12px 18px; vertical-align: middle; }
+    .col-thai { font-size: 1.05rem; font-weight: 600; color: var(--red); white-space: nowrap; }
+    .col-phonetic { font-size: 0.88rem; color: #555; font-style: italic; }
+    .col-fr { font-size: 0.93rem; font-weight: 600; color: var(--blue); }
+    .thai-row { display: flex; align-items: center; gap: 7px; }
+    .speak-btn { display: inline-flex; align-items: center; justify-content: center; background: none; border: none; cursor: pointer; padding: 3px; border-radius: 50%; color: var(--teal); opacity: 0.38; transition: opacity 0.2s, transform 0.15s; flex-shrink: 0; }
+    .speak-btn:hover { opacity: 1; transform: scale(1.2); }
+    .speak-btn.speaking { opacity: 1; animation: pulse 0.55s ease-in-out infinite alternate; }
+    @keyframes pulse { from { transform: scale(1); } to { transform: scale(1.3); } }
+    .grammar-wrap { padding: 20px 40px 40px; }
+    .grammar-note { background:#fffbeb; border-left:4px solid var(--gold); border-radius:6px; padding:14px 20px; margin-bottom:16px; font-size:0.93rem; }
+    .grammar-note strong { color: var(--slate); }
+    .grammar-table { width: 100%; border-collapse: collapse; margin-bottom: 18px; font-size: 0.93rem; background: #fff; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.06); }
+    .grammar-table th { background: var(--lgray); padding: 10px 14px; text-align: center; font-weight: 700; border: 1px solid #d8cfc4; font-size: 0.78rem; letter-spacing: 1px; text-transform: uppercase; color: var(--slate); }
+    .grammar-table td { padding: 10px 14px; text-align: center; border: 1px solid #e3ddd5; }
+    .grammar-table .row-thai td { font-weight: 600; color: var(--red); }
+    .grammar-table .row-fr td { color: var(--blue); font-style: italic; }
+    .grammar-table .thai-row { justify-content: center; }
+    .example { background:#eef4fb; border-left:4px solid #4a90d9; border-radius:6px; padding:14px 20px; margin-bottom:14px; font-size:0.93rem; }
+    .example .ex-thai { font-weight: 600; color: var(--red); }
+    .example .ex-fr { color: var(--blue); margin-top: 3px; font-style: italic; }
+    .convo { background:#fff; border-radius:10px; padding:18px 22px; margin:0 40px 24px; box-shadow:0 4px 20px rgba(0,0,0,0.06); }
+    .convo .turn { display:flex; gap:12px; padding:8px 0; border-bottom:1px dashed var(--lgray); }
+    .convo .turn:last-child { border-bottom: none; }
+    .convo .speaker { font-family:'Playfair Display', serif; color:var(--gold); font-weight:700; font-size:0.78rem; letter-spacing:1.5px; text-transform:uppercase; min-width:90px; padding-top:2px; }
+    .convo .line { flex:1; }
+    .convo .line .thai { color:var(--red); font-weight:600; display:flex; align-items:center; gap:7px; flex-wrap:wrap; }
+    .convo .line .phon { color:#555; font-style:italic; font-size:0.85rem; margin-top:2px; }
+    .convo .line .en   { color:var(--blue); font-style:italic; font-size:0.88rem; margin-top:3px; }
+    .exercises-wrap { padding: 4px 40px 40px; }
+    .exercise-list { list-style: none; counter-reset: ex; padding: 0; }
+    .exercise-list li { counter-increment: ex; background: #fff; border-left: 4px solid var(--gold); border-radius: 6px; padding: 14px 20px 14px 56px; margin-bottom: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); position: relative; font-size: 0.95rem; }
+    .exercise-list li::before { content: counter(ex, decimal-leading-zero); position: absolute; left: 16px; top: 14px; font-family: 'Playfair Display', serif; font-weight: 700; color: var(--gold); font-size: 1rem; letter-spacing: 1px; }
+    .exercise-list .prompt { color: var(--dark); font-weight:600; }
+    .exercise-list .ex-blank { display: block; margin-top: 8px; border-bottom: 1px dashed var(--lgray); min-height: 1.4em; }
+    hr { border: none; border-top: 2px solid var(--gold); margin: 6px 40px 24px; }
+    footer { background: var(--dark); color: #888; text-align: center; padding: 24px; font-size: 0.8rem; letter-spacing: 1px; }
+    footer span { color: var(--gold); }
+    footer a { color: var(--gold); text-decoration: none; font-weight: 600; }
+    .quiz-cta { display: inline-block; background: linear-gradient(135deg, var(--gold) 0%, var(--red) 100%); color: #fff; text-decoration: none; padding: 10px 22px; border-radius: 24px; font-family: 'Playfair Display', serif; font-size: 0.9rem; font-weight: 700; letter-spacing: 0.05em; margin-top: 1.2rem; box-shadow: 0 4px 14px rgba(212,160,18,0.35); transition: transform .15s, box-shadow .15s; }
+    .quiz-cta:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(212,160,18,0.5); }
+  </style>
+</head>
+<body>
+
+<section class="hero">
+  <h1>My Hobbies / งานอดิเรกของฉัน</h1>
+  <h2>ngaan a-di-réek khɔ̌ɔng chǎn &nbsp;·&nbsp; hobbies &amp; interests</h2>
+  <a href="index.html?source=Hobbies" class="quiz-cta">🎯 Take the quiz of this lesson →</a>
+</section>
+
+<h3 class="section-title">Vocabulary / คำศัพท์ – งานอดิเรก</h3>
+<div class="table-wrap">
+  <table>
+    <thead><tr><th>ภาษาไทย</th><th>Pronunciation</th><th>Translation</th></tr></thead>
+    <tbody id="tbody-vocab"></tbody>
+  </table>
+</div>
+<hr/>
+
+<h3 class="section-title">การ + verb / Noun prefix &nbsp;<small style="font-size:0.75em;opacity:0.6;">(p. 3)</small></h3>
+<div class="grammar-wrap">
+  <div class="grammar-note">
+    Putting <strong>การ (gaan)</strong> before a verb turns it into a noun — equivalent to English -ing.
+    So <em>tham aa-hǎan</em> ("to cook") becomes <em>gaan tham aa-hǎan</em> ("cooking").
+  </div>
+</div>
+<div class="table-wrap">
+  <table>
+    <thead><tr><th>ภาษาไทย</th><th>Pronunciation</th><th>Translation</th></tr></thead>
+    <tbody id="tbody-gaan"></tbody>
+  </table>
+</div>
+<hr/>
+
+<h3 class="section-title">Structure 2 / What do you like to do in your free time? &nbsp;<small style="font-size:0.75em;opacity:0.6;">(p. 4)</small></h3>
+<div class="grammar-wrap">
+  <table class="grammar-table">
+    <thead><tr><th>Subject</th><th>Verb</th><th>What?</th><th>When?</th></tr></thead>
+    <tbody>
+      <tr class="row-thai"><td>คุณ</td><td>ชอบทำ</td><td>อะไร</td><td>ในเวลาว่าง</td></tr>
+      <tr class="row-fr"><td>khun</td><td>chɔ̂ɔp tham</td><td>àrai</td><td>nai wee-laa wâang</td></tr>
+      <tr class="row-fr"><td>you</td><td>like to do</td><td>what</td><td>in your free time</td></tr>
+    </tbody>
+  </table>
+  <div class="example"><div class="ex-thai" data-speak="ฉันชอบอยู่บ้านและทำอาหารกับแฟน">chǎn chɔ̂ɔp yùu bâan lé tham aa-hǎan gàp fɛɛn</div><div class="ex-fr">I like to stay home and cook with my partner.</div></div>
+  <div class="example"><div class="ex-thai" data-speak="ผมไม่ค่อยมีเวลาว่างเพราะผมทำงานทุกวัน">phǒm mâi khɔ̂y mii wee-laa wâang phrɔ́ phǒm tham-ngaan thúk-wan</div><div class="ex-fr">I don't really have free time because I work every day.</div></div>
+  <div class="example"><div class="ex-thai" data-speak="พวกเราชอบไปเดินป่าและนอนเต็นท์เพราะมันผ่อนคลาย">phûak-rao chɔ̂ɔp bpai dern-bpàa lé non-dtén phrɔ́ man phɔ̀n-khlaay</div><div class="ex-fr">We like hiking and camping because it's relaxing.</div></div>
+  <div class="example"><div class="ex-thai" data-speak="แม่ชอบทำงานฝีมือกับเพื่อนบ้าน">mɛ̂ɛ chɔ̂ɔp tham-ngaan fii-mww gàp phɯ̂an-bâan</div><div class="ex-fr">Mum likes doing handicrafts with the neighbours.</div></div>
+</div>
+<hr/>
+
+<h3 class="section-title">Structure 3 / What sort of hobbies do you have? &nbsp;<small style="font-size:0.75em;opacity:0.6;">(p. 6)</small></h3>
+<div class="grammar-wrap">
+  <table class="grammar-table">
+    <thead><tr><th>Subject</th><th>Have</th><th>Hobby</th><th>What kind?</th></tr></thead>
+    <tbody>
+      <tr class="row-thai"><td>คุณ</td><td>มี</td><td>งานอดิเรก</td><td>อะไรบ้าง</td></tr>
+      <tr class="row-fr"><td>khun</td><td>mii</td><td>ngaan a-di-réek</td><td>àrai bâang</td></tr>
+      <tr class="row-fr"><td>you</td><td>have</td><td>hobbies</td><td>which ones</td></tr>
+    </tbody>
+  </table>
+  <div class="example"><div class="ex-thai" data-speak="งานอดิเรกของฉันคืออ่านการ์ตูน">ngaan a-di-réek khɔ̌ɔng chǎn keu àan gaa-dtuun</div><div class="ex-fr">My hobby is reading comics.</div></div>
+  <div class="example"><div class="ex-thai" data-speak="ผมมีงานอดิเรกหลายอย่าง เช่น สะสมเหรียญ เล่นเปียโน และตกปลา">phǒm mii ngaan a-di-réek lǎay yàang chên sà-sǒm rǐan lén bpia-noo lé dtòk bplaa</div><div class="ex-fr">I have several hobbies: collecting coins, playing piano, and fishing.</div></div>
+  <div class="example"><div class="ex-thai" data-speak="ฉันชอบเรียนภาษาที่สาม">chǎn chɔ̂ɔp rian phaa-sǎa thîi sǎam</div><div class="ex-fr">I like learning a third language.</div></div>
+  <div class="example"><div class="ex-thai" data-speak="ผมชอบดูยูทูปเกี่ยวกับการทำอาหาร">phǒm chɔ̂ɔp duu yuu-thúp gìaw-gàp gaan tham aa-hǎan</div><div class="ex-fr">I like watching YouTube about cooking.</div></div>
+</div>
+<hr/>
+
+<h3 class="section-title">Interests / ความสนใจ – categories &nbsp;<small style="font-size:0.75em;opacity:0.6;">(p. 7)</small></h3>
+<div class="table-wrap">
+  <table>
+    <thead><tr><th>ภาษาไทย</th><th>Pronunciation</th><th>Translation</th></tr></thead>
+    <tbody id="tbody-interests"></tbody>
+  </table>
+</div>
+<hr/>
+
+<h3 class="section-title">Structure 4 / What are you interested in? &nbsp;<small style="font-size:0.75em;opacity:0.6;">(p. 8)</small></h3>
+<div class="grammar-wrap">
+  <table class="grammar-table">
+    <thead><tr><th>Subject</th><th>Interested</th><th>About</th><th>What?</th></tr></thead>
+    <tbody>
+      <tr class="row-thai"><td>คุณ</td><td>สนใจ</td><td>เรื่อง / เกี่ยวกับ</td><td>อะไร</td></tr>
+      <tr class="row-fr"><td>khun</td><td>sǒn-jai</td><td>rûang / gìaw-gàp</td><td>àrai</td></tr>
+      <tr class="row-fr"><td>you</td><td>interested in</td><td>about / regarding</td><td>what</td></tr>
+    </tbody>
+  </table>
+  <div class="example"><div class="ex-thai" data-speak="ฉันสนใจเรื่องดนตรีไทยและการร้องเพลง">chǎn sǒn-jai rûang don-dtrii thai lé gaan rɔ́ɔng-phleeng</div><div class="ex-fr">I'm interested in Thai music and singing.</div></div>
+  <div class="example"><div class="ex-thai" data-speak="ผมสนใจเรื่องการเมืองและการทำงานจิตอาสา">phǒm sǒn-jai rûang gaan-mwang lé gaan-tham-ngaan jìt-aa-sǎa</div><div class="ex-fr">I'm interested in politics and volunteering.</div></div>
+  <div class="example"><div class="ex-thai" data-speak="ฉันสนใจเรื่องการลงทุน">chǎn sǒn-jai rûang gaan long-thun</div><div class="ex-fr">I'm interested in investment.</div></div>
+  <div class="example"><div class="ex-thai" data-speak="ฉันสนใจเรื่องประวัติศาสตร์เอเชียตะวันออกเฉียงใต้">chǎn sǒn-jai rûang bprà-wàt-sàat ee-chia dta-wan-ɔ̀ɔk chǐang-dtâai</div><div class="ex-fr">I'm interested in Southeast Asian history.</div></div>
+</div>
+<hr/>
+
+<h3 class="section-title">Conversation 1 / บทสนทนา &nbsp;<small style="font-size:0.75em;opacity:0.6;">(p. 9)</small></h3>
+<div class="convo" id="convo1"></div>
+<hr/>
+
+<h3 class="section-title">Structure 5 / น่า + verb &nbsp;<small style="font-size:0.75em;opacity:0.6;">(p. 10)</small></h3>
+<div class="grammar-wrap">
+  <div class="grammar-note">
+    Adding <strong>น่า (nâa)</strong> before a verb makes an adjective meaning <em>worth ___-ing</em> or <em>___-y / ___-able</em>.
+    So <em>sǒn-jai</em> ("to be interested") becomes <em>nâa sǒn-jai</em> ("interesting / worth interest").
+  </div>
+</div>
+<div class="table-wrap">
+  <table>
+    <thead><tr><th>ภาษาไทย</th><th>Pronunciation</th><th>Translation</th></tr></thead>
+    <tbody id="tbody-naa"></tbody>
+  </table>
+</div>
+<hr/>
+
+<h3 class="section-title">Exercise 3 / Translate into Thai &nbsp;<small style="font-size:0.75em;opacity:0.6;">(p. 11)</small></h3>
+<div class="exercises-wrap">
+  <ol class="exercise-list">
+    <li><span class="prompt">Cooking is interesting.</span><span class="ex-blank"></span></li>
+    <li><span class="prompt">Hiking is exciting.</span><span class="ex-blank"></span></li>
+    <li><span class="prompt">This cake looks tasty.</span><span class="ex-blank"></span></li>
+    <li><span class="prompt">Watching this movie is boring.</span><span class="ex-blank"></span></li>
+    <li><span class="prompt">Investing is worth learning.</span><span class="ex-blank"></span></li>
+  </ol>
+</div>
+
+<h3 class="section-title">Exercise 4 / Complete the conversation</h3>
+<div class="exercises-wrap">
+  <ol class="exercise-list">
+    <li><span class="prompt">A: คุณชอบทำอะไรในเวลาว่าง?  B: ______________</span><span class="ex-blank"></span></li>
+    <li><span class="prompt">A: คุณมีงานอดิเรกอะไรบ้าง?  B: ______________</span><span class="ex-blank"></span></li>
+    <li><span class="prompt">A: คุณสนใจเรื่องอะไร?  B: ______________</span><span class="ex-blank"></span></li>
+    <li><span class="prompt">A: ช่วงนี้คุณสนใจเรื่องอะไรบ้าง?  B: ______________</span><span class="ex-blank"></span></li>
+  </ol>
+</div>
+
+<footer>
+  <span>Lesson · Hobbies</span> &nbsp;·&nbsp; My Hobbies / งานอดิเรกของฉัน &nbsp;·&nbsp; <a href="lessons.html">← Back to lessons</a>
+</footer>
+
+<script>
+const vocab = [
+  { thai:"งานอดิเรก", phonemic:"(ngaan a-di-réek) ŋaːn ʔa.dì.rèːk", fr:"hobby" },
+  { thai:"เวลาว่าง", phonemic:"(wee-laa wâang) weː.laː wâːŋ", fr:"free time" },
+  { thai:"กิจกรรม", phonemic:"(gìt-ja-gam) kìt.ja.kam", fr:"activity" },
+  { thai:"สนใจ", phonemic:"(sǒn-jai) sǒn.tɕaj", fr:"to be interested" },
+  { thai:"เดินป่า", phonemic:"(dern bpàa) dəːn pàː", fr:"hiking" },
+  { thai:"เล่นกีฬา", phonemic:"(lén gii-laa) lên kiː.laː", fr:"play sports" },
+  { thai:"เล่นดนตรี", phonemic:"(lén don-dtrii) lên don.triː", fr:"play music" },
+  { thai:"ถ่ายรูป", phonemic:"(thàay rûup) tʰàːj rûːp", fr:"take photos" },
+  { thai:"ทำขนม", phonemic:"(tham kha-nǒm) tʰam kʰa.nǒm", fr:"make sweets / bake" },
+  { thai:"ขี่จักรยาน", phonemic:"(khìi jàk-grà-yaan) kʰìː tɕàk.kra.jaːn", fr:"ride a bicycle" },
+  { thai:"ทำงานฝีมือ", phonemic:"(tham-ngaan fǐi-mɯɯ) tʰam.ŋaːn fǐː.mɯː", fr:"do handicrafts" },
+  { thai:"ทำสวน", phonemic:"(tham sǔuan) tʰam sǔːan", fr:"gardening" },
+  { thai:"ทำสมาธิ", phonemic:"(tham sà-maa-thí) tʰam sa.maː.tʰíʔ", fr:"meditation" },
+  { thai:"ตกปลา", phonemic:"(dtòk bplaa) tòk plaː", fr:"fishing" },
+  { thai:"เขียนบล็อก", phonemic:"(khǐan blɔ́ɔk) kʰǐan blɔ́ːk", fr:"write a blog" },
+  { thai:"แต่งเค้ก", phonemic:"(dtὲɛng khéek) tɛ̀ŋ kʰéːk", fr:"decorate cakes" },
+  { thai:"ทำคลิป / วิดีโอ", phonemic:"(tham khlíp / wí-dii-oo) tʰam kʰlíp / wí.diː.ʔoː", fr:"make video clips" },
+  { thai:"อ่านการ์ตูน", phonemic:"(àan gaa-dtuun) ʔàːn kaː.tuːn", fr:"read comics / cartoons" },
+  { thai:"สะสม", phonemic:"(sà-sǒm) sa.sǒm", fr:"to collect" },
+  { thai:"เล่นเปียโน", phonemic:"(lén bpia-noo) lên piaː.noː", fr:"play the piano" },
+];
+const gaan = [
+  { thai:"การทำอาหาร", phonemic:"(gaan tham aa-hǎan) kaːn tʰam ʔaː.hǎːn", fr:"cooking" },
+  { thai:"การเดินทาง", phonemic:"(gaan dern-thaang) kaːn dəːn.tʰaːŋ", fr:"traveling" },
+  { thai:"การทำสมาธิ", phonemic:"(gaan tham sà-maa-thí) kaːn tʰam sa.maː.tʰíʔ", fr:"meditation" },
+  { thai:"การวาดรูป", phonemic:"(gaan wâat-rûup) kaːn wâːt.rûːp", fr:"drawing" },
+  { thai:"การถ่ายรูป", phonemic:"(gaan thàay-rûup) kaːn tʰàːj.rûːp", fr:"photography" },
+  { thai:"การทำขนม", phonemic:"(gaan tham kha-nǒm) kaːn tʰam kʰa.nǒm", fr:"baking" },
+  { thai:"การร้องเพลง", phonemic:"(gaan rɔ́ɔng-phleeng) kaːn rɔ́ːŋ.pʰleːŋ", fr:"singing" },
+];
+const interests = [
+  { thai:"วิทยาศาสตร์", phonemic:"(wít-tha-yaa-sàat) wít.tʰa.jaː.sàːt", fr:"Science" },
+  { thai:"ประวัติศาสตร์", phonemic:"(bprà-wàt-sàat) pra.wàt.sàːt", fr:"History" },
+  { thai:"กีฬา", phonemic:"(gii-laa) kiː.laː", fr:"Sports" },
+  { thai:"ดนตรี", phonemic:"(don-dtrii) don.triː", fr:"Music" },
+  { thai:"ศิลปะ", phonemic:"(sǐn-lá-bpà) sǐn.lá.pa", fr:"Arts" },
+  { thai:"ธุรกิจ", phonemic:"(thú-rá-gìt) tʰú.rá.kìt", fr:"Business" },
+  { thai:"การลงทุน", phonemic:"(gaan long-thun) kaːn loŋ.tʰun", fr:"Investment" },
+  { thai:"การเมือง", phonemic:"(gaan-mwang) kaːn.mɯaŋ", fr:"Politics" },
+  { thai:"เทคโนโลยี", phonemic:"(théek-noo-loo-yîi) tʰéːk.noː.loː.jîː", fr:"Technology" },
+  { thai:"วัฒนธรรม", phonemic:"(wát-tha-ná-tham) wát.tʰa.ná.tʰam", fr:"Culture" },
+  { thai:"สิ่งแวดล้อม", phonemic:"(sìng-wɛ̂ɛt-lɔ́ɔm) sìŋ.wɛ̂ːt.lɔ́ːm", fr:"Environment" },
+  { thai:"การศึกษา", phonemic:"(gaan-sɯ̀k-sǎa) kaːn.sɯ̀k.sǎː", fr:"Education" },
+];
+const naa = [
+  { thai:"น่าสนใจ", phonemic:"(nâa sǒn-jai) nâː sǒn.tɕaj", fr:"interesting" },
+  { thai:"น่ากลัว", phonemic:"(nâa glua) nâː klua", fr:"scary" },
+  { thai:"น่าตื่นเต้น", phonemic:"(nâa dtùun-dtên) nâː tùːn.tên", fr:"exciting" },
+  { thai:"น่าเบื่อ", phonemic:"(nâa bùua) nâː bɯ̀ːa", fr:"boring" },
+  { thai:"น่ารัก", phonemic:"(nâa rák) nâː rák", fr:"cute / lovable" },
+  { thai:"น่าดู", phonemic:"(nâa duu) nâː duː", fr:"worth watching" },
+  { thai:"น่ากิน", phonemic:"(nâa gin) nâː kin", fr:"looks tasty" },
+];
+const convo1 = [
+  { spk:"Phaak-puum", thai:"ช่วงนี้เธอสนใจเรื่องอะไรบ้าง", phon:"chûang-níi thəə sǒn-jai rûang àrai bâang", en:"What are you interested in these days?" },
+  { spk:"Pai-lin",    thai:"ช่วงนี้ฉันสนใจเรื่องการเมืองและการลงทุน แล้วเธอล่ะ", phon:"chûang-níi chǎn sǒn-jai rûang gaan-mwang lé gaan long-thun léew thəə lâ", en:"I'm interested in politics and investing. How about you?" },
+  { spk:"Phaak-puum", thai:"ช่วงนี้เราสนใจเรื่องการเขียนโปรแกรม", phon:"chûang-níi rao sǒn-jai rûang gaan-khǐan bproo-greem", en:"I'm interested in programming." },
+  { spk:"Pai-lin",    thai:"ว้าว ฟังดูน่าสนใจนะ มันยากไหม", phon:"wáaw fang duu nâa-sǒn-jai ná man yâak mǎi", en:"Wow, that sounds interesting. Is it hard?" },
+  { spk:"Phaak-puum", thai:"ก็ยากนะ แต่สนุกดี", phon:"gɔ̂ɔ yâak ná dtὲɛ sa-nùk dii", en:"It's hard, but it's fun." },
+  { spk:"Pai-lin",    thai:"เรียนที่ไหนล่ะ", phon:"rian thîi nǎi lâ", en:"Where do you learn it?" },
+  { spk:"Phaak-puum", thai:"เรียนออนไลน์ มันสะดวกมาก เธออยากเรียนด้วยกันไหม", phon:"rian ɔɔn-laay man sa-dùuak mâak thəə yâak rian dûuay-gan mǎi", en:"Online — it's very convenient. Do you want to learn together?" },
+  { spk:"Pai-lin",    thai:"อืม อยากลองเรียนดู", phon:"ɯ̀ɯm yâak lɔɔng rian duu", en:"Hmm, I'd like to try." },
+  { spk:"Phaak-puum", thai:"เราจะส่งลิงค์ให้นะ", phon:"rao jà sòng líng hâi ná", en:"I'll send you the link." },
+];
+
+const synth = window.speechSynthesis;
+let currentBtn = null;
+function speakText(text, btn) {
+  synth.cancel();
+  if (currentBtn && currentBtn !== btn) currentBtn.classList.remove('speaking');
+  const utter = new SpeechSynthesisUtterance(text.replace(/\s*\/\s*/g, ", "));
+  utter.lang = 'th-TH'; utter.rate = 0.85;
+  const v = synth.getVoices().find(v => v.lang === 'th-TH' || v.lang.startsWith('th'));
+  if (v) utter.voice = v;
+  btn.classList.add('speaking'); currentBtn = btn;
+  utter.onend = utter.onerror = () => { btn.classList.remove('speaking'); currentBtn = null; };
+  synth.speak(utter);
+}
+function speakerSVG() {
+  return '<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/><path d="M14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>';
+}
+function makeBtn(text) {
+  const btn = document.createElement('button');
+  btn.className = 'speak-btn'; btn.title = 'Play pronunciation';
+  btn.innerHTML = speakerSVG();
+  btn.addEventListener('click', e => { e.stopPropagation(); speakText(text, btn); });
+  return btn;
+}
+function renderTable(tbodyId, data) {
+  const tbody = document.getElementById(tbodyId);
+  tbody.innerHTML = '';
+  data.forEach(row => {
+    const tr = document.createElement('tr');
+    const tdThai = document.createElement('td'); tdThai.className = 'col-thai';
+    const tRow = document.createElement('div'); tRow.className = 'thai-row';
+    const s = document.createElement('span'); s.textContent = row.thai;
+    tRow.appendChild(s); tRow.appendChild(makeBtn(row.thai));
+    tdThai.appendChild(tRow);
+    const tdPhon = document.createElement('td'); tdPhon.className = 'col-phonetic';
+    const m = row.phonemic.match(/^(\(.*?\))\s*(.*)$/);
+    if (m) {
+      const ipa = document.createElement('span'); ipa.textContent = m[2];
+      const rom = document.createElement('span');
+      rom.style.cssText = 'color:#999; font-style:normal; margin-left:8px;'; rom.textContent = m[1];
+      tdPhon.appendChild(ipa); tdPhon.appendChild(rom);
+    } else { tdPhon.textContent = row.phonemic; }
+    const tdFr = document.createElement('td'); tdFr.className = 'col-fr'; tdFr.textContent = row.fr;
+    tr.appendChild(tdThai); tr.appendChild(tdPhon); tr.appendChild(tdFr);
+    tbody.appendChild(tr);
+  });
+}
+function renderConvo() {
+  const box = document.getElementById('convo1');
+  convo1.forEach(turn => {
+    const t = document.createElement('div'); t.className = 'turn';
+    const sp = document.createElement('div'); sp.className = 'speaker'; sp.textContent = turn.spk + ' ·';
+    const ln = document.createElement('div'); ln.className = 'line';
+    const th = document.createElement('div'); th.className = 'thai';
+    const span = document.createElement('span'); span.textContent = turn.thai;
+    th.appendChild(span); th.appendChild(makeBtn(turn.thai));
+    const ph = document.createElement('div'); ph.className = 'phon'; ph.textContent = turn.phon;
+    const en = document.createElement('div'); en.className = 'en';   en.textContent = turn.en;
+    ln.appendChild(th); ln.appendChild(ph); ln.appendChild(en);
+    t.appendChild(sp); t.appendChild(ln);
+    box.appendChild(t);
+  });
+}
+function injectStaticButtons() {
+  document.querySelectorAll('.ex-thai[data-speak]').forEach(el => {
+    if (el.parentElement && el.parentElement.classList.contains('thai-row')) return;
+    const row = document.createElement('div'); row.className = 'thai-row';
+    el.parentNode.insertBefore(row, el);
+    row.appendChild(el); row.appendChild(makeBtn(el.dataset.speak));
+  });
+  document.querySelectorAll('.grammar-table .row-thai td').forEach(td => {
+    if (td.querySelector('.thai-row')) return;
+    const text = td.textContent.trim();
+    if (!text || text === '—' || text.startsWith('(')) return;
+    const row = document.createElement('span'); row.className = 'thai-row';
+    td.innerHTML = '';
+    const s = document.createElement('span'); s.textContent = text;
+    row.appendChild(s); row.appendChild(makeBtn(text)); td.appendChild(row);
+  });
+}
+function init() {
+  renderTable('tbody-vocab', vocab);
+  renderTable('tbody-gaan', gaan);
+  renderTable('tbody-interests', interests);
+  renderTable('tbody-naa', naa);
+  renderConvo();
+  injectStaticButtons();
+}
+if (synth.onvoiceschanged !== undefined) synth.onvoiceschanged = init;
+init();
+</script>
+</body>
+</html>

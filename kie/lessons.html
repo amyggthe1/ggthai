@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lessons — Thai Language</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Source+Sans+3:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --red:    #c0392b;
+    --dark:   #1a1a1a;
+    --gold:   #d4a012;
+    --cream:  #fdf6ec;
+    --slate:  #2c3e50;
+    --teal:   #1a7a6e;
+    --border: #e6dfd5;
+    --muted:  #6b6b6b;
+    --radius: 14px;
+  }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  body{
+    font-family:'Source Sans 3', sans-serif;
+    background:var(--cream);
+    color:var(--dark);
+    line-height:1.6;
+    min-height:100vh;
+  }
+
+  /* HERO (matches lesson pages) */
+  .hero{
+    background:var(--dark);
+    padding:40px 60px;
+    border-bottom:5px solid var(--gold);
+    text-align:left;
+  }
+  .hero h1{
+    font-family:'Bebas Neue', sans-serif;
+    font-size:clamp(2.4rem, 6vw, 4.5rem);
+    color:#fff;
+    letter-spacing:4px;
+    line-height:1;
+  }
+  .hero h2{
+    font-family:'Playfair Display', serif;
+    font-size:clamp(1rem, 2vw, 1.4rem);
+    color:var(--gold);
+    font-weight:400;
+    margin-top:6px;
+    font-style:italic;
+  }
+  .hero .sub{
+    color:#c9c9c9;
+    font-size:0.95rem;
+    margin-top:.6rem;
+    max-width:560px;
+    line-height:1.5;
+  }
+  .quiz-cta{
+    display:inline-block;
+    background:linear-gradient(135deg, var(--gold) 0%, var(--red) 100%);
+    color:#fff;
+    text-decoration:none;
+    padding:10px 22px;
+    border-radius:24px;
+    font-family:'Playfair Display', serif;
+    font-size:0.9rem;
+    font-weight:700;
+    letter-spacing:0.05em;
+    margin-top:1.2rem;
+    box-shadow:0 4px 14px rgba(212,160,18,0.35);
+    transition:transform .15s, box-shadow .15s;
+  }
+  .quiz-cta:hover{
+    transform:translateY(-2px);
+    box-shadow:0 6px 20px rgba(212,160,18,0.5);
+  }
+
+  .container{max-width:920px; margin:0 auto; padding:0 1.25rem 3rem;}
+
+  /* Section title (matches lesson pages) */
+  .section-title{
+    font-family:'Playfair Display', serif;
+    font-size:1.25rem;
+    color:var(--slate);
+    padding:28px 0 12px;
+    letter-spacing:1px;
+    border-bottom:2px solid var(--gold);
+    margin:0;
+    font-style:italic;
+  }
+  .section-title:first-of-type{margin-top:.4rem;}
+
+  /* Lesson grid */
+  .grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill, minmax(260px, 1fr));
+    gap:1rem;
+    margin-top:1.2rem;
+  }
+  .card{
+    background:#fff;
+    border:1px solid var(--border);
+    border-radius:var(--radius);
+    padding:1.1rem 1.2rem;
+    text-decoration:none;
+    color:inherit;
+    display:flex;
+    flex-direction:column;
+    gap:.4rem;
+    box-shadow:0 1px 3px rgba(0,0,0,.04);
+    transition:transform .15s, box-shadow .15s, border-color .15s;
+    position:relative;
+  }
+  .card:hover{
+    transform:translateY(-2px);
+    border-color:var(--gold);
+    box-shadow:0 6px 20px rgba(212,160,18,.18);
+  }
+  .card .num{
+    position:absolute;
+    top:12px; right:14px;
+    font-family:'Playfair Display', serif;
+    font-size:.78rem;
+    color:var(--gold);
+    font-weight:700;
+    letter-spacing:2px;
+  }
+  .card .icon{font-size:1.6rem; line-height:1;}
+  .card h3{
+    font-family:'Source Sans 3', sans-serif;
+    font-weight:600;
+    font-size:1.05rem;
+    color:var(--dark);
+    margin-top:.3rem;
+    letter-spacing:.01em;
+  }
+  .card .thai{
+    font-size:.95rem;
+    color:var(--red);
+    font-weight:600;
+  }
+  .card .desc{
+    font-size:.86rem;
+    color:var(--muted);
+    margin-top:.15rem;
+    line-height:1.45;
+  }
+  .card .arrow{
+    margin-top:.6rem;
+    color:var(--gold);
+    font-weight:700;
+    font-size:.82rem;
+    letter-spacing:.04em;
+    font-family:'Playfair Display', serif;
+    font-style:italic;
+  }
+
+  /* Special card for the script game */
+  .card.game{
+    background:linear-gradient(135deg, #fdf6ec 0%, #fff5d8 100%);
+    border-color:var(--gold);
+  }
+  .card.game:hover{
+    border-color:var(--red);
+    box-shadow:0 6px 20px rgba(212,160,18,.25);
+  }
+  .card.game .arrow{color:var(--red);}
+
+  /* Footer (matches lesson pages) */
+  footer{
+    background:var(--dark);
+    color:#888;
+    text-align:center;
+    padding:24px;
+    font-size:0.8rem;
+    letter-spacing:1px;
+    margin-top:3rem;
+  }
+  footer span{color:var(--gold);}
+  footer a{color:var(--gold); text-decoration:none; font-weight:600;}
+  footer a:hover{text-decoration:underline;}
+</style>
+</head>
+<body>
+
+<section class="hero">
+  <h1>THAI LESSON INDEX</h1>
+  <h2>บทเรียน &nbsp;·&nbsp; bòt riian</h2>
+  <p class="sub">Browse all lesson pages individually to review vocabulary at your own pace, or jump back to the practice quiz.</p>
+  <a href="index.html" class="quiz-cta">🎯 Take the full quiz →</a>
+</section>
+
+<div class="container">
+
+  <h2 class="section-title">Vocabulary &amp; Phrases</h2>
+  <div class="grid">
+
+    <a class="card" href="intro.html">
+      <span class="num">01</span>
+      <span class="icon">💬</span>
+      <h3>100 Phrases</h3>
+      <span class="thai">วลี ๑๐๐ ประโยค</span>
+      <span class="desc">Essential everyday phrases to start speaking Thai.</span>
+      <span class="arrow">Open lesson →</span>
+    </a>
+
+    <a class="card" href="household.html">
+      <span class="num">02</span>
+      <span class="icon">🏠</span>
+      <h3>Household</h3>
+      <span class="thai">เครื่องใช้ในบ้าน</span>
+      <span class="desc">Rooms, furniture, and household items.</span>
+      <span class="arrow">Open lesson →</span>
+    </a>
+
+    <a class="card" href="bank.html">
+      <span class="num">03</span>
+      <span class="icon">💰</span>
+      <h3>Money &amp; Bank</h3>
+      <span class="thai">เงินและธนาคาร</span>
+      <span class="desc">Currency, banking and payment vocabulary.</span>
+      <span class="arrow">Open lesson →</span>
+    </a>
+
+    <a class="card" href="emotions.html">
+      <span class="num">04</span>
+      <span class="icon">😊</span>
+      <h3>Emotions</h3>
+      <span class="thai">อารมณ์</span>
+      <span class="desc">Talk about feelings, moods and reactions.</span>
+      <span class="arrow">Open lesson →</span>
+    </a>
+
+    <a class="card" href="transportation.html">
+      <span class="num">05</span>
+      <span class="icon">🚌</span>
+      <h3>Transportation</h3>
+      <span class="thai">การเดินทาง</span>
+      <span class="desc">Vehicles, directions and travel verbs.</span>
+      <span class="arrow">Open lesson →</span>
+    </a>
+
+    <a class="card" href="months.html">
+      <span class="num">06</span>
+      <span class="icon">📅</span>
+      <h3>Months of the Year</h3>
+      <span class="thai">เดือน</span>
+      <span class="desc">All twelve months with abbreviations and phonemics.</span>
+      <span class="arrow">Open lesson →</span>
+    </a>
+
+    <a class="card" href="hotel.html">
+      <span class="num">07</span>
+      <span class="icon">🏨</span>
+      <h3>Hotel</h3>
+      <span class="thai">โรงแรม</span>
+      <span class="desc">Check-in, room features and complaint phrases.</span>
+      <span class="arrow">Open lesson →</span>
+    </a>
+
+    <a class="card" href="corps.html">
+      <span class="num">08</span>
+      <span class="icon">🩺</span>
+      <h3>Body &amp; Illness</h3>
+      <span class="thai">ร่างกายและความเจ็บป่วย</span>
+      <span class="desc">Body parts and illness terms (French notes).</span>
+      <span class="arrow">Open lesson →</span>
+    </a>
+
+    <a class="card" href="market.html">
+      <span class="num">09</span>
+      <span class="icon">🛒</span>
+      <h3>Market</h3>
+      <span class="thai">ตลาด</span>
+      <span class="desc">Going to the market: fruits, vegetables, meat &amp; prices (French notes).</span>
+      <span class="arrow">Open lesson →</span>
+    </a>
+
+    <a class="card" href="family.html">
+      <span class="num">10</span>
+      <span class="icon">👨‍👩‍👧</span>
+      <h3>Family</h3>
+      <span class="thai">ครอบครัว</span>
+      <span class="desc">Parents, siblings, grandparents and the older/younger prefixes (French notes).</span>
+      <span class="arrow">Open lesson →</span>
+    </a>
+
+    <a class="card" href="places.html">
+      <span class="num">11</span>
+      <span class="icon">📍</span>
+      <h3>Places</h3>
+      <span class="thai">สถานที่</span>
+      <span class="desc">Venues, location words and position prepositions, with grammar &amp; exercises.</span>
+      <span class="arrow">Open lesson →</span>
+    </a>
+
+    <a class="card" href="directions.html">
+      <span class="num">12</span>
+      <span class="icon">🧭</span>
+      <h3>Directions</h3>
+      <span class="thai">ทาง</span>
+      <span class="desc">Asking and giving directions, ordinal numbers, true/false drills.</span>
+      <span class="arrow">Open lesson →</span>
+    </a>
+
+    <a class="card" href="colors.html">
+      <span class="num">13</span>
+      <span class="icon">🎨</span>
+      <h3>Colors</h3>
+      <span class="thai">สี</span>
+      <span class="desc">Basic colors, frequent shades and color expressions in Thai.</span>
+      <span class="arrow">Open lesson →</span>
+    </a>
+
+    <a class="card" href="dii.html">
+      <span class="num">14</span>
+      <span class="icon">❓</span>
+      <h3>Question + ดี</h3>
+      <span class="thai">คำถาม + ดี</span>
+      <span class="desc">Asking "what / where / who / how + shall…?" with the ดี (dii) pattern.</span>
+      <span class="arrow">Open lesson →</span>
+    </a>
+
+    <a class="card" href="hobbies.html">
+      <span class="num">15</span>
+      <span class="icon">🎨</span>
+      <h3>Hobbies</h3>
+      <span class="thai">งานอดิเรก</span>
+      <span class="desc">Free-time activities, interests, การ + verb and น่า + verb prefixes, with a conversation.</span>
+      <span class="arrow">Open lesson →</span>
+    </a>
+
+    <a class="card" href="adverb.html">
+      <span class="num">16</span>
+      <span class="icon">🔁</span>
+      <h3>Adverbs of Frequency</h3>
+      <span class="thai">การบอกความถี่</span>
+      <span class="desc">Always → never scale, "how often…?", and "X times per week" with ละ + กี่.</span>
+      <span class="arrow">Open lesson →</span>
+    </a>
+
+  </div>
+
+  <h2 class="section-title">Script &amp; Practice</h2>
+  <div class="grid">
+
+    <a class="card game" href="glyph.html">
+      <span class="num">★</span>
+      <span class="icon">✍️</span>
+      <h3>Glyphs — Stroke Practice</h3>
+      <span class="thai">การเขียนพยัญชนะ</span>
+      <span class="desc">Animated stroke order for all 44 consonants, with a tracing canvas.</span>
+      <span class="arrow">Open practice →</span>
+    </a>
+
+    <a class="card game" href="glyph/alphabet.html">
+      <span class="num">★</span>
+      <span class="icon">🎮</span>
+      <h3>Script Recognition Game</h3>
+      <span class="thai">เกมพยัญชนะ</span>
+      <span class="desc">Learn all 44 consonants with three question modes.</span>
+      <span class="arrow">Play game →</span>
+    </a>
+
+    <a class="card" href="index.html">
+      <span class="num">★</span>
+      <span class="icon">🎯</span>
+      <h3>Vocabulary Quiz</h3>
+      <span class="thai">แบบฝึกหัด</span>
+      <span class="desc">Mixed-mode practice across every lesson page.</span>
+      <span class="arrow">Take the quiz →</span>
+    </a>
+
+  </div>
+
+</div>
+
+<footer>
+  <span>Thai Language Cheat Sheets</span> &nbsp;·&nbsp; 16 lessons &nbsp;·&nbsp; <a href="index.html">Practice quiz</a>
+</footer>
+
+</body>
+</html>

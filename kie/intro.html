@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lesson 1 – 100 Thai Phrases</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Source+Sans+3:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold: #d4a012;
+    --gold-light: #fdf2d6;
+    --gold-dark: #7a5e1a;
+    --teal: #1a7a6e;
+    --teal-light: #e6f3f1;
+    --bg: #fdf6ec;
+    --surface: #fff;
+    --text: #1a1a1a;
+    --muted: #6b6b6b;
+    --border: #e6dfd5;
+    --radius: 12px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Source Sans 3', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding-bottom: 4rem;
+  }
+  header {
+    background: var(--teal);
+    color: #fff;
+    padding: 2.5rem 2rem 2rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  header::before {
+    content: '';
+    position: absolute;
+    top: -40px; left: -40px; right: -40px; bottom: -40px;
+    background: repeating-linear-gradient(45deg, transparent, transparent 20px, rgba(255,255,255,0.03) 20px, rgba(255,255,255,0.03) 40px);
+    pointer-events: none;
+  }
+  .header-badge {
+    display: inline-block;
+    background: var(--gold);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 4px 14px;
+    border-radius: 20px;
+    margin-bottom: 12px;
+  }
+  header h1 {
+    font-family: 'Bebas Neue', serif;
+    font-size: 2.4rem;
+    font-weight: 400;
+    letter-spacing: 0.02em;
+    line-height: 1.2;
+  }
+  header .subtitle {
+    font-size: 1.1rem;
+    opacity: 0.75;
+    margin-top: 6px;
+    font-weight: 300;
+  }
+
+  .main { max-width: 860px; margin: 0 auto; padding: 2rem 1.5rem; }
+
+  /* SECTION */
+  .section { margin-bottom: 2.5rem; }
+  .section-title {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 1rem;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  /* SEARCH */
+  .search-wrap { margin-bottom: 1rem; }
+  #search {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: #fff;
+    font-family: inherit;
+    font-size: 14px;
+    color: var(--text);
+    outline: none;
+    transition: border-color .15s, box-shadow .15s;
+  }
+  #search:focus {
+    border-color: var(--teal);
+    box-shadow: 0 0 0 3px var(--teal-light);
+  }
+
+  /* VOCAB TABLE */
+  .vocab-table { width: 100%; border-collapse: collapse; background: var(--surface); border-radius: var(--radius); overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,0.04); }
+  .vocab-table thead tr { background: var(--teal); color: #fff; }
+  .vocab-table thead th { padding: 12px 14px; font-size: 12px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; text-align: left; }
+  .vocab-table tbody tr { border-bottom: 1px solid var(--border); transition: background 0.15s; }
+  .vocab-table tbody tr:last-child { border-bottom: none; }
+  .vocab-table tbody tr:hover { background: var(--teal-light); }
+  .vocab-table td { padding: 9px 14px; font-size: 15px; vertical-align: middle; }
+  .vocab-table td.num { color: var(--muted); font-size: 13px; width: 36px; }
+  .vocab-table td.thai { font-size: 17px; font-weight: 600; }
+  .vocab-table td.pron { color: var(--teal); font-size: 14px; font-style: italic; }
+  .vocab-table td.trans { color: var(--text); font-size: 14px; }
+
+  /* SPEAKER BUTTON */
+  .speak-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 3px 5px;
+    border-radius: 50%;
+    margin-left: 6px;
+    vertical-align: middle;
+    opacity: 0.55;
+    transition: opacity 0.15s, background 0.15s;
+    flex-shrink: 0;
+  }
+  .speak-btn:hover { opacity: 1; background: var(--teal-light); }
+  .speak-btn.speaking { opacity: 1; animation: pulse 0.8s ease-in-out infinite; }
+  .speak-btn svg { width: 14px; height: 14px; fill: var(--teal); pointer-events: none; }
+  @keyframes pulse { 0%,100% { opacity:1 } 50% { opacity:0.45 } }
+  .thai-wrap { display: inline-flex; align-items: center; }
+
+  .quiz-cta {
+    display: inline-block;
+    background: linear-gradient(135deg, var(--gold) 0%, var(--teal) 100%);
+    color: #fff;
+    text-decoration: none;
+    padding: 10px 22px;
+    border-radius: 24px;
+    font-family: 'Bebas Neue', serif;
+    font-size: 0.95rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    margin-top: 1.2rem;
+    box-shadow: 0 4px 14px rgba(201,168,76,0.35);
+    transition: transform .15s, box-shadow .15s;
+  }
+  .quiz-cta:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(201,168,76,0.5);
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-badge">Lesson 1</div>
+  <h1>100 Thai Phrases</h1>
+  <p class="subtitle">วลีภาษาไทย ๑๐๐ ประโยค</p>
+  <a href="index.html?source=100%20Phrases" class="quiz-cta">🎯 Take the quiz of this lesson →</a>
+</header>
+
+<div class="main">
+
+  <div class="section">
+    <div class="section-title">Essential phrases</div>
+
+    <div class="search-wrap">
+      <input type="text" id="search" placeholder="Search phrases (English, Thai, or pronunciation)…" oninput="filterTable()">
+    </div>
+
+    <table class="vocab-table" id="vocabTable">
+      <thead>
+        <tr><th>#</th><th>Thai</th><th>Pronunciation</th><th>Translation</th></tr>
+      </thead>
+      <tbody id="vocabBody"></tbody>
+    </table>
+  </div>
+
+</div>
+
+<script>
+  const VOCAB = [
+      {thai:"สวัสดี",phon:"sa-wat-dee",trans:"Hello"},
+      {thai:"ขอบคุณ",phon:"khop khun",trans:"Thank you"},
+      {thai:"ใช่",phon:"chai",trans:"Yes"},
+      {thai:"ไม่ใช่",phon:"mai chai",trans:"No"},
+      {thai:"ขอโทษ",phon:"kho thot",trans:"Sorry"},
+      {thai:"สบายดีไหม",phon:"sa-bai-dee mai",trans:"How are you?"},
+      {thai:"ฉันสบายดี",phon:"chan sa-bai-dee",trans:"I am fine"},
+      {thai:"ลาก่อน",phon:"la-gon",trans:"Goodbye"},
+      {thai:"ยินดีต้อนรับ",phon:"yin-dee ton-rab",trans:"Welcome"},
+      {thai:"ไม่เป็นไร",phon:"mai pen rai",trans:"No problem"},
+      {thai:"กรุณา",phon:"ka-ru-na",trans:"Please"},
+      {thai:"ขอ",phon:"kho",trans:"May I / Can I"},
+      {thai:"ได้",phon:"dai",trans:"Can / Able to"},
+      {thai:"ไม่ได้",phon:"mai dai",trans:"Cannot"},
+      {thai:"เข้าใจ",phon:"khao jai",trans:"Understand"},
+      {thai:"ไม่เข้าใจ",phon:"mai khao jai",trans:"Don't understand"},
+      {thai:"พูดช้าๆ",phon:"phut cha-cha",trans:"Speak slowly"},
+      {thai:"พูดอีกครั้ง",phon:"phut eek khrang",trans:"Say again"},
+      {thai:"คุณชื่ออะไร",phon:"khun cheu arai",trans:"What is your name?"},
+      {thai:"ฉันชื่อ",phon:"chan cheu",trans:"My name is"},
+      {thai:"คุณมาจากไหน",phon:"khun ma chak nai",trans:"Where are you from?"},
+      {thai:"ฉันมาจาก",phon:"chan ma chak",trans:"I am from"},
+      {thai:"อายุเท่าไหร่",phon:"a-yu tao rai",trans:"How old are you?"},
+      {thai:"กี่โมงแล้ว",phon:"gee mong laew",trans:"What time is it?"},
+      {thai:"วันนี้",phon:"wan nee",trans:"Today"},
+      {thai:"พรุ่งนี้",phon:"phrung nee",trans:"Tomorrow"},
+      {thai:"เมื่อวาน",phon:"meua wan",trans:"Yesterday"},
+      {thai:"ตอนนี้",phon:"ton nee",trans:"Now"},
+      {thai:"ที่นี่",phon:"tee nee",trans:"Here"},
+      {thai:"ที่นั่น",phon:"tee nan",trans:"There"},
+      {thai:"ไป",phon:"pai",trans:"Go"},
+      {thai:"มา",phon:"ma",trans:"Come"},
+      {thai:"กิน",phon:"gin",trans:"Eat"},
+      {thai:"ดื่ม",phon:"deum",trans:"Drink"},
+      {thai:"นอน",phon:"non",trans:"Sleep"},
+      {thai:"ทำงาน",phon:"tham ngan",trans:"Work"},
+      {thai:"เปิด",phon:"poet",trans:"Open"},
+      {thai:"ปิด",phon:"pit",trans:"Close"},
+      {thai:"ซื้อ",phon:"seu",trans:"Buy"},
+      {thai:"ขาย",phon:"khai",trans:"Sell"},
+      {thai:"ราคา",phon:"ra-kha",trans:"Price"},
+      {thai:"แพง",phon:"paeng",trans:"Expensive"},
+      {thai:"ถูก",phon:"thuk",trans:"Cheap"},
+      {thai:"ลดราคา",phon:"lot ra-kha",trans:"Discount"},
+      {thai:"น้ำ",phon:"nam",trans:"Water"},
+      {thai:"อาหาร",phon:"a-han",trans:"Food"},
+      {thai:"อร่อย",phon:"a-roi",trans:"Delicious"},
+      {thai:"ไม่อร่อย",phon:"mai a-roi",trans:"Not delicious"},
+      {thai:"เผ็ด",phon:"phet",trans:"Spicy"},
+      {thai:"หวาน",phon:"wan",trans:"Sweet"},
+      {thai:"เปรี้ยว",phon:"priao",trans:"Sour"},
+      {thai:"เค็ม",phon:"kem",trans:"Salty"},
+      {thai:"ห้องน้ำ",phon:"hong nam",trans:"Bathroom"},
+      {thai:"โรงแรม",phon:"rong raem",trans:"Hotel"},
+      {thai:"สนามบิน",phon:"sa-nam bin",trans:"Airport"},
+      {thai:"แท็กซี่",phon:"taek-si",trans:"Taxi"},
+      {thai:"รถไฟ",phon:"rot fai",trans:"Train"},
+      {thai:"รถบัส",phon:"rot bus",trans:"Bus"},
+      {thai:"ซ้าย",phon:"sai",trans:"Left"},
+      {thai:"ขวา",phon:"khwa",trans:"Right"},
+      {thai:"ตรงไป",phon:"trong pai",trans:"Go straight"},
+      {thai:"หยุด",phon:"yut",trans:"Stop"},
+      {thai:"ช่วยด้วย",phon:"chuay duay",trans:"Help"},
+      {thai:"ตำรวจ",phon:"tam-ruat",trans:"Police"},
+      {thai:"โรงพยาบาล",phon:"rong pha-ya-ban",trans:"Hospital"},
+      {thai:"หมอ",phon:"mor",trans:"Doctor"},
+      {thai:"ยา",phon:"ya",trans:"Medicine"},
+      {thai:"ฉันป่วย",phon:"chan puai",trans:"I am sick"},
+      {thai:"เจ็บ",phon:"jep",trans:"Pain"},
+      {thai:"ร้อน",phon:"ron",trans:"Hot"},
+      {thai:"หนาว",phon:"nao",trans:"Cold"},
+      {thai:"ฝนตก",phon:"fon tok",trans:"Rain"},
+      {thai:"แดด",phon:"daet",trans:"Sun"},
+      {thai:"เงิน",phon:"ngern",trans:"Money"},
+      {thai:"บัตรเครดิต",phon:"bat credit",trans:"Credit card"},
+      {thai:"เงินสด",phon:"ngern sot",trans:"Cash"},
+      {thai:"ใบเสร็จ",phon:"bai set",trans:"Receipt"},
+      {thai:"เปิดบัญชี",phon:"poet ban-chee",trans:"Open account"},
+      {thai:"จ่ายเงิน",phon:"jai ngern",trans:"Pay"},
+      {thai:"ฟรี",phon:"free",trans:"Free"},
+      {thai:"เร็ว",phon:"reo",trans:"Fast"},
+      {thai:"ช้า",phon:"cha",trans:"Slow"},
+      {thai:"ใหญ่",phon:"yai",trans:"Big"},
+      {thai:"เล็ก",phon:"lek",trans:"Small"},
+      {thai:"ใหม่",phon:"mai",trans:"New"},
+      {thai:"เก่า",phon:"gao",trans:"Old"},
+      {thai:"ดี",phon:"dee",trans:"Good"},
+      {thai:"ไม่ดี",phon:"mai dee",trans:"Bad"},
+      {thai:"สวย",phon:"suai",trans:"Beautiful"},
+      {thai:"น่าเกลียด",phon:"na-kliat",trans:"Ugly"},
+      {thai:"ง่าย",phon:"ngai",trans:"Easy"},
+      {thai:"ยาก",phon:"yak",trans:"Difficult"},
+      {thai:"แน่นอน",phon:"naenon",trans:"Of course"},
+      {thai:"อาจจะ",phon:"at ja",trans:"Maybe"},
+      {thai:"แน่ใจ",phon:"nae jai",trans:"Sure"},
+      {thai:"ไม่แน่ใจ",phon:"mai nae jai",trans:"Not sure"},
+      {thai:"คิดว่า",phon:"khit wa",trans:"Think"},
+      {thai:"รู้",phon:"roo",trans:"Know"},
+      {thai:"ไม่รู้",phon:"mai roo",trans:"Don't know"}
+  ];
+
+  // ── Speaker SVG ──────────────────────────────────────────────
+  function speakerSVG() {
+    return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">' +
+      '<path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/>' +
+      '<path d="M14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>' +
+      '</svg>';
+  }
+
+  // ── TTS ──────────────────────────────────────────────────────
+  let currentBtn = null;
+  function speakThai(text, btn) {
+    if (!('speechSynthesis' in window)) return;
+    window.speechSynthesis.cancel();
+    if (currentBtn && currentBtn !== btn) currentBtn.classList.remove('speaking');
+    const utter = new SpeechSynthesisUtterance(text.replace(/\s*\/\s*/g, ", "));
+    utter.lang  = 'th-TH';
+    utter.rate  = 0.85;
+    utter.pitch = 1;
+    const voices = window.speechSynthesis.getVoices();
+    const thaiVoice = voices.find(v => v.lang === 'th-TH' || v.lang.startsWith('th'));
+    if (thaiVoice) utter.voice = thaiVoice;
+    btn.classList.add('speaking');
+    currentBtn = btn;
+    utter.onend = utter.onerror = () => { btn.classList.remove('speaking'); currentBtn = null; };
+    window.speechSynthesis.speak(utter);
+  }
+  if ('speechSynthesis' in window) {
+    window.speechSynthesis.onvoiceschanged = () => window.speechSynthesis.getVoices();
+    window.speechSynthesis.getVoices();
+  }
+
+  // ── Render rows ──────────────────────────────────────────────
+  function render() {
+    const tbody = document.getElementById('vocabBody');
+    tbody.innerHTML = '';
+    VOCAB.forEach((v, i) => {
+      const tr = document.createElement('tr');
+
+      const tdNum = document.createElement('td');
+      tdNum.className = 'num';
+      tdNum.textContent = i + 1;
+
+      const tdThai = document.createElement('td');
+      tdThai.className = 'thai';
+      const wrap = document.createElement('span');
+      wrap.className = 'thai-wrap';
+      const thaiText = document.createElement('span');
+      thaiText.textContent = v.thai;
+      const btn = document.createElement('button');
+      btn.className = 'speak-btn';
+      btn.title = 'Play: ' + v.thai;
+      btn.innerHTML = speakerSVG();
+      btn.addEventListener('click', () => speakThai(v.thai, btn));
+      wrap.appendChild(thaiText);
+      wrap.appendChild(btn);
+      tdThai.appendChild(wrap);
+
+      const tdPron = document.createElement('td');
+      tdPron.className = 'pron';
+      tdPron.textContent = v.phon;
+
+      const tdTrans = document.createElement('td');
+      tdTrans.className = 'trans';
+      tdTrans.textContent = v.trans;
+
+      tr.appendChild(tdNum);
+      tr.appendChild(tdThai);
+      tr.appendChild(tdPron);
+      tr.appendChild(tdTrans);
+      tbody.appendChild(tr);
+    });
+  }
+  render();
+
+  // ── Search filter ────────────────────────────────────────────
+  function filterTable() {
+    const q = document.getElementById('search').value.toLowerCase().trim();
+    const rows = document.querySelectorAll('#vocabBody tr');
+    rows.forEach(tr => {
+      const text = tr.textContent.toLowerCase();
+      tr.style.display = (!q || text.includes(q)) ? '' : 'none';
+    });
+  }
+</script>
+
+
+<div style="text-align:center;padding:24px;font-size:0.85rem;letter-spacing:0.04em;background:#1a1a1a;color:#888;margin-top:1rem;">
+  <a href="lessons.html" style="color:#d4a012;text-decoration:none;font-weight:600;">← Back to lessons</a>
+</div>
+
+</body>
+</html>

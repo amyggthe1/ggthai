@@ -1,0 +1,1489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Thai Quiz — แบบทดสอบ</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Source+Sans+3:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#fdf6ec;
+    --surface:#fff;
+    --ink:#1a1a1a;
+    --muted:#6b6b6b;
+    --border:#e6dfd5;
+    --teal:#1a7a6e;
+    --teal-light:#e6f3f1;
+    --gold:#d4a012;
+    --gold-light:#fdf2d6;
+    --terracotta:#c0392b;
+    --green:#3b8a5a;
+    --green-light:#e5f3ea;
+    --red:#c0392b;
+    --red-light:#fdebeb;
+    --radius:14px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    font-family:'Source Sans 3',sans-serif;
+    background:var(--bg);
+    color:var(--ink);
+    min-height:100vh;
+    padding:2rem 1rem 4rem;
+    line-height:1.6;
+  }
+  .container{max-width:760px;margin:0 auto;}
+
+  header{text-align:center;margin-bottom:2rem;}
+  .top-nav{display:flex;justify-content:flex-end;gap:1rem;margin-bottom:1.25rem;}
+  .top-nav a{
+    color:var(--teal);text-decoration:none;font-weight:600;font-size:.9rem;
+    padding:6px 14px;border:1px solid var(--teal);border-radius:20px;
+    transition:background .15s,color .15s;
+  }
+  .top-nav a:hover{background:var(--teal);color:#fff;}
+  .tts-warn{
+    background:#fdf3dd;border:1px solid #ecd6a2;color:#7a5a10;
+    border-radius:10px;padding:.7rem .9rem;font-size:.85rem;
+    line-height:1.5;margin-bottom:1rem;
+  }
+  .kicker{
+    display:inline-block;background:var(--gold);color:#fff;
+    font-size:10px;letter-spacing:2.5px;text-transform:uppercase;
+    font-weight:700;padding:4px 14px;border-radius:20px;margin-bottom:10px;
+  }
+  header h1{
+    font-family:'Bebas Neue',serif;
+    font-size:2.4rem;color:var(--teal);line-height:1.15;
+  }
+  header .sub{color:var(--muted);font-size:.95rem;margin-top:.25rem}
+
+  /* MODE PICKER */
+  .mode-bar{
+    background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+    padding:1rem 1.2rem;margin-bottom:1.25rem;
+    display:flex;flex-wrap:wrap;gap:.5rem;align-items:center;
+    box-shadow:0 1px 4px rgba(0,0,0,.04);
+  }
+  .mode-label{
+    font-size:11px;letter-spacing:1.5px;text-transform:uppercase;
+    color:var(--muted);font-weight:700;margin-right:.3rem;
+  }
+  .mode-btn{
+    border:1px solid var(--border);background:#fff;color:var(--ink);
+    padding:7px 14px;border-radius:20px;font-size:.85rem;font-weight:600;
+    cursor:pointer;transition:all .15s;font-family:inherit;
+  }
+  .mode-btn:hover{background:var(--teal-light);border-color:var(--teal)}
+  .mode-btn.active{background:var(--teal);color:#fff;border-color:var(--teal)}
+
+  /* External game tab — styled like a mode button but links to the glyph game */
+  .mode-btn-link{
+    display:inline-flex;align-items:center;gap:6px;
+    border:1px solid #c8882a;
+    background:linear-gradient(135deg,#f5e8d0 0%,#fdf6ec 100%);
+    color:#7a4010;
+    padding:7px 14px;border-radius:20px;font-size:.85rem;font-weight:700;
+    text-decoration:none;font-family:inherit;
+    transition:all .15s;
+    box-shadow:0 1px 3px rgba(200,136,42,.25);
+  }
+  .mode-btn-link:hover{
+    background:linear-gradient(135deg,#c8882a 0%,#d4a012 100%);
+    color:#fff;transform:translateY(-1px);
+    box-shadow:0 4px 12px rgba(200,136,42,.35);
+  }
+  .mode-btn-link .ext-arrow{font-size:.75em;opacity:.8}
+
+  /* SCORE BAR */
+  .score-bar{
+    display:flex;justify-content:space-between;align-items:center;gap:1rem;
+    background:var(--gold-light);border-radius:var(--radius);
+    padding:.7rem 1.2rem;margin-bottom:1.25rem;font-size:.9rem;
+  }
+  .score-bar .metric{font-weight:600;color:#7a5e1a}
+  .score-bar .metric span.val{color:var(--teal);font-size:1.05rem;margin-left:4px}
+  .progress{
+    flex:1;height:8px;background:#fff;border-radius:6px;overflow:hidden;
+    min-width:80px;
+  }
+  .progress > div{height:100%;background:var(--teal);width:0%;transition:width .3s}
+
+  /* QUESTION CARD */
+  .card{
+    background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+    padding:1.75rem 1.5rem;margin-bottom:1rem;
+    box-shadow:0 2px 10px rgba(0,0,0,.05);
+  }
+  .mode-tag{
+    display:inline-block;background:var(--teal-light);color:var(--teal);
+    font-size:10px;letter-spacing:1.5px;text-transform:uppercase;
+    font-weight:700;padding:3px 10px;border-radius:12px;margin-bottom:.75rem;
+  }
+  .source-tag{
+    display:inline-block;background:#f3f1e8;color:var(--muted);
+    font-size:10px;letter-spacing:1.2px;text-transform:uppercase;
+    font-weight:700;padding:3px 10px;border-radius:12px;margin-left:.4rem;
+  }
+  .prompt{
+    font-size:1.05rem;color:var(--muted);margin-bottom:.75rem;
+  }
+  .prompt-thai{
+    font-size:1.9rem;font-weight:700;color:var(--ink);line-height:1.3;
+    margin:.25rem 0 .75rem;
+    display:flex;align-items:center;gap:.6rem;flex-wrap:wrap;
+  }
+  .prompt-en{
+    font-size:1.3rem;font-weight:600;color:var(--ink);margin:.25rem 0 .75rem;
+  }
+  .prompt-phon{color:var(--muted);font-style:italic;font-size:.9rem;margin-bottom:1rem}
+  .blank-sentence{font-size:1.15rem;color:var(--ink);line-height:1.7;margin:.5rem 0 1rem;}
+  .blank{
+    display:inline-block;min-width:110px;border-bottom:2px solid var(--gold);
+    padding:0 6px;color:var(--terracotta);font-weight:700;
+  }
+
+  /* OPTIONS */
+  .options{display:grid;gap:.6rem;margin-top:.5rem;}
+  .opt{
+    text-align:left;padding:.85rem 1rem;border:1.5px solid var(--border);
+    background:#fff;border-radius:10px;font-family:inherit;font-size:1rem;
+    cursor:pointer;transition:all .15s;color:var(--ink);display:flex;align-items:center;gap:.6rem;
+  }
+  .opt .lbl{
+    background:var(--gold-light);color:#7a5e1a;font-weight:700;font-size:.78rem;
+    padding:3px 9px;border-radius:6px;flex-shrink:0;
+  }
+  .opt-stack{display:flex;flex-direction:column;gap:2px;line-height:1.25}
+  .opt-stack .opt-thai{font-weight:600;color:var(--ink)}
+  .opt-stack .opt-phon{font-size:.8rem;color:var(--muted);font-style:italic}
+  .opt:hover:not(:disabled){background:var(--teal-light);border-color:var(--teal)}
+  .opt.correct{background:var(--green-light);border-color:var(--green);color:var(--green);font-weight:600}
+  .opt.wrong{background:var(--red-light);border-color:var(--red);color:var(--red);font-weight:600}
+  .opt:disabled{cursor:default}
+
+  /* TEXT INPUT */
+  .text-row{display:flex;gap:.5rem;align-items:center;margin:.5rem 0 0}
+  .text-row input{
+    flex:1;padding:.85rem 1rem;border:1.5px solid var(--border);border-radius:10px;
+    font-family:inherit;font-size:1.05rem;background:#fff;color:var(--ink);
+    outline:none;transition:border-color .15s;
+  }
+  .text-row input:focus{border-color:var(--teal)}
+  .btn-submit{
+    background:var(--teal);color:#fff;border:none;padding:.85rem 1.4rem;
+    border-radius:10px;cursor:pointer;font-family:inherit;font-weight:600;
+    font-size:.95rem;transition:background .15s;
+  }
+  .btn-submit:hover{background:#134f4f}
+  .btn-submit:disabled{background:var(--muted);cursor:default}
+
+  /* FEEDBACK */
+  .feedback{
+    margin-top:1rem;padding:.8rem 1rem;border-radius:10px;font-size:.95rem;
+    display:none;
+  }
+  .feedback.ok{background:var(--green-light);color:var(--green);border:1px solid var(--green)}
+  .feedback.bad{background:var(--red-light);color:var(--red);border:1px solid var(--red)}
+  .feedback .correct-ans{font-weight:700}
+
+  /* FLASHCARD */
+  .flash{
+    perspective:1000px;margin:.75rem 0 1rem;
+  }
+  .flash-inner{
+    position:relative;width:100%;min-height:220px;
+    transition:transform .5s;transform-style:preserve-3d;cursor:pointer;
+  }
+  .flash.flipped .flash-inner{transform:rotateY(180deg);}
+  .flash-face{
+    position:absolute;inset:0;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    padding:1.2rem;border-radius:var(--radius);
+    backface-visibility:hidden;text-align:center;
+  }
+  .flash-front{background:linear-gradient(135deg,#fff 0%,var(--gold-light) 100%);border:1px solid var(--border)}
+  .flash-back{background:linear-gradient(135deg,var(--teal-light) 0%,#fff 100%);border:1px solid var(--teal);transform:rotateY(180deg);}
+  .flash-hint{font-size:.75rem;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:.5rem}
+  .flash-main{font-size:2rem;font-weight:700;color:var(--ink);line-height:1.25}
+  .flash-sub{margin-top:.5rem;color:var(--muted);font-style:italic;font-size:.95rem}
+  .flash-tip{text-align:center;color:var(--muted);font-size:.85rem;margin-bottom:.5rem}
+  .self-mark{display:flex;gap:.5rem;justify-content:center;margin-top:.75rem}
+  .self-mark button{
+    flex:1;max-width:180px;padding:.75rem 1rem;border-radius:10px;border:none;
+    font-family:inherit;font-weight:600;font-size:.95rem;cursor:pointer;
+  }
+  .mark-ok{background:var(--green);color:#fff}
+  .mark-bad{background:var(--red);color:#fff}
+
+  /* AUDIO BUTTON */
+  .speak-btn{
+    background:none;border:1.5px solid var(--teal);color:var(--teal);
+    padding:8px 14px;border-radius:24px;cursor:pointer;font-family:inherit;
+    font-size:.9rem;font-weight:600;display:inline-flex;align-items:center;gap:6px;
+    transition:all .15s;
+  }
+  .speak-btn:hover{background:var(--teal);color:#fff}
+  .speak-btn.pulse{animation:pulse 1s ease-in-out infinite;background:var(--teal);color:#fff;}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.55}}
+  .inline-speak{
+    background:none;border:none;cursor:pointer;font-size:1.2rem;
+    color:var(--teal);opacity:.7;padding:4px 8px;border-radius:50%;
+  }
+  .inline-speak:hover{opacity:1;background:var(--teal-light)}
+
+  /* NAV */
+  .nav-row{display:flex;gap:.6rem;justify-content:space-between;margin-top:.6rem}
+  .btn{
+    padding:.75rem 1.3rem;border-radius:10px;border:none;
+    font-family:inherit;font-weight:600;font-size:.9rem;cursor:pointer;
+    transition:all .15s;
+  }
+  .btn-primary{background:var(--teal);color:#fff}
+  .btn-primary:hover{background:#134f4f}
+  .btn-secondary{background:#fff;color:var(--muted);border:1px solid var(--border)}
+  .btn-secondary:hover{background:#f5f1e8}
+  .btn-accent{background:var(--gold);color:#fff}
+  .btn-accent:hover{background:#b09440}
+
+  footer{text-align:center;margin-top:2rem;color:var(--muted);font-size:.8rem}
+  footer a{color:var(--teal);text-decoration:none;margin:0 6px}
+  footer a:hover{text-decoration:underline}
+
+  @media(max-width:520px){
+    header h1{font-size:1.7rem}
+    .prompt-thai{font-size:1.5rem}
+    .flash-main{font-size:1.4rem}
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <nav class="top-nav">
+    <a href="glyph.html">✍️ Glyphs</a>
+    <a href="lessons.html">📚 Lessons</a>
+  </nav>
+  <header>
+    <div class="kicker">Practice · แบบฝึกหัด</div>
+    <h1>Thai Quiz</h1>
+    <p class="sub">Randomized questions drawn from all lesson pages — tap 🔊 to hear any Thai phrase.</p>
+  </header>
+
+  <div class="mode-bar">
+    <span class="mode-label">Mode</span>
+    <button class="mode-btn active" data-mode="mixed">🎲 Mixed</button>
+    <button class="mode-btn" data-mode="mc">🔤 Multiple choice</button>
+    <button class="mode-btn" data-mode="mc-th">🇹🇭 MC · Thai → meaning</button>
+    <button class="mode-btn" data-mode="mc-en">🇬🇧 MC · meaning → Thai</button>
+    <button class="mode-btn" data-mode="fill">✏️ Fill blank</button>
+    <button class="mode-btn" data-mode="listen">👂 Listening</button>
+    <button class="mode-btn" data-mode="flash">🔁 Flashcard</button>
+    <a class="mode-btn-link" href="glyph/alphabet.html" title="Thai script recognition game">🎮 Script game <span class="ext-arrow">↗</span></a>
+  </div>
+
+  <div class="score-bar">
+    <div class="metric">Score <span class="val" id="score">0</span></div>
+    <div class="metric">Q <span class="val" id="qnum">0</span>/<span id="qtot">10</span></div>
+    <div class="progress"><div id="progress-fill"></div></div>
+    <button class="btn btn-secondary" style="padding:.4rem .8rem;font-size:.8rem" id="restart">↻ Restart</button>
+  </div>
+
+  <div id="quiz-area"><!-- question card rendered here --></div>
+
+  <footer>
+    Back to lessons:
+    <a href="intro.html">100 Phrases</a>·
+    <a href="bank.html">Money &amp; Bank</a>·
+    <a href="emotions.html">Emotions</a>·
+    <a href="household.html">Household</a>·
+    <a href="transportation.html">Transportation</a>·
+    <a href="months.html">Months</a>·
+    <a href="hotel.html">Hotel</a>·
+    <a href="corps.html">Body &amp; Illness</a>·
+    <a href="market.html">Market</a>·
+    <a href="family.html">Family</a>·
+    <a href="places.html">Places</a>·
+    <a href="directions.html">Directions</a>·
+    <a href="colors.html">Colors</a>·
+    <a href="dii.html">Question Dii</a>·
+    <a href="hobbies.html">Hobbies</a>·
+    <a href="adverb.html">Adverbs of Frequency</a>
+  </footer>
+</div>
+
+<script>
+/* ============================================================
+   DATA — extracted from the lesson HTML files
+   Each item: {thai, phon, trans, source, lang:'en'|'fr'}
+   ============================================================ */
+
+const VOCAB = [
+  // ---- intro.html  (Top 100 phrases) — lang:'en' ----
+  {thai:'สวัสดี',phon:'sa-wat-dee',trans:'Hello',source:'100 Phrases',lang:'en'},
+  {thai:'ขอบคุณ',phon:'khop khun',trans:'Thank you',source:'100 Phrases',lang:'en'},
+  {thai:'ใช่',phon:'chai',trans:'Yes',source:'100 Phrases',lang:'en'},
+  {thai:'ไม่ใช่',phon:'mai chai',trans:'No',source:'100 Phrases',lang:'en'},
+  {thai:'ขอโทษ',phon:'kho thot',trans:'Sorry',source:'100 Phrases',lang:'en'},
+  {thai:'สบายดีไหม',phon:'sa-bai-dee mai',trans:'How are you?',source:'100 Phrases',lang:'en'},
+  {thai:'ฉันสบายดี',phon:'chan sa-bai-dee',trans:'I am fine',source:'100 Phrases',lang:'en'},
+  {thai:'ลาก่อน',phon:'la-gon',trans:'Goodbye',source:'100 Phrases',lang:'en'},
+  {thai:'ยินดีต้อนรับ',phon:'yin-dee ton-rab',trans:'Welcome',source:'100 Phrases',lang:'en'},
+  {thai:'ไม่เป็นไร',phon:'mai pen rai',trans:'No problem',source:'100 Phrases',lang:'en'},
+  {thai:'กรุณา',phon:'ka-ru-na',trans:'Please',source:'100 Phrases',lang:'en'},
+  {thai:'ขอ',phon:'kho',trans:'May I / Can I',source:'100 Phrases',lang:'en'},
+  {thai:'ได้',phon:'dai',trans:'Can / Able to',source:'100 Phrases',lang:'en'},
+  {thai:'ไม่ได้',phon:'mai dai',trans:'Cannot',source:'100 Phrases',lang:'en'},
+  {thai:'เข้าใจ',phon:'khao jai',trans:'Understand',source:'100 Phrases',lang:'en'},
+  {thai:'ไม่เข้าใจ',phon:'mai khao jai',trans:"Don't understand",source:'100 Phrases',lang:'en'},
+  {thai:'พูดช้าๆ',phon:'phut cha-cha',trans:'Speak slowly',source:'100 Phrases',lang:'en'},
+  {thai:'พูดอีกครั้ง',phon:'phut eek khrang',trans:'Say again',source:'100 Phrases',lang:'en'},
+  {thai:'คุณชื่ออะไร',phon:'khun cheu arai',trans:'What is your name?',source:'100 Phrases',lang:'en'},
+  {thai:'ฉันชื่อ',phon:'chan cheu',trans:'My name is',source:'100 Phrases',lang:'en'},
+  {thai:'คุณมาจากไหน',phon:'khun ma chak nai',trans:'Where are you from?',source:'100 Phrases',lang:'en'},
+  {thai:'ฉันมาจาก',phon:'chan ma chak',trans:'I am from',source:'100 Phrases',lang:'en'},
+  {thai:'อายุเท่าไหร่',phon:'a-yu tao rai',trans:'How old are you?',source:'100 Phrases',lang:'en'},
+  {thai:'กี่โมงแล้ว',phon:'gee mong laew',trans:'What time is it?',source:'100 Phrases',lang:'en'},
+  {thai:'วันนี้',phon:'wan nee',trans:'Today',source:'100 Phrases',lang:'en'},
+  {thai:'พรุ่งนี้',phon:'phrung nee',trans:'Tomorrow',source:'100 Phrases',lang:'en'},
+  {thai:'เมื่อวาน',phon:'meua wan',trans:'Yesterday',source:'100 Phrases',lang:'en'},
+  {thai:'ตอนนี้',phon:'ton nee',trans:'Now',source:'100 Phrases',lang:'en'},
+  {thai:'ที่นี่',phon:'tee nee',trans:'Here',source:'100 Phrases',lang:'en'},
+  {thai:'ที่นั่น',phon:'tee nan',trans:'There',source:'100 Phrases',lang:'en'},
+  {thai:'ไป',phon:'pai',trans:'Go',source:'100 Phrases',lang:'en'},
+  {thai:'มา',phon:'ma',trans:'Come',source:'100 Phrases',lang:'en'},
+  {thai:'กิน',phon:'gin',trans:'Eat',source:'100 Phrases',lang:'en'},
+  {thai:'ดื่ม',phon:'deum',trans:'Drink',source:'100 Phrases',lang:'en'},
+  {thai:'นอน',phon:'non',trans:'Sleep',source:'100 Phrases',lang:'en'},
+  {thai:'ทำงาน',phon:'tham ngan',trans:'Work',source:'100 Phrases',lang:'en'},
+  {thai:'เปิด',phon:'poet',trans:'Open',source:'100 Phrases',lang:'en'},
+  {thai:'ปิด',phon:'pit',trans:'Close',source:'100 Phrases',lang:'en'},
+  {thai:'ซื้อ',phon:'seu',trans:'Buy',source:'100 Phrases',lang:'en'},
+  {thai:'ขาย',phon:'khai',trans:'Sell',source:'100 Phrases',lang:'en'},
+  {thai:'ราคา',phon:'ra-kha',trans:'Price',source:'100 Phrases',lang:'en'},
+  {thai:'แพง',phon:'paeng',trans:'Expensive',source:'100 Phrases',lang:'en'},
+  {thai:'ถูก',phon:'thuk',trans:'Cheap',source:'100 Phrases',lang:'en'},
+  {thai:'ลดราคา',phon:'lot ra-kha',trans:'Discount',source:'100 Phrases',lang:'en'},
+  {thai:'น้ำ',phon:'nam',trans:'Water',source:'100 Phrases',lang:'en'},
+  {thai:'อาหาร',phon:'a-han',trans:'Food',source:'100 Phrases',lang:'en'},
+  {thai:'อร่อย',phon:'a-roi',trans:'Delicious',source:'100 Phrases',lang:'en'},
+  {thai:'ไม่อร่อย',phon:'mai a-roi',trans:'Not delicious',source:'100 Phrases',lang:'en'},
+  {thai:'เผ็ด',phon:'phet',trans:'Spicy',source:'100 Phrases',lang:'en'},
+  {thai:'หวาน',phon:'wan',trans:'Sweet',source:'100 Phrases',lang:'en'},
+  {thai:'เปรี้ยว',phon:'priao',trans:'Sour',source:'100 Phrases',lang:'en'},
+  {thai:'เค็ม',phon:'kem',trans:'Salty',source:'100 Phrases',lang:'en'},
+  {thai:'ห้องน้ำ',phon:'hong nam',trans:'Bathroom',source:'100 Phrases',lang:'en'},
+  {thai:'โรงแรม',phon:'rong raem',trans:'Hotel',source:'100 Phrases',lang:'en'},
+  {thai:'สนามบิน',phon:'sa-nam bin',trans:'Airport',source:'100 Phrases',lang:'en'},
+  {thai:'แท็กซี่',phon:'taek-si',trans:'Taxi',source:'100 Phrases',lang:'en'},
+  {thai:'รถไฟ',phon:'rot fai',trans:'Train',source:'100 Phrases',lang:'en'},
+  {thai:'รถบัส',phon:'rot bus',trans:'Bus',source:'100 Phrases',lang:'en'},
+  {thai:'ซ้าย',phon:'sai',trans:'Left',source:'100 Phrases',lang:'en'},
+  {thai:'ขวา',phon:'khwa',trans:'Right',source:'100 Phrases',lang:'en'},
+  {thai:'ตรงไป',phon:'trong pai',trans:'Go straight',source:'100 Phrases',lang:'en'},
+  {thai:'หยุด',phon:'yut',trans:'Stop',source:'100 Phrases',lang:'en'},
+  {thai:'ช่วยด้วย',phon:'chuay duay',trans:'Help',source:'100 Phrases',lang:'en'},
+  {thai:'ตำรวจ',phon:'tam-ruat',trans:'Police',source:'100 Phrases',lang:'en'},
+  {thai:'โรงพยาบาล',phon:'rong pha-ya-ban',trans:'Hospital',source:'100 Phrases',lang:'en'},
+  {thai:'หมอ',phon:'mor',trans:'Doctor',source:'100 Phrases',lang:'en'},
+  {thai:'ยา',phon:'ya',trans:'Medicine',source:'100 Phrases',lang:'en'},
+  {thai:'ฉันป่วย',phon:'chan puai',trans:'I am sick',source:'100 Phrases',lang:'en'},
+  {thai:'เจ็บ',phon:'jep',trans:'Pain',source:'100 Phrases',lang:'en'},
+  {thai:'ร้อน',phon:'ron',trans:'Hot',source:'100 Phrases',lang:'en'},
+  {thai:'หนาว',phon:'nao',trans:'Cold',source:'100 Phrases',lang:'en'},
+  {thai:'ฝนตก',phon:'fon tok',trans:'Rain',source:'100 Phrases',lang:'en'},
+  {thai:'แดด',phon:'daet',trans:'Sun',source:'100 Phrases',lang:'en'},
+  {thai:'เงิน',phon:'ngern',trans:'Money',source:'100 Phrases',lang:'en'},
+  {thai:'บัตรเครดิต',phon:'bat credit',trans:'Credit card',source:'100 Phrases',lang:'en'},
+  {thai:'เงินสด',phon:'ngern sot',trans:'Cash',source:'100 Phrases',lang:'en'},
+  {thai:'ใบเสร็จ',phon:'bai set',trans:'Receipt',source:'100 Phrases',lang:'en'},
+  {thai:'เปิดบัญชี',phon:'poet ban-chee',trans:'Open account',source:'100 Phrases',lang:'en'},
+  {thai:'จ่ายเงิน',phon:'jai ngern',trans:'Pay',source:'100 Phrases',lang:'en'},
+  {thai:'ฟรี',phon:'free',trans:'Free',source:'100 Phrases',lang:'en'},
+  {thai:'เร็ว',phon:'reo',trans:'Fast',source:'100 Phrases',lang:'en'},
+  {thai:'ช้า',phon:'cha',trans:'Slow',source:'100 Phrases',lang:'en'},
+  {thai:'ใหญ่',phon:'yai',trans:'Big',source:'100 Phrases',lang:'en'},
+  {thai:'เล็ก',phon:'lek',trans:'Small',source:'100 Phrases',lang:'en'},
+  {thai:'ใหม่',phon:'mai',trans:'New',source:'100 Phrases',lang:'en'},
+  {thai:'เก่า',phon:'gao',trans:'Old',source:'100 Phrases',lang:'en'},
+  {thai:'ดี',phon:'dee',trans:'Good',source:'100 Phrases',lang:'en'},
+  {thai:'ไม่ดี',phon:'mai dee',trans:'Bad',source:'100 Phrases',lang:'en'},
+  {thai:'สวย',phon:'suai',trans:'Beautiful',source:'100 Phrases',lang:'en'},
+  {thai:'น่าเกลียด',phon:'na-kliat',trans:'Ugly',source:'100 Phrases',lang:'en'},
+  {thai:'ง่าย',phon:'ngai',trans:'Easy',source:'100 Phrases',lang:'en'},
+  {thai:'ยาก',phon:'yak',trans:'Difficult',source:'100 Phrases',lang:'en'},
+  {thai:'แน่นอน',phon:'naenon',trans:'Of course',source:'100 Phrases',lang:'en'},
+  {thai:'อาจจะ',phon:'at ja',trans:'Maybe',source:'100 Phrases',lang:'en'},
+  {thai:'แน่ใจ',phon:'nae jai',trans:'Sure',source:'100 Phrases',lang:'en'},
+  {thai:'ไม่แน่ใจ',phon:'mai nae jai',trans:'Not sure',source:'100 Phrases',lang:'en'},
+  {thai:'คิดว่า',phon:'khit wa',trans:'Think',source:'100 Phrases',lang:'en'},
+  {thai:'รู้',phon:'roo',trans:'Know',source:'100 Phrases',lang:'en'},
+  {thai:'ไม่รู้',phon:'mai roo',trans:"Don't know",source:'100 Phrases',lang:'en'},
+
+  // ---- household.html (Household & Utensils) — lang:'en' ----
+  {thai:'ด้วย',phon:'dûay',trans:'With',source:'Household',lang:'en'},
+  {thai:'โดย',phon:'dooy',trans:'By',source:'Household',lang:'en'},
+  {thai:'ใช้',phon:'cháai',trans:'To use',source:'Household',lang:'en'},
+  {thai:'เครื่องซักผ้า',phon:'khrûang sák-phâa',trans:'Washing machine',source:'Household',lang:'en'},
+  {thai:'เครื่องดูดฝุ่น',phon:'khrûang dùut fùn',trans:'Vacuum',source:'Household',lang:'en'},
+  {thai:'เครื่องฟอกอากาศ',phon:'khrûang fɔ̂ɔk aa-gàat',trans:'Air purifier',source:'Household',lang:'en'},
+  {thai:'ไม้กวาด',phon:'máai gwàat',trans:'Broomstick',source:'Household',lang:'en'},
+  {thai:'ไม้ถูพื้น',phon:'máai thǔu phúuun',trans:'Mop',source:'Household',lang:'en'},
+  {thai:'ผ้า',phon:'phâa',trans:'Cloth',source:'Household',lang:'en'},
+  {thai:'ไมโครเวฟ',phon:'mai-kroo-wép',trans:'Microwave',source:'Household',lang:'en'},
+  {thai:'เตาแก๊ส',phon:'dtao géɛt',trans:'Gas stove',source:'Household',lang:'en'},
+  {thai:'เตาอบ',phon:'dtao òp',trans:'Oven',source:'Household',lang:'en'},
+  {thai:'พัดลม',phon:'phát-lom',trans:'Fan',source:'Household',lang:'en'},
+  {thai:'มีด',phon:'mîit',trans:'Knife',source:'Household',lang:'en'},
+  {thai:'ช้อน',phon:'chɔ́ɔn',trans:'Spoon',source:'Household',lang:'en'},
+  {thai:'ส้อม',phon:'sôom',trans:'Fork',source:'Household',lang:'en'},
+  {thai:'ตะเกียบ',phon:'dtà-gìap',trans:'Chopsticks',source:'Household',lang:'en'},
+  {thai:'ตัด',phon:'dtàt',trans:'To cut',source:'Household',lang:'en'},
+  {thai:'หั่น',phon:'hàn',trans:'To slice',source:'Household',lang:'en'},
+  {thai:'สับ',phon:'sàp',trans:'To chop / mince',source:'Household',lang:'en'},
+  {thai:'ปอก',phon:'bpɔ̀ɔk',trans:'To peel',source:'Household',lang:'en'},
+  {thai:'ทำความสะอาด',phon:'tham kwaam-sà-àat',trans:'To clean',source:'Household',lang:'en'},
+  {thai:'เช็ด',phon:'chét',trans:'To wipe',source:'Household',lang:'en'},
+  {thai:'ถู',phon:'thǔu',trans:'To mop / swab',source:'Household',lang:'en'},
+  {thai:'ล้าง',phon:'láang',trans:'To wash',source:'Household',lang:'en'},
+  {thai:'ซัก',phon:'sák',trans:'To wash (fabric)',source:'Household',lang:'en'},
+
+  // ---- bank.html — lang:'en' ----
+  {thai:'สตางค์',phon:'sà-dtaŋ',trans:'Money (small coin)',source:'Money & Bank',lang:'en'},
+  {thai:'แลกเงิน',phon:'lɛ̂ɛk ŋəən',trans:'Exchange money',source:'Money & Bank',lang:'en'},
+  {thai:'โอนเงิน',phon:'oon ŋəən',trans:'Transfer money',source:'Money & Bank',lang:'en'},
+  {thai:'ถอนเงิน',phon:'thǒon ŋəən',trans:'Withdraw money',source:'Money & Bank',lang:'en'},
+  {thai:'ฝากเงิน',phon:'fàak ŋəən',trans:'Deposit money',source:'Money & Bank',lang:'en'},
+  {thai:'ธนาคาร',phon:'thá-naa-khaan',trans:'Bank',source:'Money & Bank',lang:'en'},
+  {thai:'ตู้เอทีเอ็ม',phon:'dtûu ATM',trans:'ATM',source:'Money & Bank',lang:'en'},
+  {thai:'จ่าย',phon:'jàay',trans:'To pay',source:'Money & Bank',lang:'en'},
+  {thai:'ยืม',phon:'yuuum',trans:'To borrow',source:'Money & Bank',lang:'en'},
+  {thai:'คืน',phon:'kuuun',trans:'To return (something)',source:'Money & Bank',lang:'en'},
+  {thai:'บัญชีธนาคาร',phon:'ban-chii thá-naa-khaan',trans:'Bank account',source:'Money & Bank',lang:'en'},
+  {thai:'บัตรประชาชน',phon:'bàt bprà-chaa-chon',trans:'ID card',source:'Money & Bank',lang:'en'},
+  {thai:'สมุดบัญชี',phon:'sà-mùt ban-chii',trans:'Bank book',source:'Money & Bank',lang:'en'},
+  {thai:'หาย',phon:'hǎay',trans:'Lost / stolen',source:'Money & Bank',lang:'en'},
+  {thai:'แนะนำ',phon:'nɛ́ɛ-nam',trans:'To recommend',source:'Money & Bank',lang:'en'},
+  {thai:'เงินเหรียญ',phon:'ŋəən rǐan',trans:'Coin',source:'Money & Bank',lang:'en'},
+  {thai:'ซื้อของ',phon:'sɯ́w khôoŋ',trans:'Shopping',source:'Money & Bank',lang:'en'},
+
+  // ---- emotions.html — lang:'fr' ----
+  {thai:'ดีใจ',phon:'dee jai',trans:'heureux / heureuse',source:'Emotions',lang:'fr'},
+  {thai:'เสียใจ',phon:'sǐa jai',trans:'triste',source:'Emotions',lang:'fr'},
+  {thai:'โกรธ',phon:'gròht',trans:'fâché(e) / en colère',source:'Emotions',lang:'fr'},
+  {thai:'กลัว',phon:'glua',trans:'avoir peur / effrayé(e)',source:'Emotions',lang:'fr'},
+  {thai:'งง',phon:'ngong',trans:'confus(e)',source:'Emotions',lang:'fr'},
+  {thai:'สับสน',phon:'sàp sǒn',trans:'confus(e)',source:'Emotions',lang:'fr'},
+  {thai:'เครียด',phon:'krîat',trans:'stressé(e)',source:'Emotions',lang:'fr'},
+  {thai:'เบื่อ',phon:'bʉ̀a',trans:'ennuyé(e) / en avoir assez',source:'Emotions',lang:'fr'},
+  {thai:'ประทับใจ',phon:'prà-táp jai',trans:'impressionné(e) / touché(e)',source:'Emotions',lang:'fr'},
+  {thai:'ภูมิใจ',phon:'puum jai',trans:'fier / fière',source:'Emotions',lang:'fr'},
+  {thai:'ผิดหวัง',phon:'pìt wǎng',trans:'déçu(e)',source:'Emotions',lang:'fr'},
+  {thai:'เหงา',phon:'ngǎo',trans:'seul(e)',source:'Emotions',lang:'fr'},
+  {thai:'อาย',phon:'aai',trans:'gêné(e) / embarrassé(e)',source:'Emotions',lang:'fr'},
+  {thai:'มีความหวัง',phon:'mee kwaam wǎng',trans:"plein(e) d'espoir",source:'Emotions',lang:'fr'},
+  {thai:'สบายใจ',phon:'sà-baai jai',trans:'soulagé(e) / apaisé(e)',source:'Emotions',lang:'fr'},
+  {thai:'ตื่นเต้น',phon:'tʉ̀n tên',trans:'excité(e)',source:'Emotions',lang:'fr'},
+
+  // ---- transportation.html — lang:'en' ----
+  {thai:'รถไฟ',phon:'rót-fai',trans:'Train',source:'Transportation',lang:'en'},
+  {thai:'รถยนต์',phon:'rót-yon',trans:'Car',source:'Transportation',lang:'en'},
+  {thai:'รถเมล์',phon:'rót-mee',trans:'City bus',source:'Transportation',lang:'en'},
+  {thai:'รถทัวร์',phon:'rót-thua',trans:'Coach bus',source:'Transportation',lang:'en'},
+  {thai:'เครื่องบิน',phon:'khrûan-bin',trans:'Airplane',source:'Transportation',lang:'en'},
+  {thai:'เรือ',phon:'rua',trans:'Boat / Ship',source:'Transportation',lang:'en'},
+  {thai:'สถานีรถไฟ',phon:'sà-thǎa-nii rót-fai',trans:'Train station',source:'Transportation',lang:'en'},
+  {thai:'สถานีขนส่ง',phon:'sà-thǎa-nii khǒn-sòn',trans:'Bus terminal',source:'Transportation',lang:'en'},
+  {thai:'สนามบิน',phon:'sà-nǎam bin',trans:'Airport',source:'Transportation',lang:'en'},
+  {thai:'ป้ายรถเมล์',phon:'bpâai rót-mee',trans:'Bus stop',source:'Transportation',lang:'en'},
+  {thai:'ท่าเรือ',phon:'thâa rua',trans:'Pier / Port',source:'Transportation',lang:'en'},
+  {thai:'ขึ้น',phon:'khûn',trans:'Get on / board',source:'Transportation',lang:'en'},
+  {thai:'ลง',phon:'lon',trans:'Get off / alight',source:'Transportation',lang:'en'},
+  {thai:'ยังไง',phon:'yaŋ-ŋai',trans:'How / in what way',source:'Transportation',lang:'en'},
+  {thai:'ใช้เวลา',phon:'chái wee-laa',trans:'Take (time)',source:'Transportation',lang:'en'},
+  {thai:'จอด',phon:'jɔ̀ɔt',trans:'Stop / park',source:'Transportation',lang:'en'},
+
+  // ---- months.html — lang:'en' ----
+  {thai:'มกราคม',phon:'mók-ga-raa-khom',trans:'January',source:'Months',lang:'en'},
+  {thai:'กุมภาพันธ์',phon:'gum-phaa-phan',trans:'February',source:'Months',lang:'en'},
+  {thai:'มีนาคม',phon:'mii-naa-khom',trans:'March',source:'Months',lang:'en'},
+  {thai:'เมษายน',phon:'mee-sǎa-yon',trans:'April',source:'Months',lang:'en'},
+  {thai:'พฤษภาคม',phon:'phrúet-sà-phaa-khom',trans:'May',source:'Months',lang:'en'},
+  {thai:'มิถุนายน',phon:'mí-thù-naa-yon',trans:'June',source:'Months',lang:'en'},
+  {thai:'กรกฎาคม',phon:'gà-rák-ga-daa-khom',trans:'July',source:'Months',lang:'en'},
+  {thai:'สิงหาคม',phon:'sǐng-hǎa-khom',trans:'August',source:'Months',lang:'en'},
+  {thai:'กันยายน',phon:'gan-yaa-yon',trans:'September',source:'Months',lang:'en'},
+  {thai:'ตุลาคม',phon:'dtù-laa-khom',trans:'October',source:'Months',lang:'en'},
+  {thai:'พฤศจิกายน',phon:'phrúet-sà-jì-gaa-yon',trans:'November',source:'Months',lang:'en'},
+  {thai:'ธันวาคม',phon:'than-waa-khom',trans:'December',source:'Months',lang:'en'},
+
+  // ---- hotel.html — lang:'en' ----
+  // Numbered in-room vocab
+  {thai:'รถเข็นบริการส่งถึงห้อง',phon:'rót khěn baaw-rí-gaan sòng thûeng hâawng',trans:'Room service cart',source:'Hotel',lang:'en'},
+  {thai:'เตียงคู่',phon:'dtiiang khûu',trans:'Twin-sized bed',source:'Hotel',lang:'en'},
+  {thai:'ทีวี',phon:'thii-wii',trans:'TV',source:'Hotel',lang:'en'},
+  {thai:'เตียงเดี่ยวสำหรับนอนสองคน',phon:'dtiiang diiao sǎm-ràp naawn saawng khon',trans:'Double-sized bed',source:'Hotel',lang:'en'},
+  {thai:'ทางเดิน',phon:'thaang dooen',trans:'Corridor',source:'Hotel',lang:'en'},
+  {thai:'ลิฟต์',phon:'líp',trans:'Elevator',source:'Hotel',lang:'en'},
+  {thai:'ตู้กดน้ำ',phon:'dtuu gòt nám',trans:'Vending machine',source:'Hotel',lang:'en'},
+  {thai:'เตียงเดี่ยวขนาดคิงไซส์',phon:'dtiiang dìiao khà-nàat khing sái',trans:'King-sized bed',source:'Hotel',lang:'en'},
+  {thai:'ฝักบัว',phon:'fàk buua',trans:'Shower',source:'Hotel',lang:'en'},
+  {thai:'อ่างอาบน้ำ',phon:'àang àap nám',trans:'Bathtub',source:'Hotel',lang:'en'},
+  {thai:'อ่างล้างหน้า',phon:'àang láang nâa',trans:'Sink',source:'Hotel',lang:'en'},
+  {thai:'แผนกต้อนรับส่วนหน้า',phon:'phà-nàaek dtaawn-ráp sùuan nâa',trans:'Front desk',source:'Hotel',lang:'en'},
+  // Accommodation types
+  {thai:'โรงแรม',phon:'roong-raaem',trans:'Hotel',source:'Hotel',lang:'en'},
+  {thai:'รีสอร์ท',phon:'rii-sàawt',trans:'Resort',source:'Hotel',lang:'en'},
+  {thai:'ที่พักพร้อมอาหารเช้า',phon:'thii phák phráawm aa-hǎan cháo',trans:'Bed & breakfast',source:'Hotel',lang:'en'},
+  {thai:'โรงแรมขนาดเล็ก',phon:'roong-raaem khà-nàat lék',trans:'Inn',source:'Hotel',lang:'en'},
+  {thai:'โฮสเทล',phon:'hóot-theo',trans:'Hostel',source:'Hotel',lang:'en'},
+  {thai:'ที่ตั้งแคมป์',phon:'thii dtâng khaaem',trans:'Campground',source:'Hotel',lang:'en'},
+  // Must-know
+  {thai:'เคเบิ้ลทีวี',phon:'khee-bôen thii-wii',trans:'Cable TV',source:'Hotel',lang:'en'},
+  {thai:'แอร์',phon:'aae',trans:'Air conditioning',source:'Hotel',lang:'en'},
+  {thai:'ฮีทเตอร์',phon:'híit dtôoe',trans:'Heater',source:'Hotel',lang:'en'},
+  {thai:'สบู่',phon:'sà-bùu',trans:'Soap',source:'Hotel',lang:'en'},
+  {thai:'แชมพู',phon:'chaaem-phuu',trans:'Shampoo',source:'Hotel',lang:'en'},
+  {thai:'แปรงสีฟัน',phon:'bpraaeng sǐi fan',trans:'Toothbrush',source:'Hotel',lang:'en'},
+  {thai:'ไวไฟ',phon:'wai-fai',trans:'WI-FI',source:'Hotel',lang:'en'},
+  {thai:'สระว่ายน้ำ',phon:'sà-wâai-nám',trans:'Swimming pool',source:'Hotel',lang:'en'},
+  {thai:'ฟิตเนส',phon:'fít-nèet',trans:'Gym',source:'Hotel',lang:'en'},
+  {thai:'วิวทะเล',phon:'wiu thá-lee',trans:'Ocean view',source:'Hotel',lang:'en'},
+  {thai:'วิวภูเขา',phon:'wiu phuu-kháo',trans:'Mountain view',source:'Hotel',lang:'en'},
+  {thai:'รวมทุกอย่าง',phon:'ruuam thúk-yàang',trans:'All inclusive',source:'Hotel',lang:'en'},
+  {thai:'หมายเลขห้อง',phon:'mǎai lêek hâawng',trans:'Room number',source:'Hotel',lang:'en'},
+  {thai:'กุญแจ',phon:'gun-jaae',trans:'Key',source:'Hotel',lang:'en'},
+  {thai:'เช็คอิน',phon:'chék-in',trans:'Check in',source:'Hotel',lang:'en'},
+  // ---- corps.html — lang:'fr' ----
+  {thai:'ผม',phon:'phôme',trans:'les cheveux',source:'Body & Illness',lang:'fr'},
+  {thai:'หัว',phon:'hua',trans:'la tête',source:'Body & Illness',lang:'fr'},
+  {thai:'ตา',phon:'taa',trans:'les yeux',source:'Body & Illness',lang:'fr'},
+  {thai:'หู',phon:'hou',trans:'les oreilles',source:'Body & Illness',lang:'fr'},
+  {thai:'จมูก',phon:'ja-mouk',trans:'le nez',source:'Body & Illness',lang:'fr'},
+  {thai:'ปาก',phon:'paak',trans:'la bouche',source:'Body & Illness',lang:'fr'},
+  {thai:'ฟัน',phon:'fun',trans:'les dents',source:'Body & Illness',lang:'fr'},
+  {thai:'ไหล่',phon:'laï',trans:"l'épaule",source:'Body & Illness',lang:'fr'},
+  {thai:'คอ',phon:'khor',trans:'le cou / la gorge',source:'Body & Illness',lang:'fr'},
+  {thai:'หน้าอก',phon:'naa ok',trans:'la poitrine',source:'Body & Illness',lang:'fr'},
+  {thai:'แขน',phon:'khène',trans:'le bras',source:'Body & Illness',lang:'fr'},
+  {thai:'ข้อศอก',phon:'kho sork',trans:'le coude',source:'Body & Illness',lang:'fr'},
+  {thai:'กระเพาะ',phon:'kra pror',trans:"l'estomac",source:'Body & Illness',lang:'fr'},
+  {thai:'ท้อง',phon:'thǒng',trans:'le ventre',source:'Body & Illness',lang:'fr'},
+  {thai:'มือ',phon:'mue',trans:'la main',source:'Body & Illness',lang:'fr'},
+  {thai:'นิ้วมือ',phon:'niw mue',trans:'les doigts',source:'Body & Illness',lang:'fr'},
+  {thai:'ขา',phon:'kha',trans:'la jambe',source:'Body & Illness',lang:'fr'},
+  {thai:'หัวเข่า',phon:'hua khao',trans:'le genou',source:'Body & Illness',lang:'fr'},
+  {thai:'ข้อเท้า',phon:'kho thǎo',trans:'la cheville',source:'Body & Illness',lang:'fr'},
+  {thai:'เท้า',phon:'thǎo',trans:'les pieds',source:'Body & Illness',lang:'fr'},
+  {thai:'เจ็บ',phon:'jəb',trans:'avoir mal',source:'Body & Illness',lang:'fr'},
+  {thai:'ดีขึ้น',phon:'dii kôn',trans:'aller mieux',source:'Body & Illness',lang:'fr'},
+  {thai:'รู้สึก',phon:'rúusωk',trans:'sentir / ressentir',source:'Body & Illness',lang:'fr'},
+  {thai:'ป่วย',phon:'bpuùaay',trans:'malade',source:'Body & Illness',lang:'fr'},
+  {thai:'ต้อง',phon:'dtɔɔng',trans:'devoir / falloir',source:'Body & Illness',lang:'fr'},
+  {thai:'พักผ่อน',phon:'pákpɔɔn',trans:'se reposer',source:'Body & Illness',lang:'fr'},
+  {thai:'ไอ',phon:'ai',trans:'tousser',source:'Body & Illness',lang:'fr'},
+  {thai:'จาม',phon:'jaam',trans:'éternuer',source:'Body & Illness',lang:'fr'},
+  {thai:'ถ้า',phon:'tâa',trans:'si',source:'Body & Illness',lang:'fr'},
+  {thai:'หา',phon:'hǎa',trans:'trouver / rencontrer',source:'Body & Illness',lang:'fr'},
+  {thai:'ไข้',phon:'kâi',trans:'la fièvre',source:'Body & Illness',lang:'fr'},
+  {thai:'หวัด',phon:'wàd',trans:'le rhume / la grippe',source:'Body & Illness',lang:'fr'},
+  {thai:'อาเจียน',phon:'aajiiaan',trans:'vomir',source:'Body & Illness',lang:'fr'},
+  {thai:'ท้องเสีย',phon:'tɔóng siǐaa',trans:'la diarrhée',source:'Body & Illness',lang:'fr'},
+  {thai:'เมื่อย',phon:'mωωaay',trans:'être courbaturé',source:'Body & Illness',lang:'fr'},
+  {thai:'เวียนหัว',phon:'wiiaan huǔaa',trans:'avoir mal au cœur',source:'Body & Illness',lang:'fr'},
+  {thai:'ยา',phon:'yaa',trans:'un médicament',source:'Body & Illness',lang:'fr'},
+  {thai:'ยาน้ำ',phon:'yaa nám',trans:'un sirop',source:'Body & Illness',lang:'fr'},
+  {thai:'ฉีด',phon:'chìid',trans:'une piqûre / injecter',source:'Body & Illness',lang:'fr'},
+  {thai:'เม็ด',phon:'məd',trans:'pilule (classificateur)',source:'Body & Illness',lang:'fr'},
+
+  // ---- market.html (Leçon 2 — Au marché) — lang:'fr' ----
+  {thai:'ตลาด',phon:'dtalàad',trans:'le marché',source:'Market',lang:'fr'},
+  {thai:'ไป',phon:'bpai',trans:'aller',source:'Market',lang:'fr'},
+  {thai:'ซื้อ',phon:'sɯ́ɯ',trans:'acheter',source:'Market',lang:'fr'},
+  {thai:'เอา',phon:'ao',trans:'prendre',source:'Market',lang:'fr'},
+  {thai:'มี',phon:'mii',trans:'avoir',source:'Market',lang:'fr'},
+  {thai:'ราคา',phon:'raakaa',trans:'le prix',source:'Market',lang:'fr'},
+  {thai:'เท่าไหร่',phon:'tâo rài',trans:'combien',source:'Market',lang:'fr'},
+  {thai:'กี่',phon:'gìi',trans:'combien (+ classificateur)',source:'Market',lang:'fr'},
+  {thai:'อะไร',phon:'àrai',trans:'que / quoi',source:'Market',lang:'fr'},
+  {thai:'ละ',phon:'lá',trans:'par',source:'Market',lang:'fr'},
+  {thai:'กิโล',phon:'gìloo',trans:'kilogramme',source:'Market',lang:'fr'},
+  {thai:'ครึ่ง',phon:'krɯ̂ŋ',trans:'demi',source:'Market',lang:'fr'},
+  {thai:'ทั้งหมด',phon:'táng mòd',trans:'le total',source:'Market',lang:'fr'},
+  {thai:'ผลไม้',phon:'pǒn lá mái',trans:'un fruit / les fruits',source:'Market',lang:'fr'},
+  {thai:'มะละกอ',phon:'málágɔɔ',trans:'la papaye',source:'Market',lang:'fr'},
+  {thai:'สับปะรด',phon:'sàp bpà ród',trans:"l'ananas",source:'Market',lang:'fr'},
+  {thai:'ส้ม',phon:'sôm',trans:"l'orange",source:'Market',lang:'fr'},
+  {thai:'องุ่น',phon:'à ngùn',trans:'le raisin',source:'Market',lang:'fr'},
+  {thai:'แตงโม',phon:'dtεεng moo',trans:'la pastèque',source:'Market',lang:'fr'},
+  {thai:'ทุเรียน',phon:'tú riiaan',trans:'le durian',source:'Market',lang:'fr'},
+  {thai:'มะม่วง',phon:'má muûaang',trans:'la mangue',source:'Market',lang:'fr'},
+  {thai:'เงาะ',phon:'ngɔ́',trans:'le ramboutan',source:'Market',lang:'fr'},
+  {thai:'ผัก',phon:'pàk',trans:'un légume / les légumes',source:'Market',lang:'fr'},
+  {thai:'มันฝรั่ง',phon:'man faràng',trans:'la pomme de terre',source:'Market',lang:'fr'},
+  {thai:'หัวหอม',phon:'huǔaa hɔ̌ɔm',trans:"l'oignon",source:'Market',lang:'fr'},
+  {thai:'มะเขือเทศ',phon:'má kɯ̌aa tə̂əd',trans:'la tomate',source:'Market',lang:'fr'},
+  {thai:'กระเทียม',phon:'grá tiiaam',trans:"l'ail",source:'Market',lang:'fr'},
+  {thai:'เนื้อ',phon:'nɯ́aa',trans:'la viande',source:'Market',lang:'fr'},
+  {thai:'หมู',phon:'mǔu',trans:'le porc',source:'Market',lang:'fr'},
+  {thai:'ไก่',phon:'gài',trans:'le poulet',source:'Market',lang:'fr'},
+  {thai:'ปลา',phon:'bplaa',trans:'le poisson',source:'Market',lang:'fr'},
+
+  // ---- family.html (Leçon 4 — Ma famille) — lang:'fr' ----
+  {thai:'ครอบครัว',phon:'krɔ̂ɔb kruuaa',trans:'la famille / family',source:'Family',lang:'fr'},
+  {thai:'พ่อ',phon:'pɔ̂ɔ',trans:'le père / father',source:'Family',lang:'fr'},
+  {thai:'แม่',phon:'mɛ̂ɛ',trans:'la mère / mother',source:'Family',lang:'fr'},
+  {thai:'ลูก',phon:'lûuk',trans:"l'enfant / child",source:'Family',lang:'fr'},
+  {thai:'ลูกสาว',phon:'lûuk sǎaw',trans:'la fille / daughter',source:'Family',lang:'fr'},
+  {thai:'ลูกชาย',phon:'lûuk chaay',trans:'le fils / son',source:'Family',lang:'fr'},
+  {thai:'สามี',phon:'sǎamii',trans:'le mari / husband',source:'Family',lang:'fr'},
+  {thai:'ภรรยา',phon:'pan rayaa',trans:'la femme / wife',source:'Family',lang:'fr'},
+  {thai:'พี่ชาย',phon:'pîi chaay',trans:'le grand frère / older brother',source:'Family',lang:'fr'},
+  {thai:'น้องชาย',phon:'nɔ́ɔng chaay',trans:'le petit frère / younger brother',source:'Family',lang:'fr'},
+  {thai:'พี่สาว',phon:'pîi sǎaw',trans:'la grande sœur / older sister',source:'Family',lang:'fr'},
+  {thai:'น้องสาว',phon:'nɔ́ɔng sǎaw',trans:'la petite sœur / younger sister',source:'Family',lang:'fr'},
+  {thai:'ปู่',phon:'bpùu',trans:'le grand-père paternel / paternal grandfather',source:'Family',lang:'fr'},
+  {thai:'ตา',phon:'dtaa',trans:'le grand-père maternel / maternal grandfather',source:'Family',lang:'fr'},
+  {thai:'ย่า',phon:'yâa',trans:'la grand-mère paternelle / paternal grandmother',source:'Family',lang:'fr'},
+  {thai:'ยาย',phon:'yaay',trans:'la grand-mère maternelle / maternal grandmother',source:'Family',lang:'fr'},
+  {thai:'ลุง',phon:'lung',trans:"l'oncle (aîné) / uncle (older)",source:'Family',lang:'fr'},
+  {thai:'อา',phon:'aa',trans:"l'oncle (cadet) / uncle (younger)",source:'Family',lang:'fr'},
+  {thai:'ป้า',phon:'bpâa',trans:'la tante (aînée) / aunt (older)',source:'Family',lang:'fr'},
+  {thai:'น้า',phon:'nâa',trans:'la tante (cadette) / aunt (younger)',source:'Family',lang:'fr'},
+  {thai:'ชื่อ',phon:'chɯ̂ɯ',trans:"s'appeler / to be called",source:'Family',lang:'fr'},
+  {thai:'ของ',phon:'kɔ̌ɔng',trans:'de (possession) / of',source:'Family',lang:'fr'},
+  {thai:'อะไร',phon:'àrai',trans:'que / quoi / what',source:'Family',lang:'fr'},
+  {thai:'ใคร',phon:'krai',trans:'qui / who',source:'Family',lang:'fr'},
+  {thai:'แต่งงาน',phon:'dtὲɛng ngaan',trans:'marié / married',source:'Family',lang:'fr'},
+
+  // ---- places.html (Leçon 5 — Les lieux) — lang:'fr' ----
+  {thai:'บ้าน',phon:'bâan',trans:'la maison / house',source:'Places',lang:'fr'},
+  {thai:'โรงเรียน',phon:'roong riiaan',trans:"l'école / school",source:'Places',lang:'fr'},
+  {thai:'สมาคมฝรั่งเศส',phon:'samaakom faràngsə̀əd',trans:"l'alliance française / Alliance française",source:'Places',lang:'fr'},
+  {thai:'โรงพยาบาล',phon:'roong páyaabaan',trans:"l'hôpital / hospital",source:'Places',lang:'fr'},
+  {thai:'ตลาด',phon:'dtàlàad',trans:'le marché / market',source:'Places',lang:'fr'},
+  {thai:'วัด',phon:'wád',trans:'le temple / temple',source:'Places',lang:'fr'},
+  {thai:'สถานีรถไฟ',phon:'satǎanii rót fai',trans:'la gare / train station',source:'Places',lang:'fr'},
+  {thai:'สถานีขนส่ง',phon:'satǎanii kǒn sòng',trans:'le terminal de bus / bus terminal',source:'Places',lang:'fr'},
+  {thai:'ร้านขายของ',phon:'ráan kǎay kɔ̌ɔng',trans:'le magasin / shop',source:'Places',lang:'fr'},
+  {thai:'ร้านอาหาร',phon:'ráan aahǎan',trans:'le restaurant / restaurant',source:'Places',lang:'fr'},
+  {thai:'ถนน',phon:'tanǒn',trans:'la rue / la route / street / road',source:'Places',lang:'fr'},
+  {thai:'โรงหนัง',phon:'roong nǎng',trans:'le cinéma / cinema',source:'Places',lang:'fr'},
+  {thai:'ปั๊มน้ำมัน',phon:'bpám nám man',trans:'la station-service / gas station',source:'Places',lang:'fr'},
+  {thai:'โรงแรม',phon:'roong rεεm',trans:"l'hôtel / hotel",source:'Places',lang:'fr'},
+  {thai:'สวนสาธารณะ',phon:'sǔuaan sǎataaraná',trans:'le parc / public park',source:'Places',lang:'fr'},
+  {thai:'สวนสัตว์',phon:'sǔuaan sàt',trans:'le zoo / zoo',source:'Places',lang:'fr'},
+  {thai:'ลานจอดรถ',phon:'laan jɔ̀ɔd rót',trans:'le parking / parking lot',source:'Places',lang:'fr'},
+  {thai:'โบสถ์',phon:'bòod',trans:"l'église / church",source:'Places',lang:'fr'},
+  {thai:'ไปรษณีย์',phon:'bprai sà nii',trans:'la poste / post office',source:'Places',lang:'fr'},
+  {thai:'ธนาคาร',phon:'tánaakaan',trans:'la banque / bank',source:'Places',lang:'fr'},
+  {thai:'ที่',phon:'tîi',trans:'à / at',source:'Places',lang:'fr'},
+  {thai:'ที่นี่',phon:'tîi nîi',trans:'ici / here',source:'Places',lang:'fr'},
+  {thai:'ที่นั่น',phon:'tîi nân',trans:'là / there',source:'Places',lang:'fr'},
+  {thai:'ที่โน่น',phon:'tîi nôon',trans:'là-bas / over there',source:'Places',lang:'fr'},
+  {thai:'ที่ไหน',phon:'tîi nǎi',trans:'où / where',source:'Places',lang:'fr'},
+  {thai:'ใน',phon:'nai',trans:'dans / in',source:'Places',lang:'fr'},
+  {thai:'อยู่',phon:'yùu',trans:'être / se trouver / to be located',source:'Places',lang:'fr'},
+  {thai:'ข้าง',phon:'kâang',trans:'à côté de / next to',source:'Places',lang:'fr'},
+  {thai:'หัวมุม',phon:'huǔaa mum',trans:'au coin de / at the corner of',source:'Places',lang:'fr'},
+  {thai:'ตรงข้าม',phon:'dtrong kâam',trans:'en face de / opposite',source:'Places',lang:'fr'},
+  {thai:'ระหว่าง',phon:'ráw aàng',trans:'entre / between',source:'Places',lang:'fr'},
+  {thai:'ใกล้',phon:'glâi',trans:'près (de) / near',source:'Places',lang:'fr'},
+  {thai:'ไกล',phon:'glai',trans:'loin (de) / far',source:'Places',lang:'fr'},
+  {thai:'แถว',phon:'tεε̌w',trans:'aux environs de / around',source:'Places',lang:'fr'},
+
+  // ---- directions.html (Leçon 6 — Comment va-t-on à la poste ?) — lang:'fr' ----
+  {thai:'ทาง',phon:'taang',trans:'le chemin / la direction / way',source:'Directions',lang:'fr'},
+  {thai:'ตรง',phon:'dtrong',trans:'(tout) droit / straight',source:'Directions',lang:'fr'},
+  {thai:'เลี้ยว',phon:'líiaáw',trans:'tourner / to turn',source:'Directions',lang:'fr'},
+  {thai:'ซอย',phon:'sɔɔy',trans:'une petite rue / a small alley',source:'Directions',lang:'fr'},
+  {thai:'ซ้าย',phon:'sáay',trans:'gauche / left',source:'Directions',lang:'fr'},
+  {thai:'ซ้ายมือ',phon:'sáay mɯɯ',trans:'sur la gauche / on the left',source:'Directions',lang:'fr'},
+  {thai:'ขวา',phon:'kwǎa',trans:'droite / right',source:'Directions',lang:'fr'},
+  {thai:'ขวามือ',phon:'kwǎa mɯɯ',trans:'sur la droite / on the right',source:'Directions',lang:'fr'},
+  {thai:'แยก',phon:'yεε̂k',trans:'croisement / intersection',source:'Directions',lang:'fr'},
+  {thai:'ไฟแดง',phon:'fai dεεng',trans:'un feu rouge / a red light',source:'Directions',lang:'fr'},
+  {thai:'ข้าม',phon:'kâam',trans:'traverser / to cross',source:'Directions',lang:'fr'},
+  {thai:'สะพาน',phon:'sàpaan',trans:'un pont / a bridge',source:'Directions',lang:'fr'},
+  // ---- colors.html — lang:'en' ----
+  {thai:'สี',phon:'sǐi',trans:'color',source:'Colors',lang:'en'},
+  {thai:'สีดำ',phon:'sǐi dam',trans:'black',source:'Colors',lang:'en'},
+  {thai:'สีขาว',phon:'sǐi kʰǎaw',trans:'white',source:'Colors',lang:'en'},
+  {thai:'สีแดง',phon:'sǐi dɛɛŋ',trans:'red',source:'Colors',lang:'en'},
+  {thai:'สีน้ำเงิน',phon:'sǐi nám ŋən',trans:'blue',source:'Colors',lang:'en'},
+  {thai:'สีเหลือง',phon:'sǐi lɯ̌aŋ',trans:'yellow',source:'Colors',lang:'en'},
+  {thai:'สีเขียว',phon:'sǐi kʰǐaw',trans:'green',source:'Colors',lang:'en'},
+  {thai:'สีม่วง',phon:'sǐi mûaŋ',trans:'purple',source:'Colors',lang:'en'},
+  {thai:'สีทอง',phon:'sǐi tʰɔɔŋ',trans:'gold',source:'Colors',lang:'en'},
+  {thai:'สีเงิน',phon:'sǐi ŋən',trans:'silver',source:'Colors',lang:'en'},
+  {thai:'สีชมพู',phon:'sǐi cʰom pʰuu',trans:'pink',source:'Colors',lang:'en'},
+  {thai:'สีส้ม',phon:'sǐi sôm',trans:'orange',source:'Colors',lang:'en'},
+  {thai:'สีน้ำตาล',phon:'sǐi nám taan',trans:'brown',source:'Colors',lang:'en'},
+  {thai:'สีฟ้า',phon:'sǐi fáa',trans:'sky blue',source:'Colors',lang:'en'},
+  {thai:'สีไข่ไก่',phon:'sǐi kʰài kài',trans:'beige',source:'Colors',lang:'en'},
+  {thai:'สีเทา',phon:'sǐi tʰao',trans:'gray',source:'Colors',lang:'en'},
+  {thai:'สีกากี',phon:'sǐi kaakii',trans:'khaki',source:'Colors',lang:'en'},
+  {thai:'แม่สี',phon:'mɛ̂ɛ sǐi',trans:'primary color',source:'Colors',lang:'en'},
+  {thai:'สีสว่าง',phon:'sǐi sa wàaŋ',trans:'bright color',source:'Colors',lang:'en'},
+  {thai:'สีแสบตา',phon:'sǐi sɛ̀ɛp taa',trans:'glaring color',source:'Colors',lang:'en'},
+  {thai:'สีมืด',phon:'sǐi mɯ̂ɯt',trans:'dark color',source:'Colors',lang:'en'},
+  {thai:'สีชัด',phon:'sǐi cʰát',trans:'bold color',source:'Colors',lang:'en'},
+  {thai:'สีสด',phon:'sǐi sòt',trans:'vivid color',source:'Colors',lang:'en'},
+  {thai:'สีเข้ม',phon:'sǐi kʰêm',trans:'deep color',source:'Colors',lang:'en'},
+  {thai:'สีอ่อน',phon:'sǐi ɔ̀ɔn',trans:'pale color',source:'Colors',lang:'en'},
+  // ---- dii.html (Use of ดี — question + dii) — lang:'en' ----
+  {thai:'อะไรดี',phon:'à-rai dii',trans:'What shall...?',source:'Question Dii',lang:'en'},
+  {thai:'ที่ไหนดี',phon:'thîi-năi dii',trans:'Where shall...?',source:'Question Dii',lang:'en'},
+  {thai:'ใครดี',phon:'khrai dii',trans:'Who shall...?',source:'Question Dii',lang:'en'},
+  {thai:'ไหนดี',phon:'năi dii',trans:'Which (one)...?',source:'Question Dii',lang:'en'},
+  {thai:'ยังไงดี',phon:'yang-ngai dii',trans:'How / What shall...?',source:'Question Dii',lang:'en'},
+  {thai:'อย่างไรดี',phon:'yâang-rai dii',trans:'How / What shall...? (formal)',source:'Question Dii',lang:'en'},
+  {thai:'เมื่อไหร่ดี',phon:'mûea-rai dii',trans:'When shall...?',source:'Question Dii',lang:'en'},
+  // ---- hobbies.html (My Hobbies) — lang:'en' ----
+  {thai:'งานอดิเรก',phon:'ngaan a-di-réek',trans:'hobby',source:'Hobbies',lang:'en'},
+  {thai:'เวลาว่าง',phon:'wee-laa wâang',trans:'free time',source:'Hobbies',lang:'en'},
+  {thai:'กิจกรรม',phon:'gìt-ja-gam',trans:'activity',source:'Hobbies',lang:'en'},
+  {thai:'สนใจ',phon:'sǒn-jai',trans:'to be interested',source:'Hobbies',lang:'en'},
+  {thai:'เดินป่า',phon:'dern bpàa',trans:'hiking',source:'Hobbies',lang:'en'},
+  {thai:'เล่นกีฬา',phon:'lén gii-laa',trans:'play sports',source:'Hobbies',lang:'en'},
+  {thai:'เล่นดนตรี',phon:'lén don-dtrii',trans:'play music',source:'Hobbies',lang:'en'},
+  {thai:'ถ่ายรูป',phon:'thàay rûup',trans:'take photos',source:'Hobbies',lang:'en'},
+  {thai:'ทำขนม',phon:'tham kha-nǒm',trans:'make sweets / bake',source:'Hobbies',lang:'en'},
+  {thai:'ขี่จักรยาน',phon:'khìi jàk-grà-yaan',trans:'ride a bicycle',source:'Hobbies',lang:'en'},
+  {thai:'ทำงานฝีมือ',phon:'tham-ngaan fǐi-mɯɯ',trans:'do handicrafts',source:'Hobbies',lang:'en'},
+  {thai:'ทำสวน',phon:'tham sǔuan',trans:'gardening',source:'Hobbies',lang:'en'},
+  {thai:'ทำสมาธิ',phon:'tham sà-maa-thí',trans:'meditation',source:'Hobbies',lang:'en'},
+  {thai:'ตกปลา',phon:'dtòk bplaa',trans:'fishing',source:'Hobbies',lang:'en'},
+  {thai:'เขียนบล็อก',phon:'khǐan blɔ́ɔk',trans:'write a blog',source:'Hobbies',lang:'en'},
+  {thai:'แต่งเค้ก',phon:'dtὲɛng khéek',trans:'decorate cakes',source:'Hobbies',lang:'en'},
+  {thai:'ทำคลิป',phon:'tham khlíp',trans:'make video clips',source:'Hobbies',lang:'en'},
+  {thai:'อ่านการ์ตูน',phon:'àan gaa-dtuun',trans:'read comics',source:'Hobbies',lang:'en'},
+  {thai:'สะสม',phon:'sà-sǒm',trans:'to collect',source:'Hobbies',lang:'en'},
+  {thai:'เล่นเปียโน',phon:'lén bpia-noo',trans:'play the piano',source:'Hobbies',lang:'en'},
+  // Interests
+  {thai:'วิทยาศาสตร์',phon:'wít-tha-yaa-sàat',trans:'science',source:'Hobbies',lang:'en'},
+  {thai:'ประวัติศาสตร์',phon:'bprà-wàt-sàat',trans:'history',source:'Hobbies',lang:'en'},
+  {thai:'ดนตรี',phon:'don-dtrii',trans:'music',source:'Hobbies',lang:'en'},
+  {thai:'ศิลปะ',phon:'sǐn-lá-bpà',trans:'arts',source:'Hobbies',lang:'en'},
+  {thai:'ธุรกิจ',phon:'thú-rá-gìt',trans:'business',source:'Hobbies',lang:'en'},
+  {thai:'การลงทุน',phon:'gaan long-thun',trans:'investment',source:'Hobbies',lang:'en'},
+  {thai:'การเมือง',phon:'gaan-mwang',trans:'politics',source:'Hobbies',lang:'en'},
+  {thai:'เทคโนโลยี',phon:'théek-noo-loo-yîi',trans:'technology',source:'Hobbies',lang:'en'},
+  {thai:'วัฒนธรรม',phon:'wát-tha-ná-tham',trans:'culture',source:'Hobbies',lang:'en'},
+  {thai:'สิ่งแวดล้อม',phon:'sìng-wɛ̂ɛt-lɔ́ɔm',trans:'environment',source:'Hobbies',lang:'en'},
+  {thai:'การศึกษา',phon:'gaan-sɯ̀k-sǎa',trans:'education',source:'Hobbies',lang:'en'},
+  // น่า + verb (worth + V-ing)
+  {thai:'น่าสนใจ',phon:'nâa sǒn-jai',trans:'interesting',source:'Hobbies',lang:'en'},
+  {thai:'น่ากลัว',phon:'nâa glua',trans:'scary',source:'Hobbies',lang:'en'},
+  {thai:'น่าตื่นเต้น',phon:'nâa dtùun-dtên',trans:'exciting',source:'Hobbies',lang:'en'},
+  {thai:'น่าเบื่อ',phon:'nâa bùua',trans:'boring',source:'Hobbies',lang:'en'},
+  {thai:'น่ารัก',phon:'nâa rák',trans:'cute / lovable',source:'Hobbies',lang:'en'},
+  {thai:'น่ากิน',phon:'nâa gin',trans:'looks tasty',source:'Hobbies',lang:'en'},
+  // ---- adverb.html (Adverbs of Frequency) — lang:'en' ----
+  {thai:'ตลอด',phon:'dtà-lɔ̀ɔt',trans:'always (100%)',source:'Frequency',lang:'en'},
+  {thai:'เสมอ',phon:'sà-mə̌ə',trans:'always (100%)',source:'Frequency',lang:'en'},
+  {thai:'มักจะ',phon:'mák-jà',trans:'usually (90-80%)',source:'Frequency',lang:'en'},
+  {thai:'เป็นประจำ',phon:'bpen bprà-jam',trans:'regularly (90-80%)',source:'Frequency',lang:'en'},
+  {thai:'บ่อย',phon:'bɔ̀ɔy',trans:'often / frequently (70%)',source:'Frequency',lang:'en'},
+  {thai:'บางครั้ง',phon:'baang khráng',trans:'sometimes (50%)',source:'Frequency',lang:'en'},
+  {thai:'เป็นบางโอกาส',phon:'bpen baang oo-gàat',trans:'occasionally (30%)',source:'Frequency',lang:'en'},
+  {thai:'ไม่ค่อย',phon:'mâi khɔ̂ɔy',trans:'seldom (10%)',source:'Frequency',lang:'en'},
+  {thai:'แทบจะไม่',phon:'thɛ̂ɛp-jà-mâi',trans:'hardly ever / rarely (5%)',source:'Frequency',lang:'en'},
+  {thai:'ไม่เคย',phon:'mâi khəəy',trans:'never (0%)',source:'Frequency',lang:'en'},
+  {thai:'บ่อยแค่ไหน',phon:'bɔ̀ɔy khɛ̂ɛ-nǎi',trans:'how often?',source:'Frequency',lang:'en'},
+  {thai:'ละ',phon:'lá',trans:'per (week/month...)',source:'Frequency',lang:'en'},
+  {thai:'กี่',phon:'gìi',trans:'how many',source:'Frequency',lang:'en'},
+  {thai:'ครั้ง',phon:'khráng',trans:'time(s) (classifier)',source:'Frequency',lang:'en'},
+  {thai:'ทำความสะอาด',phon:'tham kwaam sà-àat',trans:'to clean',source:'Frequency',lang:'en'},
+  {thai:'กวาดพื้น',phon:'gwàat phɯ́ɯn',trans:'to sweep the floor',source:'Frequency',lang:'en'},
+  {thai:'ดูดฝุ่น',phon:'dùut fùn',trans:'to vacuum',source:'Frequency',lang:'en'},
+  {thai:'ถูพื้น',phon:'thǔu phɯ́ɯn',trans:'to mop the floor',source:'Frequency',lang:'en'},
+  {thai:'ล้างรถ',phon:'láang rót',trans:'to wash the car',source:'Frequency',lang:'en'},
+  {thai:'ล้างห้องน้ำ',phon:'láang hɔ̂ng-náam',trans:'to clean the bathroom',source:'Frequency',lang:'en'},
+  {thai:'เช็ดโต๊ะ',phon:'chét dtó',trans:'to wipe the desk / table',source:'Frequency',lang:'en'},
+  {thai:'ผ้าปูที่นอน',phon:'phâa-bpuu-thîi-nɔɔn',trans:'bed sheet',source:'Frequency',lang:'en'},
+  {thai:'ผ้าห่ม',phon:'phâa hòm',trans:'blanket',source:'Frequency',lang:'en'},
+  {thai:'จัดบ้าน',phon:'jàt bâan',trans:'to tidy the house',source:'Frequency',lang:'en'},
+  {thai:'ขี้เกียจ',phon:'khîi-gìat',trans:'lazy',source:'Frequency',lang:'en'},
+
+
+
+
+
+
+
+];
+
+/* Sentences used for fill-in-the-blank & listening-in-context.
+   "target" must appear (exactly) inside "thai". */
+const SENTENCES = [
+  // --- Household / household.html ---
+  {thai:'ฉันซักผ้าด้วยเครื่องซักผ้า', phon:'chǎn sák phâa dûay khrûang sák-phâa', trans:'I wash clothes with the washing machine', target:'เครื่องซักผ้า', source:'Household', lang:'en'},
+  {thai:'ฉันถูพื้นด้วยไม้ถูพื้น', phon:'chǎn thǔu phúuun dûay máai thǔu phúuun', trans:'I mop the floor with a mop', target:'ไม้ถูพื้น', source:'Household', lang:'en'},
+  {thai:'ฉันทำความสะอาดพื้นด้วยเครื่องดูดฝุ่น', phon:'chǎn tham kwaam-sà-àat phúuun dûay khrûang dùut fùn', trans:'I clean the floor with a vacuum', target:'เครื่องดูดฝุ่น', source:'Household', lang:'en'},
+  {thai:'ฉันปอกผลไม้ด้วยมีด', phon:'chǎn bpɔ̀ɔk phon-lá-máai dûay mîit', trans:'I peel fruit with a knife', target:'มีด', source:'Household', lang:'en'},
+  {thai:'ฉันกินอาหารด้วยตะเกียบ', phon:'chǎn gin aa-hǎan dûay dtà-gìap', trans:'I eat with chopsticks', target:'ตะเกียบ', source:'Household', lang:'en'},
+  {thai:'ฉันกินอาหารด้วยช้อนและส้อม', phon:'chǎn gin aa-hǎan dûay chɔ́ɔn lɛ́ sôom', trans:'I eat with spoon and fork', target:'ช้อน', source:'Household', lang:'en'},
+  {thai:'ฉันทำอาหารด้วยเตาแก๊ส', phon:'chǎn tham aa-hǎan dûay dtao géɛt', trans:'I cook with a gas stove', target:'เตาแก๊ส', source:'Household', lang:'en'},
+  {thai:'ฉันทำอาหารด้วยเตาอบ', phon:'chǎn tham aa-hǎan dûay dtao òp', trans:'I cook with an oven', target:'เตาอบ', source:'Household', lang:'en'},
+  {thai:'คนไทยกินข้าวด้วยช้อนและส้อม', phon:'khon thai gin khâao dûay chɔ́ɔn lɛ́ sôom', trans:'Thais eat rice with spoon and fork', target:'ส้อม', source:'Household', lang:'en'},
+
+  // --- Money & Bank ---
+  {thai:'ขอโทษค่ะ ธนาคารอยู่ไหนคะ', phon:'khǒo-thôot khâ thá-naa-khaan yùu nǎi khá', trans:'Excuse me, where is the bank?', target:'ธนาคาร', source:'Money & Bank', lang:'en'},
+  {thai:'ฉันอยากแลกเงิน', phon:'chǎn yàak lɛ̂ɛk ŋəən', trans:'I want to exchange money', target:'แลกเงิน', source:'Money & Bank', lang:'en'},
+  {thai:'กระเป๋าเงินของฉันหาย', phon:'grà-bpǎw ŋəən khǒoŋ chǎn hǎay', trans:'My wallet is lost', target:'หาย', source:'Money & Bank', lang:'en'},
+  {thai:'แม่จะไปโอนเงินที่ตู้เอทีเอ็ม', phon:'mêɛ jà bpai oon ŋəən thîi dtûu ATM', trans:'Mom will transfer money at the ATM', target:'ตู้เอทีเอ็ม', source:'Money & Bank', lang:'en'},
+  {thai:'ที่นี่รับแค่เงินสด', phon:'thîi-níi ráp khêɛ ŋəən-sòt', trans:'Here we only accept cash', target:'เงินสด', source:'Money & Bank', lang:'en'},
+  {thai:'เดือนที่แล้วเธอยืมเงินฉัน 2000 บาท', phon:'duuan thîi-lɛ́ɛw thəə yuuum ŋəən chǎn 2000 bàat', trans:'Last month you borrowed 2000 baht from me', target:'ยืม', source:'Money & Bank', lang:'en'},
+  {thai:'อาทิตย์หน้าฉันจะคืนเงิน', phon:'aa-thít nâa chǎn jà kuuun ŋəən', trans:"Next week I'll return the money", target:'คืน', source:'Money & Bank', lang:'en'},
+  {thai:'คุณสนใจสมัครบัตรเครดิตไหมคะ', phon:'khun sǒn-jai sà-màk bàt-khree-dìt mǎi khá', trans:'Are you interested in applying for a credit card?', target:'บัตรเครดิต', source:'Money & Bank', lang:'en'},
+
+  // --- Emotions (French) ---
+  {thai:'ฉันดีใจมาก', phon:'chǎn dee jai mâak', trans:'Je suis très heureuse.', target:'ดีใจ', source:'Emotions', lang:'fr'},
+  {thai:'ฉันเสียใจมาก', phon:'chǎn sǐa jai mâak', trans:'Je suis très triste.', target:'เสียใจ', source:'Emotions', lang:'fr'},
+  {thai:'ฉันโกรธนิดหน่อย', phon:'chǎn gròht nít nòi', trans:'Je suis un peu fâchée.', target:'โกรธ', source:'Emotions', lang:'fr'},
+  {thai:'ฉันกลัวแมงมุม', phon:'chǎn glua maeng mum', trans:"J'ai peur des araignées.", target:'กลัว', source:'Emotions', lang:'fr'},
+  {thai:'ฉันรู้สึกเครียด', phon:'chǎn rúu sʉ̀k krîat', trans:'Je me sens stressée.', target:'เครียด', source:'Emotions', lang:'fr'},
+  {thai:'ฉันเบื่อมาก', phon:'chǎn bʉ̀a mâak', trans:"Je m'ennuie beaucoup.", target:'เบื่อ', source:'Emotions', lang:'fr'},
+  {thai:'ฉันภูมิใจในตัวคุณ', phon:'chǎn puum jai nai tua kun', trans:'Je suis fière de toi.', target:'ภูมิใจ', source:'Emotions', lang:'fr'},
+  {thai:'ฉันผิดหวังกับผลสอบ', phon:'chǎn pìt wǎng gàp pon sòp', trans:"Je suis déçue du résultat de l'examen.", target:'ผิดหวัง', source:'Emotions', lang:'fr'},
+  {thai:'ฉันรู้สึกเหงา', phon:'chǎn rúu sʉ̀k ngǎo', trans:'Je me sens seule.', target:'เหงา', source:'Emotions', lang:'fr'},
+  {thai:'ฉันตื่นเต้นมาก', phon:'chǎn tʉ̀n tên mâak', trans:'Je suis très excitée.', target:'ตื่นเต้น', source:'Emotions', lang:'fr'},
+  {thai:'ฉันสบายใจขึ้นแล้ว', phon:'chǎn sà-baai jai kʉ̂n láew', trans:'Je me sens soulagée.', target:'สบายใจ', source:'Emotions', lang:'fr'},
+
+  // --- 100 phrases, short sentences for fill-in ---
+  {thai:'ฉันมาจากประเทศไทย', phon:'chan ma chak prà-thêet thai', trans:'I am from Thailand', target:'ฉันมาจาก', source:'100 Phrases', lang:'en'},
+  {thai:'คุณชื่ออะไร', phon:'khun cheu arai', trans:'What is your name?', target:'ชื่อ', source:'100 Phrases', lang:'en'},
+  {thai:'ห้องน้ำอยู่ที่ไหน', phon:'hong nam yuu tee nai', trans:'Where is the bathroom?', target:'ห้องน้ำ', source:'100 Phrases', lang:'en'},
+  {thai:'อาหารอร่อยมาก', phon:'a-han a-roi mak', trans:'The food is very delicious', target:'อร่อย', source:'100 Phrases', lang:'en'},
+  {thai:'ฉันไม่เข้าใจ', phon:'chan mai khao jai', trans:"I don't understand", target:'เข้าใจ', source:'100 Phrases', lang:'en'},
+
+  // --- Transportation ---
+  {thai:'ผมจะไปโดยรถไฟครับ', phon:'phǒm jà bpai dooy rót-fai khráp', trans:"I'll go by train", target:'รถไฟ', source:'Transportation', lang:'en'},
+  {thai:'ผมจะนั่งรถไฟไปครับ', phon:'phǒm jà nân rót-fai bpai khráp', trans:"I'll ride the train there", target:'รถไฟ', source:'Transportation', lang:'en'},
+  {thai:'ผมไปเกาะสมุยโดยเรือครับ', phon:'phǒm bpai gɔ̀ sà-muy dooy rua khráp', trans:'I went to Samui Island by boat', target:'เรือ', source:'Transportation', lang:'en'},
+  {thai:'ผมมาที่นี่โดยรถเมล์ครับ', phon:'phǒm maa thîi-nîi dooy rót-mee khráp', trans:'I came here by city bus', target:'รถเมล์', source:'Transportation', lang:'en'},
+  {thai:'ปกติผมนั่งรถเมล์ไปโรงเรียน', phon:'bpòk-gà-dtì phǒm nân rót-mee bpai roon-rian', trans:'I usually take the city bus to school', target:'รถเมล์', source:'Transportation', lang:'en'},
+  {thai:'เมื่อวานผมนั่งแท็กซี่ไปสนามบิน', phon:'mûa-waan phǒm nân ték-sîi bpai sà-naam bin', trans:'Yesterday I took a taxi to the airport', target:'สนามบิน', source:'Transportation', lang:'en'},
+  {thai:'อาทิตย์ที่แล้วคุณแม่นั่งรถไฟไปกรุงเทพฯ', phon:'aa-thit thîi-léew khun-mêe nân rót-fai bpai gruŋ-thêep', trans:'Last week my mother took the train to Bangkok', target:'รถไฟ', source:'Transportation', lang:'en'},
+  {thai:'วันศุกร์เพื่อนของผมนั่งเครื่องบินไปญี่ปุ่น', phon:'wan-sùk phûan khɔ̌ɔŋ phǒm nân khrûan-bin bpai yîi-bpun', trans:'On Friday my friend flew to Japan', target:'เครื่องบิน', source:'Transportation', lang:'en'},
+  {thai:'ปกติผมขับรถยนต์ไปทำงาน', phon:'bpòk-gà-dtì phǒm khàp rót-yon bpai tham-ŋaan', trans:'I usually drive the car to work', target:'รถยนต์', source:'Transportation', lang:'en'},
+  {thai:'วันพรุ่งนี้น้องชายจะนั่งรถทัวร์ไปต่างจังหวัด', phon:'wan-phrûŋ níi nɔ́ɔŋ-chaay jà nân rót-thua bpai dtàaŋ jaŋ-wàt', trans:'Tomorrow my younger brother will take the coach bus upcountry', target:'รถทัวร์', source:'Transportation', lang:'en'},
+  {thai:'วันหยุดนี้ผมจะนั่งเรือไปเกาะสมุย', phon:'wan-yùt níi phǒm jà nân rua bpai gɔ̀ sà-muy', trans:"This holiday I'll take a boat to Samui Island", target:'เรือ', source:'Transportation', lang:'en'},
+  {thai:'ฉันจะไปขึ้นรถเมล์หน้ามหาวิทยาลัย', phon:'chǎn jà bpai khûn rót-mee nâa má-hǎa-wít-tá-yaa-lai', trans:'I will go catch the city bus in front of the university', target:'ขึ้น', source:'Transportation', lang:'en'},
+
+  // --- Hotel ---
+  {thai:'ฉันต้องการเช็คอิน', phon:'chǎn dtâawng gaan chék-in', trans:"I'd like to check in", target:'เช็คอิน', source:'Hotel', lang:'en'},
+  {thai:'เวลาเช็คเอาท์กี่โมง', phon:'wee-laa chék-áo gìi moong', trans:'What time is check out?', target:'เช็คเอาท์', source:'Hotel', lang:'en'},
+  {thai:'รวมอาหารเช้าด้วยหรือเปล่า', phon:'ruuam aa-hǎan cháo dûuai rǔue bplào', trans:'Is breakfast included?', target:'อาหารเช้า', source:'Hotel', lang:'en'},
+  {thai:'คุณช่วยเรียกแท็กซี่ให้หน่อยได้มั๊ย', phon:'khun chûuai rîiak tháek-sîi hâi nàauy dâi mái', trans:'Could you please call me a taxi?', target:'แท็กซี่', source:'Hotel', lang:'en'},
+  {thai:'คุณมีคู่มือแนะนำเมืองมั๊ย', phon:'khun mii khûu-muue náe-nam muueang mái', trans:'Do you have a city guide?', target:'คู่มือ', source:'Hotel', lang:'en'},
+  {thai:'ไวไฟไม่ทำงาน', phon:'wai-fai mâi tham ngaan', trans:'The WI-FI is not working', target:'ไวไฟ', source:'Hotel', lang:'en'},
+  {thai:'น้ำในอ่างเย็น', phon:'nám nai àang yen', trans:'The bathwater is cold', target:'เย็น', source:'Hotel', lang:'en'},
+  {thai:'ไม่มีผ้าเช็ดตัว', phon:'mâi mii phâa chét dtuua', trans:'There are no towels', target:'ผ้าเช็ดตัว', source:'Hotel', lang:'en'},
+  {thai:'เสียงดังมาก', phon:'sǐiang dang mâak', trans:"It's too noisy", target:'เสียงดัง', source:'Hotel', lang:'en'},
+  // ---- corps.html — lang:'fr' ----
+  {thai:'ผมปวดหัว', phon:'pǒm bpuùaad huǔaa', trans:"J'ai mal à la tête", target:'หัว', source:'Body & Illness', lang:'fr'},
+  {thai:'ผมเจ็บขา', phon:'pǒm jèb kǎa', trans:"J'ai mal aux jambes", target:'ขา', source:'Body & Illness', lang:'fr'},
+  {thai:'ผมกินยาเพราะมีท้องเสีย', phon:'pǒm gin yaa prɔ́wâa mii tɔóng siǐaa', trans:"Je prends des médicaments parce que j'ai la diarrhée", target:'ยา', source:'Body & Illness', lang:'fr'},
+  {thai:'ผมเจ็บขาเพราะเดินมาก', phon:'pǒm jèb kǎa prɔ́wâa deen mâak', trans:"J'ai mal aux jambes car j'ai beaucoup marché", target:'ขา', source:'Body & Illness', lang:'fr'},
+
+  // ---- market.html — lang:'fr' ----
+  {thai:'ผมไปตลาด', phon:'pǒm bpai dtalàad', trans:'Je vais au marché', target:'ตลาด', source:'Market', lang:'fr'},
+  {thai:'ราคาเท่าไหร่', phon:'raakaa tâo rài', trans:'Combien ça coûte ?', target:'ราคา', source:'Market', lang:'fr'},
+  {thai:'ทั้งหมดเท่าไหร่', phon:'táng mòd tâo rài', trans:'Combien en tout ?', target:'ทั้งหมด', source:'Market', lang:'fr'},
+  {thai:'เอามะละกอครึ่งกิโล', phon:'ao málágɔɔ krɯ̂ŋ gìloo', trans:"Je prends un demi-kilo de papaye", target:'มะละกอ', source:'Market', lang:'fr'},
+  {thai:'ผมซื้อส้มหนึ่งกิโล', phon:'pǒm sɯ́ɯ sôm nɯ̀ng gìloo', trans:"J'achète un kilo d'oranges", target:'ซื้อ', source:'Market', lang:'fr'},
+  {thai:'ผมชอบกินทุเรียน', phon:'pǒm chɔ̂ɔp gin tú riiaan', trans:"J'aime manger le durian", target:'ทุเรียน', source:'Market', lang:'fr'},
+  {thai:'ขอกระเทียมหนึ่งกิโล', phon:'khǎaw grá tiiaam nɯ̀ng gìloo', trans:"Donnez-moi un kilo d'ail", target:'กระเทียม', source:'Market', lang:'fr'},
+  {thai:'ผมเอาหมูครึ่งกิโล', phon:'pǒm ao mǔu krɯ̂ŋ gìloo', trans:'Je prends un demi-kilo de porc', target:'หมู', source:'Market', lang:'fr'},
+  {thai:'แตงโมราคากี่บาท', phon:'dtεεng moo raakaa gìi bàat', trans:'Combien coûte la pastèque ?', target:'แตงโม', source:'Market', lang:'fr'},
+  {thai:'มะม่วงกิโลละเท่าไหร่', phon:'má muûaang gìloo lá tâo rài', trans:'Combien coûte le kilo de mangue ?', target:'มะม่วง', source:'Market', lang:'fr'},
+  // ---- family.html — lang:'fr' ----
+  {thai:'คุณชื่ออะไร', phon:'kun chɯ̂ɯ àrai', trans:"Comment t'appelles-tu ? / What's your name?", target:'ชื่อ', source:'Family', lang:'fr'},
+  {thai:'พ่อของฉันชื่อสมชาย', phon:'pɔ̂ɔ kɔ̌ɔng chǎn chɯ̂ɯ Somchai', trans:"Mon père s'appelle Somchai. / My father is named Somchai.", target:'พ่อ', source:'Family', lang:'fr'},
+  {thai:'แม่ของฉันเป็นครู', phon:'mɛ̂ɛ kɔ̌ɔng chǎn bpen kruu', trans:'Ma mère est professeure. / My mother is a teacher.', target:'แม่', source:'Family', lang:'fr'},
+  {thai:'พี่สาวของฉันแต่งงานแล้ว', phon:'pîi sǎaw kɔ̌ɔng chǎn dtὲɛng ngaan láew', trans:'Ma grande sœur est mariée. / My older sister is married.', target:'แต่งงาน', source:'Family', lang:'fr'},
+  {thai:'น้องชายของฉันอายุสิบปี', phon:'nɔ́ɔng chaay kɔ̌ɔng chǎn aayú sìp bpii', trans:'Mon petit frère a dix ans. / My younger brother is ten years old.', target:'น้องชาย', source:'Family', lang:'fr'},
+  {thai:'ปู่ของฉันอยู่ที่บ้าน', phon:'bpùu kɔ̌ɔng chǎn yùu tîi bâan', trans:'Mon grand-père est à la maison. / My grandfather is at home.', target:'ปู่', source:'Family', lang:'fr'},
+  {thai:'ครอบครัวของฉันมีห้าคน', phon:'krɔ̂ɔb kruuaa kɔ̌ɔng chǎn mii hâa kon', trans:'Ma famille compte cinq personnes. / My family has five people.', target:'ครอบครัว', source:'Family', lang:'fr'},
+  {thai:'ลูกสาวของเขาน่ารัก', phon:'lûuk sǎaw kɔ̌ɔng kǎo nâa rák', trans:'Sa fille est mignonne. / His/her daughter is cute.', target:'ลูกสาว', source:'Family', lang:'fr'},
+  {thai:'ใครเป็นสามีของคุณ', phon:'krai bpen sǎamii kɔ̌ɔng kun', trans:'Qui est ton mari ? / Who is your husband?', target:'สามี', source:'Family', lang:'fr'},
+
+  // ---- places.html — lang:'fr' ----
+  {thai:'ผมไปตลาด', phon:'pǒm bpai dtàlàad', trans:'Je vais au marché. / I am going to the market.', target:'ตลาด', source:'Places', lang:'fr'},
+  {thai:'ลูกของเขาไปโรงเรียน', phon:'lûuk kɔ̌ɔng kǎo bpai roong riiaan', trans:"Son enfant va à l'école. / His/her child goes to school.", target:'โรงเรียน', source:'Places', lang:'fr'},
+  {thai:'ฉันไปสมาคมฝรั่งเศส', phon:'chǎn bpai samaakom faràngsə̀əd', trans:"Je vais à l'alliance française. / I'm going to the Alliance française.", target:'สมาคมฝรั่งเศส', source:'Places', lang:'fr'},
+  {thai:'ภรรยาของผมอยู่ที่วัด', phon:'pan rayaa kɔ̌ɔng pǒm yùu tîi wád', trans:'Ma femme est au temple. / My wife is at the temple.', target:'วัด', source:'Places', lang:'fr'},
+  {thai:'ที่เชียงรายมีโรงพยาบาลสามที่', phon:'tîi Chiangrai mii roong páyaabaan sǎam tîi', trans:'À Chiang Rai il y a trois hôpitaux. / In Chiang Rai there are three hospitals.', target:'โรงพยาบาล', source:'Places', lang:'fr'},
+  {thai:'ลานจอดรถอยู่ที่โน่น', phon:'laan jɔ̀ɔd rót yùu tîi nôon', trans:'Le parking est là-bas. / The parking lot is over there.', target:'ลานจอดรถ', source:'Places', lang:'fr'},
+  {thai:'ไปรษณีย์อยู่ที่ไหนครับ', phon:'bprai sà nii yùu tîi nǎi kráb', trans:'Où est la poste ? / Where is the post office?', target:'ไปรษณีย์', source:'Places', lang:'fr'},
+  {thai:'แม่อยู่ที่ไหน', phon:'mêε yùu tîi nǎi', trans:'Où est maman ? / Where is mum?', target:'ที่ไหน', source:'Places', lang:'fr'},
+  {thai:'เธอไปไหน', phon:'tee bpai nǎi', trans:'Où vas-tu ? / Where are you going?', target:'ไป', source:'Places', lang:'fr'},
+  {thai:'สนามบินอยู่ใกล้กับสถานีรถไฟ', phon:'sanǎam bin yùu glâi gàb satǎanii rót fai', trans:"L'aéroport est près de la gare. / The airport is near the train station.", target:'ใกล้', source:'Places', lang:'fr'},
+  {thai:'ร้านอาหารอยู่ตรงข้ามโรงแรม', phon:'ráan aahǎan yùu dtrong kâam roong rεεm', trans:"Le restaurant est en face de l'hôtel. / The restaurant is across from the hotel.", target:'ตรงข้าม', source:'Places', lang:'fr'},
+  {thai:'ร้านกาแฟอยู่ระหว่างห้องสมุดและธนาคาร', phon:'ráan gaafεε yùu ráw aàng hɔ̂ɔng samùd lέ tánaakaan', trans:'Le café est entre la bibliothèque et la banque. / The coffee shop is between the library and the bank.', target:'ระหว่าง', source:'Places', lang:'fr'},
+  {thai:'บ้านของคุณอยู่ที่ไหน', phon:'bâan kɔ̌ɔng kun yùu tîi nǎi', trans:'Où est ta maison ? / Where is your house?', target:'บ้าน', source:'Places', lang:'fr'},
+
+  // ---- directions.html — lang:'fr' ----
+  {thai:'โรงเรียนไปทางไหน', phon:'roong riiaan bpai taang nǎi', trans:"Comment va-t-on à l'école ? / How do I get to the school?", target:'ทาง', source:'Directions', lang:'fr'},
+  {thai:'ตรงไปแล้วเลี้ยวขวาในถนนที่สาม', phon:'dtrong bpai lέεw líiaáw kwǎa nay tanǒn tîi sǎam', trans:'Allez tout droit puis tournez à droite dans la troisième rue. / Go straight then turn right into the third street.', target:'เลี้ยว', source:'Directions', lang:'fr'},
+  {thai:'ถนนที่สองทางขวามือ', phon:'tanǒn tîi sɔ̌ɔng taang kwǎa mɯɯ', trans:'la deuxième rue à droite / the second street on the right', target:'ขวามือ', source:'Directions', lang:'fr'},
+  {thai:'เลี้ยวซ้ายที่ไฟแดง', phon:'líiaáw sáay tîi fai dεεng', trans:'Tournez à gauche au feu rouge. / Turn left at the red light.', target:'ไฟแดง', source:'Directions', lang:'fr'},
+  {thai:'ข้ามสะพานแล้วเลี้ยวขวา', phon:'kâam sàpaan lέεw líiaáw kwǎa', trans:'Traversez le pont puis tournez à droite. / Cross the bridge then turn right.', target:'สะพาน', source:'Directions', lang:'fr'},
+  {thai:'ปั๊มน้ำมันไปทางไหน', phon:'bpám nám man bpai taang nǎi', trans:'Comment va-t-on à la station-service ? / How do I get to the gas station?', target:'ทาง', source:'Directions', lang:'fr'},
+  {thai:'ธนาคารอยู่ที่หัวมุมแยก', phon:'tánaakaan yùu tîi huǔaa mum yεε̂k', trans:"La banque est au coin de l'intersection. / The bank is at the corner of the intersection.", target:'แยก', source:'Directions', lang:'fr'},
+  {thai:'ตรงไปแล้วเลี้ยวซ้ายในซอย', phon:'dtrong bpai lέεw líiaáw sáay nay sɔɔy', trans:'Allez tout droit puis tournez à gauche dans la ruelle. / Go straight then turn left into the alley.', target:'ซอย', source:'Directions', lang:'fr'},
+
+  // ---- months.html — lang:'en' ----
+  {thai:'เดือนนี้คือเดือนเมษายน', phon:'duuan níi keuu duuan mee-sǎa-yon', trans:'This month is April', target:'เดือน', source:'Months', lang:'en'},
+  {thai:'เดือนหน้าฉันจะไปกรุงเทพ', phon:'duuan nâa chǎn jà bpai grung-têep', trans:"Next month I'll go to Bangkok", target:'เดือน', source:'Months', lang:'en'},
+  {thai:'คุณเกิดเดือนอะไร', phon:'kun gèet duuan àrai', trans:'Which month were you born?', target:'เดือน', source:'Months', lang:'en'},
+  {thai:'ฉันชอบเดือนธันวาคม', phon:'chǎn chɔ̂ɔp duuan than-waa-kom', trans:'I like December', target:'เดือน', source:'Months', lang:'en'},
+  {thai:'เดือนที่แล้วฝนตกมาก', phon:'duuan tîi-lέεw fǒn dtòk mâak', trans:'Last month it rained a lot', target:'เดือน', source:'Months', lang:'en'},
+  // ---- colors.html — lang:'en' ----
+  {thai:'รถสีแดง', phon:'rót sǐi dɛɛŋ', trans:'a red car', target:'สีแดง', source:'Colors', lang:'en'},
+  {thai:'ฉันชอบสีฟ้า', phon:'chǎn chɔ̂ɔp sǐi fáa', trans:'I like sky blue', target:'สีฟ้า', source:'Colors', lang:'en'},
+  {thai:'เสื้อสีเหลืองสวยมาก', phon:'sɯ̂a sǐi lɯ̌aŋ sǔai mâak', trans:'The yellow shirt is very pretty', target:'สีเหลือง', source:'Colors', lang:'en'},
+  {thai:'ดอกไม้สีชมพู', phon:'dɔ̀ɔk máai sǐi chom phuu', trans:'a pink flower', target:'สีชมพู', source:'Colors', lang:'en'},
+  {thai:'กระเป๋าสีดำของฉัน', phon:'grà-bpǎo sǐi dam khɔ̌ɔng chǎn', trans:'my black bag', target:'สีดำ', source:'Colors', lang:'en'},
+  {thai:'ท้องฟ้าสีน้ำเงิน', phon:'tɔ́ɔng fáa sǐi nám ŋən', trans:'a blue sky', target:'สีน้ำเงิน', source:'Colors', lang:'en'},
+  {thai:'ใบไม้สีเขียว', phon:'bai máai sǐi khǐaw', trans:'a green leaf', target:'สีเขียว', source:'Colors', lang:'en'},
+  {thai:'คุณชอบสีอะไร', phon:'kun chɔ̂ɔp sǐi àrai', trans:'What color do you like?', target:'สี', source:'Colors', lang:'en'},
+  {thai:'แมวสีขาว', phon:'maew sǐi khǎaw', trans:'a white cat', target:'สีขาว', source:'Colors', lang:'en'},
+  {thai:'ห้องนี้สีอ่อน', phon:'hɔ̂ɔng níi sǐi ɔ̀ɔn', trans:'this room is pale-colored', target:'สีอ่อน', source:'Colors', lang:'en'},
+  // ---- dii.html — lang:'en' ----
+  {thai:'ฉันอยากได้เครื่องซักผ้าใหม่ แต่ยังไม่รู้จะซื้อยี่ห้ออะไรดี', phon:'chăn yàak dâi khrûeang sák phâa mài, dtὲɛ yang mâi rúu jà súue yîi-hɔ̂ɔ à-rai dii', trans:"I'd like a new washing machine, but I don't know what brand to buy", target:'อะไรดี', source:'Question Dii', lang:'en'},
+  {thai:'เย็นนี้หลังเลิกงาน ฉันไม่มีนัด เราไปกินอะไรดี', phon:'yen níi lăng lôek ngaan chăn mâi mii nát, rao bpai gin à-rai dii', trans:'Tonight after work I have no plans — what shall we eat?', target:'อะไรดี', source:'Question Dii', lang:'en'},
+  {thai:'ลูกสาวเรียนจบแล้ว แต่ยังไม่รู้จะเรียนต่อที่ไหนดี', phon:'lûuk-săao rian jòp léeo, dtὲɛ yang mâi rú jà rian dtɔ̀ɔ thîi-năi dii', trans:"My daughter has graduated, but doesn't know where to continue studying", target:'ที่ไหนดี', source:'Question Dii', lang:'en'},
+  {thai:'เสาร์อาทิตย์นี้อยากไปดูหนัง แต่ยังไม่รู้จะชวนใครดี', phon:'săw aa-thít níi yàak bpai duu năng, dtὲɛ yang mâi rú jà chuan khrai dii', trans:"This weekend I want to see a movie, but don't know who to invite", target:'ใครดี', source:'Question Dii', lang:'en'},
+  {thai:'อีกสองวันจะเป็นวันครบรอบ พวกเราจะไปฉลองที่ไหนดี', phon:'ìik sɔ̌ɔng wan jà bpen wan khróp-rɔ̂ɔp, phûak-raw jà bpai chà-lɔ̌ɔng thîi-năi dii', trans:"In 2 days it's our anniversary — where shall we celebrate?", target:'ที่ไหนดี', source:'Question Dii', lang:'en'},
+  {thai:'ตอนนี้พาสปอร์ตของฉันหาย ฉันควรทำยังไงดี', phon:'dtɔɔn-níi pháat-bpɔ̀ɔt khɔ̌ɔng chăn hăay, chăn khuan tham yang-ngai dii', trans:"My passport is lost — what should I do?", target:'ยังไงดี', source:'Question Dii', lang:'en'},
+  {thai:'ตอนนี้รถเสีย และฉันมีประชุมตอนบ่ายโมง ฉันควรทำยังไงดี', phon:'dtɔɔn-níi rót sĭa, lé chăn mii bprà-chum dtɔɔn bàai moong, chăn khuan tham yang-ngai dii', trans:"My car is broken and I have a 1pm meeting — what should I do?", target:'ยังไงดี', source:'Question Dii', lang:'en'},
+  {thai:'อาหารเย็นวันนี้คุณจะทานอะไรดีคะ', phon:'aa-hăan yen wan-níi, khun jà thaan à-rai dii khá', trans:"What shall you have for dinner tonight?", target:'อะไรดี', source:'Question Dii', lang:'en'},
+  // ---- hobbies.html — lang:'en' ----
+  {thai:'คุณชอบทำอะไรในเวลาว่าง', phon:'khun chɔ̂ɔp tham àrai nai wee-laa wâang', trans:'What do you like to do in your free time?', target:'เวลาว่าง', source:'Hobbies', lang:'en'},
+  {thai:'ฉันชอบอยู่บ้านและทำอาหารกับแฟน', phon:'chǎn chɔ̂ɔp yùu bâan lé tham aa-hǎan gàp fɛɛn', trans:'I like to stay home and cook with my partner', target:'ทำอาหาร', source:'Hobbies', lang:'en'},
+  {thai:'พวกเราชอบไปเดินป่าและนอนเต็นท์', phon:'phûak-rao chɔ̂ɔp bpai dern-bpàa lé non-dtén', trans:'We like to go hiking and camping', target:'เดินป่า', source:'Hobbies', lang:'en'},
+  {thai:'คุณมีงานอดิเรกอะไรบ้าง', phon:'khun mii ngaan a-di-réek àrai bâang', trans:'What sort of hobbies do you have?', target:'งานอดิเรก', source:'Hobbies', lang:'en'},
+  {thai:'งานอดิเรกของฉันคืออ่านการ์ตูน', phon:'ngaan a-di-réek khɔ̌ɔng chǎn keu àan gaa-dtuun', trans:'My hobby is reading comics', target:'อ่านการ์ตูน', source:'Hobbies', lang:'en'},
+  {thai:'ผมมีงานอดิเรกหลายอย่าง เช่น สะสมเหรียญ', phon:'phǒm mii ngaan a-di-réek lǎay yàang chên sà-sǒm rǐan', trans:'I have several hobbies, such as collecting coins', target:'สะสม', source:'Hobbies', lang:'en'},
+  {thai:'คุณสนใจเรื่องอะไร', phon:'khun sǒn-jai rûang àrai', trans:'What are you interested in?', target:'สนใจ', source:'Hobbies', lang:'en'},
+  {thai:'ฉันสนใจเรื่องดนตรีไทย', phon:'chǎn sǒn-jai rûang don-dtrii thai', trans:'I am interested in Thai music', target:'ดนตรี', source:'Hobbies', lang:'en'},
+  {thai:'ผมสนใจเรื่องการเมืองและการลงทุน', phon:'phǒm sǒn-jai rûang gaan-mwang lé gaan long-thun', trans:'I am interested in politics and investment', target:'การลงทุน', source:'Hobbies', lang:'en'},
+  {thai:'การทำอาหารน่าสนใจ', phon:'gaan tham aa-hǎan nâa sǒn-jai', trans:'Cooking is interesting', target:'น่าสนใจ', source:'Hobbies', lang:'en'},
+  {thai:'เค้กชิ้นนี้น่ากินมาก', phon:'khéek chín níi nâa gin mâak', trans:'This cake looks very tasty', target:'น่ากิน', source:'Hobbies', lang:'en'},
+  {thai:'การเดินป่าน่าตื่นเต้น', phon:'gaan dern-bpàa nâa dtùun-dtên', trans:'Hiking is exciting', target:'น่าตื่นเต้น', source:'Hobbies', lang:'en'},
+  // ---- adverb.html (Adverbs of Frequency) — lang:'en' ----
+  {thai:'คุณทำสมาธิบ่อยแค่ไหน', phon:'khun tham sà-maa-thí bɔ̀ɔy khɛ̂ɛ-nǎi', trans:'How often do you meditate?', target:'บ่อยแค่ไหน', source:'Frequency', lang:'en'},
+  {thai:'ฉันทำสมาธิเป็นประจำ', phon:'chǎn tham sà-maa-thí bpen-bprà-jam', trans:'I meditate regularly', target:'เป็นประจำ', source:'Frequency', lang:'en'},
+  {thai:'ผมไปเดินป่ากับครอบครัวบ่อย', phon:'phǒm bpai dəən-bpàa gàp khrɔ̂ɔp-khrua bɔ̀ɔy', trans:'I often go hiking with my family', target:'บ่อย', source:'Frequency', lang:'en'},
+  {thai:'คุณแม่ของฉันทำสวนตลอด', phon:'khun mɛ̂ɛ khɔ̌ɔng chǎn tham sǔan dtà-lɔ̀ɔt', trans:'My mum gardens all the time', target:'ตลอด', source:'Frequency', lang:'en'},
+  {thai:'ผมแทบจะไม่จัดบ้านเพราะว่าผมขี้เกียจมาก', phon:'phǒm thɛ̂ɛp-jà-mâi jàt bâan phrɔ́-wâa phǒm khîi-gìat mâak', trans:'I hardly ever tidy the house because I am very lazy', target:'แทบจะไม่', source:'Frequency', lang:'en'},
+  {thai:'ฉันทำความสะอาดบ้านอาทิตย์ละ 3 วัน', phon:'chǎn tham kwaam sà-àat bâan aa-thít lá sǎam wan', trans:'I clean the house 3 days a week', target:'ทำความสะอาด', source:'Frequency', lang:'en'},
+  {thai:'คุณถูพื้นอาทิตย์ละกี่วัน', phon:'khun thǔu phɯ́ɯn aa-thít lá gìi wan', trans:'How many days per week do you mop the floor?', target:'กี่', source:'Frequency', lang:'en'},
+  {thai:'ฉันซักผ้าปูที่นอนเดือนละ 2 ครั้ง', phon:'chǎn sák phâa-bpuu-thîi-nɔɔn dɯan lá sɔ̌ɔng khráng', trans:'I wash my bed sheets twice a month', target:'ผ้าปูที่นอน', source:'Frequency', lang:'en'},
+  {thai:'ฉันไม่เคยล้างรถ', phon:'chǎn mâi khəəy láang rót', trans:'I never wash the car', target:'ไม่เคย', source:'Frequency', lang:'en'},
+  {thai:'เขาดูดฝุ่นเป็นบางโอกาส', phon:'khǎw dùut fùn bpen baang oo-gàat', trans:'He vacuums occasionally', target:'เป็นบางโอกาส', source:'Frequency', lang:'en'},
+
+
+
+
+
+];
+
+/* ============================================================
+   PER-LESSON FILTER (?source=...)
+   ============================================================ */
+(() => {
+  const params = new URLSearchParams(window.location.search);
+  const src = params.get('source');
+  if (!src) return;
+
+  const matchVocab = VOCAB.filter(v => v.source === src);
+  const matchSent  = SENTENCES.filter(s => s.source === src);
+  if (matchVocab.length === 0) return;          // unknown source → keep full set
+
+  // Mutate the const arrays in place
+  VOCAB.length = 0;
+  matchVocab.forEach(v => VOCAB.push(v));
+  SENTENCES.length = 0;
+  matchSent.forEach(s => SENTENCES.push(s));
+
+  // Update the page subtitle to reflect the filter
+  document.addEventListener('DOMContentLoaded', () => {
+    const sub = document.querySelector('header .sub');
+    if (sub) sub.textContent = `Quiz focused on “${src}” — ${VOCAB.length} vocab · ${SENTENCES.length} sentences. Tap 🔊 to hear any Thai phrase.`;
+    const kicker = document.querySelector('header .kicker');
+    if (kicker) kicker.textContent = `Practice · ${src}`;
+  });
+})();
+
+/* ============================================================
+   CORE STATE
+   ============================================================ */
+const TOTAL_QUESTIONS = 10;
+const MODES = ['mc','mc-th','mc-en','fill','listen','flash'];
+let state = {
+  mode: 'mixed',
+  qIndex: 0,
+  score: 0,
+  currentQ: null,
+  answered: false,
+};
+
+/* ============================================================
+   UTILITIES
+   ============================================================ */
+function rand(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
+function shuffle(a){ const x=a.slice(); for(let i=x.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1)); [x[i],x[j]]=[x[j],x[i]];} return x; }
+function sample(arr, n, exclude){
+  const pool = arr.filter(v => v !== exclude && (!exclude || v.trans !== exclude.trans));
+  return shuffle(pool).slice(0,n);
+}
+
+/* TTS */
+let currentBtn = null;
+
+/* Chrome populates getVoices() asynchronously and returns [] until it is ready.
+   Waiting for it means an early click can't silently fall back to an English
+   voice trying to pronounce Thai. Times out so a browser that never fires
+   voiceschanged still resolves instead of leaving the button dead. */
+let _voices = null;
+function voicesReady(){
+  if(_voices) return _voices;
+  _voices = new Promise(resolve => {
+    const synth = window.speechSynthesis;
+    const now = synth.getVoices();
+    if(now && now.length){ resolve(now); return; }
+    const done = () => resolve(synth.getVoices() || []);
+    synth.addEventListener('voiceschanged', done, {once:true});
+    setTimeout(done, 2000);
+  });
+  return _voices;
+}
+
+let warnedNoThaiVoice = false;
+function noThaiVoiceNotice(){
+  if(warnedNoThaiVoice) return;
+  warnedNoThaiVoice = true;
+  const bar = document.createElement('div');
+  bar.className = 'tts-warn';
+  bar.textContent = 'No Thai voice is installed, so audio will be silent or mispronounced. '
+    + 'Windows: Settings › Time & Language › Speech › Add voices › Thai. '
+    + 'iPhone: Settings › Accessibility › Spoken Content › Voices › Thai.';
+  const host = document.querySelector('.container') || document.body;
+  host.insertBefore(bar, host.firstChild);
+}
+
+async function speakThai(text, btn){
+  if(!('speechSynthesis' in window)) return;
+  const synth = window.speechSynthesis;
+  const voices = await voicesReady();
+  const thai = voices.find(v => v.lang && v.lang.toLowerCase().startsWith('th'));
+
+  synth.cancel();
+  if(currentBtn){ currentBtn.classList.remove('pulse'); currentBtn = null; }
+
+  const u = new SpeechSynthesisUtterance(text.replace(/\s*\/\s*/g, ", "));
+  u.lang = 'th-TH';
+  u.rate = 0.85;
+  if(thai) u.voice = thai; else noThaiVoiceNotice();
+
+  if(btn){
+    currentBtn = btn; btn.classList.add('pulse');
+    u.onend = u.onerror = ()=>{
+      btn.classList.remove('pulse');
+      if(currentBtn === btn) currentBtn = null;
+    };
+  }
+  /* cancel() is asynchronous in Chrome — speaking in the same tick can drop the
+     utterance entirely, which is the usual cause of a dead first click. */
+  setTimeout(()=> synth.speak(u), 60);
+}
+function inlineSpeaker(text){
+  const b = document.createElement('button');
+  b.className='inline-speak'; b.type='button'; b.title='Play Thai audio';
+  b.textContent='🔊';
+  b.onclick = ()=> speakThai(text, b);
+  return b;
+}
+
+/* ============================================================
+   QUESTION GENERATORS
+   ============================================================ */
+function pickMode(){
+  if(state.mode === 'mixed') return rand(MODES);
+  return state.mode;
+}
+function normalize(s){
+  return String(s||'').trim().toLowerCase()
+    .replace(/[.,!?;:()"'`’]/g,'').replace(/\s+/g,' ');
+}
+
+function genMC(){
+  const direction = Math.random()<0.5 ? 'th2tr' : 'tr2th';
+  const correct = rand(VOCAB);
+  const distractors = sample(VOCAB.filter(v=>v.lang===correct.lang), 3, correct);
+  const options = shuffle([correct, ...distractors]);
+  return {
+    type:'mc', direction, correct, options, source:correct.source, lang:correct.lang
+  };
+}
+/* Thai → translation MC: prompt is always Thai+phonetics, options are translations */
+function genMcTh(){
+  const correct = rand(VOCAB);
+  const distractors = sample(VOCAB.filter(v=>v.lang===correct.lang), 3, correct);
+  const options = shuffle([correct, ...distractors]);
+  return {
+    type:'mc', direction:'th2tr', correct, options, source:correct.source, lang:correct.lang
+  };
+}
+/* English/French → Thai MC: prompt is the translation, options are Thai with phonetics shown */
+function genMcEn(){
+  const correct = rand(VOCAB);
+  const distractors = sample(VOCAB.filter(v=>v.lang===correct.lang), 3, correct);
+  const options = shuffle([correct, ...distractors]);
+  return {
+    type:'mc', direction:'tr2th', showPhon:true, correct, options, source:correct.source, lang:correct.lang
+  };
+}
+function genListen(){
+  const correct = rand(VOCAB);
+  const distractors = sample(VOCAB.filter(v=>v.lang===correct.lang), 3, correct);
+  const options = shuffle([correct, ...distractors]);
+  return { type:'listen', correct, options, source:correct.source, lang:correct.lang };
+}
+function genFill(){
+  const s = rand(SENTENCES);
+  return { type:'fill', sentence:s, source:s.source, lang:s.lang };
+}
+function genFlash(){
+  const card = rand(VOCAB);
+  const faceFirst = Math.random()<0.5 ? 'thai' : 'trans';
+  return { type:'flash', card, faceFirst, source:card.source, lang:card.lang };
+}
+
+function genQuestion(){
+  const m = pickMode();
+  switch(m){
+    case 'mc':     return genMC();
+    case 'mc-th':  return genMcTh();
+    case 'mc-en':  return genMcEn();
+    case 'listen': return genListen();
+    case 'fill':   return genFill();
+    case 'flash':  return genFlash();
+  }
+}
+
+/* ============================================================
+   RENDER
+   ============================================================ */
+const area = document.getElementById('quiz-area');
+
+function modeLabel(t, direction, showPhon){
+  if(t === 'mc'){
+    if(direction === 'th2tr') return 'Multiple choice · Thai → meaning';
+    if(showPhon)              return 'Multiple choice · meaning → Thai';
+    return 'Multiple choice';
+  }
+  return {listen:'Listening', fill:'Fill the blank', flash:'Flashcard'}[t];
+}
+function langBadge(lang){ return lang==='fr' ? '🇫🇷' : '🇬🇧'; }
+
+function renderShell(q){
+  const tag = `<span class="mode-tag">${modeLabel(q.type, q.direction, q.showPhon)} ${langBadge(q.lang)}</span><span class="source-tag">${q.source}</span>`;
+  return `<div class="card">${tag}<div id="qbody"></div><div class="feedback" id="feedback"></div><div class="nav-row" id="nav"></div></div>`;
+}
+
+function renderNav(showNext){
+  const nav = document.getElementById('nav');
+  nav.innerHTML = '';
+  const skip = document.createElement('button');
+  skip.className='btn btn-secondary';
+  skip.textContent='Skip →';
+  skip.onclick = nextQuestion;
+  nav.appendChild(skip);
+  if(showNext){
+    const next = document.createElement('button');
+    next.className='btn btn-primary';
+    next.textContent = state.qIndex+1 >= TOTAL_QUESTIONS ? 'Finish ✓' : 'Next →';
+    next.onclick = nextQuestion;
+    nav.appendChild(next);
+  }
+}
+
+function showFeedback(correct, message){
+  const f = document.getElementById('feedback');
+  f.className = 'feedback ' + (correct?'ok':'bad');
+  f.style.display = 'block';
+  f.innerHTML = message;
+}
+
+/* ---- render MC ---- */
+function renderMC(q){
+  const body = document.getElementById('qbody');
+  let promptHTML, optHTML;
+  if(q.direction === 'th2tr'){
+    promptHTML = `<div class="prompt">What does this mean?</div>
+      <div class="prompt-thai">${q.correct.thai}</div>
+      <div class="prompt-phon">${q.correct.phon}</div>`;
+  } else {
+    promptHTML = `<div class="prompt">Choose the Thai word for:</div>
+      <div class="prompt-en">${q.correct.trans}</div>`;
+  }
+  body.innerHTML = promptHTML + `<div class="options" id="opts"></div>`;
+  if(q.direction === 'th2tr'){
+    const host = body.querySelector('.prompt-thai');
+    host.appendChild(inlineSpeaker(q.correct.thai));
+  }
+  const opts = document.getElementById('opts');
+  q.options.forEach((o,i)=>{
+    const b = document.createElement('button');
+    b.className='opt';
+    const label = String.fromCharCode(65+i);
+    let inner;
+    if(q.direction === 'th2tr'){
+      inner = `<span>${o.trans}</span>`;
+    } else if(q.showPhon){
+      // English/French → Thai with phonetics
+      inner = `<span class="opt-stack"><span class="opt-thai">${o.thai}</span><span class="opt-phon">${o.phon}</span></span>`;
+    } else {
+      inner = `<span>${o.thai}</span>`;
+    }
+    b.innerHTML = `<span class="lbl">${label}</span>${inner}`;
+    b.__vocab = o;
+    b.onclick = ()=> handleMC(b, o, q);
+    opts.appendChild(b);
+  });
+  renderNav(false);
+}
+function handleMC(btn, picked, q){
+  if(state.answered) return;
+  state.answered = true;
+  const correct = picked === q.correct;
+  document.querySelectorAll('.opt').forEach(el=>{
+    el.disabled = true;
+    if(el.__vocab === q.correct) el.classList.add('correct');
+    if(el===btn && !correct) el.classList.add('wrong');
+  });
+  if(correct){ state.score++; updateScore(); showFeedback(true, `✓ Correct! <strong>${q.correct.thai}</strong> — <em>${q.correct.phon}</em> — ${q.correct.trans}`); }
+  else { showFeedback(false, `✗ The answer was <span class="correct-ans">${q.direction==='th2tr'?q.correct.trans:q.correct.thai}</span> — <em>${q.correct.phon}</em>`); }
+  renderNav(true);
+}
+
+/* ---- render Listening ---- */
+function renderListen(q){
+  const body = document.getElementById('qbody');
+  body.innerHTML = `
+    <div class="prompt">Listen and pick what you hear.</div>
+    <div style="margin:1rem 0;">
+      <button class="speak-btn" id="bigPlay">🔊 Play Thai</button>
+    </div>
+    <div class="options" id="opts"></div>`;
+  const play = document.getElementById('bigPlay');
+  play.onclick = ()=> speakThai(q.correct.thai, play);
+  setTimeout(()=> speakThai(q.correct.thai, play), 350);
+  const opts = document.getElementById('opts');
+  // Listening = hear Thai, pick the translation. Options show ONLY the translation
+  // (English or French depending on the source lesson), never the Thai text.
+  q.options.forEach((o,i)=>{
+    const b = document.createElement('button');
+    b.className='opt';
+    b.innerHTML = `<span class="lbl">${String.fromCharCode(65+i)}</span><span>${o.trans}</span>`;
+    b.onclick = ()=> handleListen(b, o, q);
+    opts.appendChild(b);
+  });
+  renderNav(false);
+}
+function handleListen(btn, picked, q){
+  if(state.answered) return;
+  state.answered = true;
+  const correct = picked === q.correct;
+  document.querySelectorAll('.opt').forEach(el=>{
+    el.disabled = true;
+    const txt = el.querySelector('span:last-child').textContent.trim();
+    if(txt === q.correct.trans) el.classList.add('correct');
+    if(el===btn && !correct) el.classList.add('wrong');
+  });
+  if(correct){ state.score++; updateScore(); showFeedback(true, `✓ Correct! <strong>${q.correct.thai}</strong> — <em>${q.correct.phon}</em> — ${q.correct.trans}`); }
+  else { showFeedback(false, `✗ You heard <strong>${q.correct.thai}</strong> (<em>${q.correct.phon}</em>) — <span class="correct-ans">${q.correct.trans}</span>`); }
+  renderNav(true);
+}
+
+/* ---- render Fill ---- */
+function renderFill(q){
+  const body = document.getElementById('qbody');
+  const s = q.sentence;
+  const blanked = s.thai.replace(s.target, `<span class="blank">_____</span>`);
+  body.innerHTML = `
+    <div class="prompt">Fill in the missing Thai word:</div>
+    <div class="blank-sentence" id="sentence">${blanked}</div>
+    <div class="prompt-phon">${s.phon}</div>
+    <div style="color:var(--muted);font-size:.9rem;margin-bottom:.8rem;">Translation: <em>${s.trans}</em></div>
+    <div class="text-row">
+      <input id="answerInput" placeholder="type the missing Thai word…" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" />
+      <button class="btn-submit" id="submitBtn">Check</button>
+    </div>
+    <div style="margin-top:.5rem;">
+      <button class="btn btn-secondary" id="hintBtn" style="font-size:.8rem;padding:.4rem .8rem;">🔊 Hear full sentence</button>
+    </div>`;
+  document.getElementById('hintBtn').onclick = (e)=> speakThai(s.thai, e.currentTarget);
+  const input = document.getElementById('answerInput');
+  const submit = document.getElementById('submitBtn');
+  submit.onclick = ()=> handleFill(input.value, q);
+  input.addEventListener('keydown', e=>{ if(e.key==='Enter'){ submit.click(); }});
+  input.focus();
+  renderNav(false);
+}
+function handleFill(val, q){
+  if(state.answered) return;
+  state.answered = true;
+  const target = q.sentence.target;
+  const ok = normalize(val) === normalize(target);
+  document.getElementById('answerInput').disabled = true;
+  document.getElementById('submitBtn').disabled = true;
+  // Replace blank with the correct word highlighted
+  const sentence = document.getElementById('sentence');
+  sentence.innerHTML = q.sentence.thai.replace(q.sentence.target, `<span style="color:var(--green);font-weight:700;background:var(--green-light);padding:2px 6px;border-radius:4px;">${q.sentence.target}</span>`);
+  if(ok){ state.score++; updateScore(); showFeedback(true, `✓ Correct! <strong>${target}</strong>`); }
+  else { showFeedback(false, `✗ You typed <em>${val||'(blank)'}</em>. The correct word is <span class="correct-ans">${target}</span>.`); }
+  renderNav(true);
+}
+
+/* ---- render Flashcard ---- */
+function renderFlash(q){
+  const body = document.getElementById('qbody');
+  const front = q.faceFirst==='thai' ? q.card.thai : q.card.trans;
+  const frontHint = q.faceFirst==='thai' ? 'Thai' : (q.lang==='fr'?'Français':'English');
+  body.innerHTML = `
+    <div class="prompt">Think of the answer, then flip the card.</div>
+    <div class="flash-tip">Tap the card to flip</div>
+    <div class="flash" id="flashBox">
+      <div class="flash-inner">
+        <div class="flash-face flash-front">
+          <div class="flash-hint">${frontHint}</div>
+          <div class="flash-main" id="frontMain">${front}</div>
+        </div>
+        <div class="flash-face flash-back">
+          <div class="flash-hint">Answer</div>
+          <div class="flash-main">${q.card.thai}</div>
+          <div class="flash-sub">${q.card.phon}</div>
+          <div class="flash-sub" style="color:var(--terracotta);font-weight:600;margin-top:.4rem">${q.card.trans}</div>
+        </div>
+      </div>
+    </div>
+    <div class="self-mark" id="markRow" style="display:none;">
+      <button class="mark-bad" id="markBad">✗ Got it wrong</button>
+      <button class="mark-ok" id="markOk">✓ Got it right</button>
+    </div>`;
+  const box = document.getElementById('flashBox');
+  const frontMain = document.getElementById('frontMain');
+  if(q.faceFirst==='thai'){
+    // show a replay button and auto-play the Thai audio as soon as the card renders
+    const replay = inlineSpeaker(q.card.thai);
+    frontMain.appendChild(replay);
+    setTimeout(()=> speakThai(q.card.thai, replay), 250);
+  }
+  box.onclick = ()=>{
+    if(box.classList.contains('flipped')) return;
+    box.classList.add('flipped');
+    document.getElementById('markRow').style.display='flex';
+    // always speak the Thai once it's revealed on the back too (plays again if Thai was already on the front)
+    const backMain = box.querySelector('.flash-back .flash-main');
+    let backBtn = box.querySelector('.flash-back .inline-speak');
+    if(!backBtn){
+      backBtn = inlineSpeaker(q.card.thai);
+      backMain.appendChild(backBtn);
+    }
+    setTimeout(()=> speakThai(q.card.thai, backBtn), 400);
+  };
+  document.getElementById('markOk').onclick = ()=> flashResult(true, q);
+  document.getElementById('markBad').onclick = ()=> flashResult(false, q);
+  renderNav(false);
+}
+function flashResult(ok, q){
+  if(state.answered) return;
+  state.answered = true;
+  document.getElementById('markOk').disabled=true;
+  document.getElementById('markBad').disabled=true;
+  if(ok){ state.score++; updateScore(); showFeedback(true, `✓ Marked correct — <strong>${q.card.thai}</strong> · ${q.card.trans}`); }
+  else { showFeedback(false, `Marked wrong — review: <strong>${q.card.thai}</strong> · ${q.card.phon} · ${q.card.trans}`); }
+  renderNav(true);
+}
+
+/* ============================================================
+   FLOW
+   ============================================================ */
+function renderQuestion(){
+  const q = genQuestion();
+  state.currentQ = q;
+  state.answered = false;
+  area.innerHTML = renderShell(q);
+  switch(q.type){
+    case 'mc':     renderMC(q); break;
+    case 'listen': renderListen(q); break;
+    case 'fill':   renderFill(q); break;
+    case 'flash':  renderFlash(q); break;
+  }
+  document.getElementById('qnum').textContent = state.qIndex+1;
+  document.getElementById('progress-fill').style.width = ((state.qIndex)/TOTAL_QUESTIONS*100)+'%';
+}
+
+function nextQuestion(){
+  state.qIndex++;
+  if(state.qIndex >= TOTAL_QUESTIONS){ renderFinish(); return; }
+  renderQuestion();
+}
+
+function renderFinish(){
+  const pct = Math.round(state.score / TOTAL_QUESTIONS * 100);
+  let msg = 'Keep practicing! 🌱';
+  if(pct>=90) msg = 'Outstanding! 🏆';
+  else if(pct>=70) msg = 'Great work! 🎉';
+  else if(pct>=50) msg = 'Good progress! 🌿';
+  area.innerHTML = `
+    <div class="card" style="text-align:center;padding:2.5rem 1.5rem;">
+      <div class="mode-tag">Quiz complete</div>
+      <div style="font-family:'Bebas Neue',serif;font-size:3rem;color:var(--teal);margin:.5rem 0;">
+        ${state.score} / ${TOTAL_QUESTIONS}
+      </div>
+      <div style="font-size:1.1rem;color:var(--muted);margin-bottom:.5rem;">${pct}%</div>
+      <div style="font-size:1.1rem;margin-bottom:1.5rem;">${msg}</div>
+      <button class="btn btn-primary" id="againBtn">↻ Start a new quiz</button>
+    </div>`;
+  document.getElementById('progress-fill').style.width = '100%';
+  document.getElementById('qnum').textContent = TOTAL_QUESTIONS;
+  document.getElementById('againBtn').onclick = resetQuiz;
+}
+
+function updateScore(){ document.getElementById('score').textContent = state.score; }
+function resetQuiz(){
+  state.qIndex=0; state.score=0; state.answered=false;
+  updateScore();
+  renderQuestion();
+}
+
+/* ============================================================
+   MODE PICKER
+   ============================================================ */
+document.querySelectorAll('.mode-btn').forEach(b=>{
+  b.addEventListener('click', ()=>{
+    document.querySelectorAll('.mode-btn').forEach(x=>x.classList.remove('active'));
+    b.classList.add('active');
+    state.mode = b.dataset.mode;
+    resetQuiz();
+  });
+});
+const restartBtn = document.getElementById('restart');
+if (restartBtn) restartBtn.addEventListener('click', resetQuiz);
+
+/* Boot */
+if('speechSynthesis' in window){
+  window.speechSynthesis.onvoiceschanged = ()=> window.speechSynthesis.getVoices();
+  window.speechSynthesis.getVoices();
+}
+resetQuiz();
+</script>
+</body>
+</html>

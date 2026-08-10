@@ -1,0 +1,1173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Lesson 4 — Transportation · การเดินทาง</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Source+Sans+3:wght@300;400;600;700&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --cream: #fdf6ec;
+      --dark: #1a1a1a;
+      --slate: #2c3e50;
+      --blue: #2a5fa5;
+      --teal-light: #e6f3f1;
+      --gold: #d4a012;
+      --gold-light: #fdf2d6;
+      --teal: #1a7a6e;
+      --muted: #6b6b6b;
+      --red: #c0392b;
+      --yellow: #f9e04b;
+      --lgray: #f0ede8;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background-color: var(--cream);
+      background-image:
+        radial-gradient(ellipse at 15% 10%, rgba(58,122,191,0.07) 0%, transparent 50%),
+        radial-gradient(ellipse at 85% 85%, rgba(196,122,30,0.06) 0%, transparent 50%);
+      font-family: 'Source Sans 3', sans-serif;
+      color: var(--dark);
+      min-height: 100vh;
+      padding: 2rem 1rem 4rem;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 3rem;
+      position: relative;
+    }
+
+    .lesson-tag {
+      display: inline-block;
+      background: var(--dark);
+      color: var(--teal-light);
+      font-family: 'Playfair Display', serif;
+      font-size: 0.72rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      padding: 0.3rem 1rem;
+      border-radius: 20px;
+      margin-bottom: 0.8rem;
+    }
+
+    h1 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(2.4rem, 6vw, 4.5rem);
+      color: var(--dark);
+      line-height: 1;
+      letter-spacing: 4px;
+      font-weight: 400;
+    }
+
+    h1 span {
+      display: block;
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1rem, 2vw, 1.4rem);
+      color: var(--gold);
+      font-weight: 400;
+      margin-top: 6px;
+      font-style: italic;
+      letter-spacing: 0;
+    }
+
+    header::after {
+      content: '';
+      display: block;
+      width: 80px;
+      height: 3px;
+      background: linear-gradient(90deg, var(--blue), var(--gold));
+      margin: 1.2rem auto 0;
+      border-radius: 2px;
+    }
+
+    .container { max-width: 1050px; margin: 0 auto; }
+
+    /* Section titles */
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.3rem;
+      color: var(--dark);
+      margin: 2.5rem 0 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+    }
+
+    .section-title::before {
+      content: '';
+      display: inline-block;
+      width: 30px;
+      height: 3px;
+      background: var(--blue);
+      border-radius: 2px;
+      flex-shrink: 0;
+    }
+
+    /* Column legend */
+    .col-legend {
+      display: grid;
+      grid-template-columns: 38% 28% 34%;
+      max-width: 1050px;
+      margin: 0 auto 0.8rem;
+    }
+
+    .col-legend span {
+      font-size: 0.7rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      font-family: 'Playfair Display', serif;
+      padding: 0 1.2rem;
+    }
+
+    .col-legend span:nth-child(1) { color: var(--dark); opacity: 0.5; }
+    .col-legend span:nth-child(2) { color: var(--teal); border-left: 1px solid rgba(58,122,191,0.2); border-right: 1px solid rgba(58,122,191,0.2); }
+    .col-legend span:nth-child(3) { color: var(--gold); opacity: 0.8; }
+
+    /* Cards */
+    .section-card {
+      background: var(--cream);
+      border-radius: 16px;
+      box-shadow: 0 2px 20px rgba(15,39,68,0.08), 0 0 0 1px rgba(58,122,191,0.12);
+      margin-bottom: 1rem;
+      overflow: hidden;
+      transition: box-shadow 0.25s ease, transform 0.25s ease;
+    }
+
+    .section-card:hover {
+      box-shadow: 0 6px 30px rgba(15,39,68,0.13), 0 0 0 1.5px rgba(58,122,191,0.25);
+      transform: translateY(-2px);
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.9rem 1.5rem;
+      background: linear-gradient(135deg, var(--dark) 0%, var(--slate) 100%);
+      color: white;
+      flex-wrap: wrap;
+    }
+
+    .word-number {
+      font-family: 'Playfair Display', serif;
+      font-size: 0.95rem;
+      color: var(--teal-light);
+      opacity: 0.6;
+      min-width: 1.6rem;
+    }
+
+    .header-titles {
+      display: flex;
+      align-items: baseline;
+      gap: 0.6rem;
+      flex: 1;
+      flex-wrap: wrap;
+    }
+
+    .word-thai {
+      font-family: 'Source Sans 3', sans-serif;
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--teal-light);
+    }
+
+    .word-phonetic {
+      font-size: 0.82rem;
+      color: rgba(255,255,255,0.45);
+      font-style: italic;
+    }
+
+    .header-divider { color: rgba(255,255,255,0.25); font-size: 0.9rem; }
+
+    .word-english {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.05rem;
+      color: rgba(255,255,255,0.88);
+      font-style: italic;
+    }
+
+    table { width: 100%; border-collapse: collapse; table-layout: fixed; }
+
+    tr {
+      border-bottom: 1px solid rgba(58,122,191,0.1);
+      transition: background 0.15s;
+    }
+
+    tr:last-child { border-bottom: none; }
+    tr:hover { background: rgba(58,122,191,0.04); }
+
+    td { padding: 0.8rem 1.2rem; vertical-align: middle; }
+    td:nth-child(1) { width: 38%; }
+    td:nth-child(2) { width: 28%; border-left: 1px solid rgba(58,122,191,0.15); border-right: 1px solid rgba(58,122,191,0.15); background: rgba(42,122,111,0.03); }
+    td:nth-child(3) { width: 34%; }
+
+    .thai-cell {
+      font-family: 'Source Sans 3', sans-serif;
+      font-size: 1rem;
+      color: var(--dark);
+      display: flex;
+      align-items: center;
+      gap: 0.55rem;
+    }
+
+    .phonetic-cell {
+      font-size: 0.86rem;
+      color: var(--teal);
+      font-style: italic;
+      letter-spacing: 0.02em;
+      line-height: 1.5;
+    }
+
+    .english-cell {
+      font-family: 'Playfair Display', serif;
+      font-size: 0.92rem;
+      color: var(--gold);
+      font-style: italic;
+      line-height: 1.5;
+    }
+
+    .speaker-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--blue);
+      transition: background 0.15s, color 0.15s, transform 0.15s;
+      flex-shrink: 0;
+    }
+
+    .speaker-btn:hover {
+      background: rgba(58,122,191,0.12);
+      color: var(--gold);
+      transform: scale(1.15);
+    }
+
+    .speaker-btn:active { transform: scale(0.95); }
+    .speaker-btn svg { width: 16px; height: 16px; }
+
+    /* ── Grammar Structures ── */
+    .structure-block {
+      background: var(--cream);
+      border-radius: 14px;
+      padding: 1.5rem;
+      margin-bottom: 1.2rem;
+      box-shadow: 0 2px 12px rgba(15,39,68,0.07);
+      border-top: 4px solid var(--blue);
+    }
+
+    .structure-block h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem;
+      color: var(--dark);
+      margin-bottom: 1.2rem;
+      font-style: italic;
+    }
+
+    .grammar-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+      margin-bottom: 1rem;
+    }
+
+    .grammar-table th {
+      background: var(--dark);
+      color: var(--teal-light);
+      font-family: 'Playfair Display', serif;
+      font-size: 0.78rem;
+      letter-spacing: 0.05em;
+      padding: 0.5rem 0.8rem;
+      text-align: left;
+      font-style: italic;
+      font-weight: 400;
+    }
+
+    .grammar-table td {
+      padding: 0.55rem 0.8rem;
+      border-bottom: 1px solid rgba(58,122,191,0.1);
+      vertical-align: top;
+      width: auto;
+    }
+
+    .grammar-table tr:last-child td { border-bottom: none; }
+    .grammar-table tr:hover { background: rgba(58,122,191,0.04); }
+
+    .grammar-table .row-thai {
+      font-family: 'Source Sans 3', sans-serif;
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--dark);
+    }
+
+    .grammar-table .row-phonetic {
+      font-style: italic;
+      color: var(--teal);
+      font-size: 0.85rem;
+    }
+
+    .grammar-table .row-english {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      color: var(--gold);
+      font-size: 0.85rem;
+    }
+
+    /* Example sentences */
+    .examples-block {
+      background: var(--cream);
+      border-radius: 14px;
+      padding: 1.5rem;
+      margin-bottom: 1.2rem;
+      box-shadow: 0 2px 12px rgba(15,39,68,0.07);
+      border-left: 4px solid var(--gold);
+    }
+
+    .examples-block h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem;
+      color: var(--dark);
+      margin-bottom: 1rem;
+      font-style: italic;
+    }
+
+    .dialogue { display: flex; flex-direction: column; gap: 1rem; }
+
+    .dialogue-item { display: flex; gap: 0.8rem; align-items: flex-start; }
+
+    .speaker-label {
+      font-family: 'Playfair Display', serif;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: white;
+      background: var(--blue);
+      border-radius: 4px;
+      padding: 0.15rem 0.4rem;
+      flex-shrink: 0;
+      margin-top: 0.2rem;
+    }
+
+    .speaker-label.b { background: var(--gold); }
+
+    .dialogue-text { display: flex; flex-direction: column; gap: 0.2rem; }
+
+    .dialogue-text .d-thai {
+      font-family: 'Source Sans 3', sans-serif;
+      font-size: 1rem;
+      color: var(--dark);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .dialogue-text .d-phonetic { font-size: 0.82rem; font-style: italic; color: var(--teal); }
+    .dialogue-text .d-english { font-family: 'Playfair Display', serif; font-size: 0.82rem; font-style: italic; color: var(--gold); }
+
+    .dialogue-separator {
+      border: none;
+      border-top: 1px dashed rgba(58,122,191,0.2);
+      margin: 0.5rem 0;
+    }
+
+    /* Exercises */
+    .exercise-block {
+      background: var(--cream);
+      border-radius: 14px;
+      padding: 1.5rem;
+      margin-bottom: 1.2rem;
+      border-left: 4px solid var(--blue);
+      box-shadow: 0 2px 12px rgba(15,39,68,0.06);
+    }
+
+    .exercise-block h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem;
+      color: var(--dark);
+      margin-bottom: 0.4rem;
+    }
+
+    .exercise-block .ex-instruction {
+      font-size: 0.88rem;
+      color: var(--muted);
+      margin-bottom: 1rem;
+      font-style: italic;
+    }
+
+    .ex-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 0.8rem;
+    }
+
+    .ex-item {
+      border: 1px solid rgba(58,122,191,0.18);
+      border-radius: 10px;
+      padding: 0.8rem 1rem;
+      background: rgba(58,122,191,0.03);
+    }
+
+    .ex-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 0.75rem;
+      color: var(--blue);
+      font-weight: 700;
+      margin-bottom: 0.3rem;
+    }
+
+    .ex-line {
+      font-size: 0.88rem;
+      color: var(--dark);
+      margin-bottom: 0.25rem;
+      display: flex;
+      gap: 0.4rem;
+    }
+
+    .ex-label {
+      font-family: 'Playfair Display', serif;
+      font-size: 0.78rem;
+      color: var(--blue);
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    .ex-hint {
+      color: var(--muted);
+      font-style: italic;
+    }
+
+    .fill-blank {
+      display: inline-block;
+      min-width: 120px;
+      border-bottom: 2px solid var(--blue);
+      margin: 0 4px;
+    }
+
+    /* Listening exercise */
+    .listening-list { display: flex; flex-direction: column; gap: 0.7rem; }
+
+    .listening-item {
+      background: rgba(58,122,191,0.04);
+      border-radius: 10px;
+      padding: 0.8rem 1rem;
+      border: 1px solid rgba(58,122,191,0.13);
+    }
+
+    .listening-item .l-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 0.75rem;
+      color: var(--blue);
+      font-weight: 700;
+      margin-bottom: 0.3rem;
+    }
+
+    .listening-item .l-thai {
+      font-family: 'Source Sans 3', sans-serif;
+      font-size: 1rem;
+      color: var(--dark);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 0.2rem;
+    }
+
+    .listening-item .l-phonetic { font-size: 0.82rem; font-style: italic; color: var(--teal); }
+
+    footer {
+      text-align: center;
+      margin-top: 3rem;
+      font-size: 0.78rem;
+      color: var(--muted);
+      letter-spacing: 0.05em;
+    }
+
+    @media (max-width: 640px) {
+      .word-phonetic { display: none; }
+      td { padding: 0.6rem 0.7rem; }
+      .thai-cell, .phonetic-cell, .english-cell { font-size: 0.82rem; }
+      .col-legend span { font-size: 0.62rem; padding: 0 0.7rem; }
+    }
+
+    .quiz-cta {
+      display: inline-block;
+      background: linear-gradient(135deg, var(--blue) 0%, var(--dark) 100%);
+      color: #fff;
+      text-decoration: none;
+      padding: 10px 22px;
+      border-radius: 24px;
+      font-family: 'Playfair Display', serif;
+      font-size: 0.9rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      margin-top: 1.2rem;
+      box-shadow: 0 4px 14px rgba(58,122,191,0.35);
+      transition: transform .15s, box-shadow .15s;
+    }
+    .quiz-cta:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(58,122,191,0.5);
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+
+  <header>
+    <div class="lesson-tag">Lesson 4 · Speaking &amp; Listening</div>
+    <h1>
+      Transportation
+      <span>การเดินทาง</span>
+    </h1>
+    <a href="index.html?source=Transportation" class="quiz-cta">🎯 Take the quiz of this lesson →</a>
+  </header>
+
+  <!-- ══ VOCABULARY ══ -->
+  <div class="section-title">Vocabulary · คำศัพท์</div>
+
+  <style>
+    /* Vocabulary table styled to match household.html */
+    .vocab-wrap{padding:0 0 30px;overflow-x:auto;}
+    .vocab-table{
+      width:100%;border-collapse:collapse;background:#fff;
+      border-radius:10px;overflow:hidden;
+      box-shadow:0 4px 20px rgba(0,0,0,0.08);
+    }
+    .vocab-table thead tr{background:#2c3e50;}
+    .vocab-table thead th{
+      padding:14px 20px;text-align:left;
+      font-size:0.78rem;font-weight:700;letter-spacing:1.5px;
+      text-transform:uppercase;color:#f9e04b;
+    }
+    .vocab-table thead th:first-child{border-radius:10px 0 0 0;}
+    .vocab-table thead th:last-child{border-radius:0 10px 0 0;}
+    .vocab-table tbody tr{
+      border-bottom:1px solid #f0ede8;transition:background 0.15s;
+    }
+    .vocab-table tbody tr:last-child{border-bottom:none;}
+    .vocab-table tbody tr:hover{background:#fef9ee;}
+    .vocab-table td{padding:14px 20px;vertical-align:middle;}
+    .vocab-col-thai{
+      font-size:1.25rem;color:#1a7a6e;font-weight:600;white-space:nowrap;
+    }
+    .vocab-col-phon{font-size:0.92rem;color:#555;font-style:italic;}
+    .vocab-col-eng{font-weight:700;color:#c0392b;font-size:0.98rem;}
+    .vocab-thai-row{display:flex;align-items:center;gap:8px;}
+    .vocab-row-num{
+      display:inline-flex;align-items:center;justify-content:center;
+      width:26px;height:26px;border-radius:50%;
+      background:#d4a012;color:#fff;
+      font-size:0.72rem;font-weight:700;flex-shrink:0;
+    }
+    .vocab-speak-btn{
+      display:inline-flex;align-items:center;justify-content:center;
+      background:none;border:none;cursor:pointer;
+      padding:4px;border-radius:50%;color:#1a7a6e;opacity:0.4;
+      transition:opacity 0.2s, transform 0.15s;flex-shrink:0;
+    }
+    .vocab-speak-btn:hover{opacity:1;transform:scale(1.2);}
+    .vocab-speak-btn.speaking{
+      opacity:1;animation:vocab-pulse 0.55s ease-in-out infinite alternate;
+    }
+    @keyframes vocab-pulse{
+      from{transform:scale(1);} to{transform:scale(1.3);}
+    }
+  </style>
+
+  <div class="vocab-wrap">
+    <table class="vocab-table">
+      <thead>
+        <tr>
+          <th>Thai (ภาษาไทย)</th>
+          <th>Phonemic</th>
+          <th>English</th>
+        </tr>
+      </thead>
+      <tbody id="vocab-tbody"></tbody>
+    </table>
+  </div>
+
+  <script>
+    const VOCAB_TRANSPORT = [
+      {thai:"รถไฟ",         phon:"rót-fai",            eng:"Train"},
+      {thai:"รถยนต์",       phon:"rót-yon",            eng:"Car"},
+      {thai:"รถเมล์",       phon:"rót-mee",            eng:"City bus"},
+      {thai:"รถทัวร์",      phon:"rót-thua",           eng:"Coach bus"},
+      {thai:"เครื่องบิน",   phon:"khrûan-bin",         eng:"Airplane"},
+      {thai:"เรือ",         phon:"rua",                eng:"Boat / Ship"},
+      {thai:"สถานีรถไฟ",    phon:"sà-thǎa-nii rót-fai",eng:"Train station"},
+      {thai:"สถานีขนส่ง",   phon:"sà-thǎa-nii khǒn-sòn",eng:"Bus terminal"},
+      {thai:"สนามบิน",      phon:"sà-nǎam bin",        eng:"Airport"},
+      {thai:"ป้ายรถเมล์",   phon:"bpâai rót-mee",      eng:"Bus stop"},
+      {thai:"ท่าเรือ",      phon:"thâa rua",           eng:"Pier / Port"},
+      {thai:"ขึ้น",         phon:"khûn",               eng:"Get on / board"},
+      {thai:"ลง",           phon:"lon",                eng:"Get off / alight"},
+      {thai:"ยังไง",        phon:"yan-ŋai",            eng:"How / in what way"},
+      {thai:"ใช้เวลา",      phon:"chái wee-laa",       eng:"Take (time)"},
+      {thai:"จอด",          phon:"jɔ̀ɔt",              eng:"Stop / park"},
+    ];
+
+    (function renderVocabTable(){
+      const synth = window.speechSynthesis;
+      let curBtn = null;
+      function speakWithBtn(text, btn){
+        if(!synth) return;
+        synth.cancel();
+        if(curBtn && curBtn !== btn) curBtn.classList.remove('speaking');
+        const u = new SpeechSynthesisUtterance(text.replace(/\s*\/\s*/g, ", "));
+        u.lang='th-TH'; u.rate=0.85; u.pitch=1;
+        const voices = synth.getVoices();
+        const th = voices.find(v => v.lang === 'th-TH' || v.lang.startsWith('th'));
+        if(th) u.voice = th;
+        btn.classList.add('speaking'); curBtn = btn;
+        u.onend = u.onerror = () => { btn.classList.remove('speaking'); curBtn=null; };
+        synth.speak(u);
+      }
+      function speakerSVG(){
+        return '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor">'+
+          '<path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/>'+
+          '<path d="M14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>'+
+          '</svg>';
+      }
+      function render(){
+        const tbody = document.getElementById('vocab-tbody');
+        if(!tbody) return;
+        tbody.innerHTML = '';
+        VOCAB_TRANSPORT.forEach((v, i) => {
+          const tr = document.createElement('tr');
+
+          const tdThai = document.createElement('td');
+          tdThai.className = 'vocab-col-thai';
+          const row = document.createElement('div');
+          row.className = 'vocab-thai-row';
+
+          const badge = document.createElement('span');
+          badge.className = 'vocab-row-num';
+          badge.textContent = i + 1;
+
+          const span = document.createElement('span');
+          span.textContent = v.thai;
+
+          const btn = document.createElement('button');
+          btn.className = 'vocab-speak-btn';
+          btn.title = 'Play: ' + v.thai;
+          btn.setAttribute('aria-label', 'Play Thai pronunciation of ' + v.eng);
+          btn.innerHTML = speakerSVG();
+          btn.addEventListener('click', () => speakWithBtn(v.thai, btn));
+
+          row.appendChild(badge); row.appendChild(span); row.appendChild(btn);
+          tdThai.appendChild(row);
+
+          const tdPhon = document.createElement('td');
+          tdPhon.className = 'vocab-col-phon';
+          tdPhon.textContent = v.phon;
+
+          const tdEng = document.createElement('td');
+          tdEng.className = 'vocab-col-eng';
+          tdEng.textContent = v.eng;
+
+          tr.appendChild(tdThai); tr.appendChild(tdPhon); tr.appendChild(tdEng);
+          tbody.appendChild(tr);
+        });
+      }
+      if(synth && synth.onvoiceschanged !== undefined) synth.onvoiceschanged = render;
+      if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', render);
+      else render();
+    })();
+  </script>
+
+  <!-- ══ GRAMMAR STRUCTURES ══ -->
+  <div class="section-title">Grammar Structures · โครงสร้างประโยค</div>
+
+  <!-- Structure 1 -->
+  <div class="structure-block">
+    <h3>Structure 1 — How do you go/get to ……… ?</h3>
+    <table class="grammar-table">
+      <thead>
+        <tr>
+          <th>Subject</th>
+          <th>Verb</th>
+          <th>Noun</th>
+          <th>Question Word</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="row-thai">คุณ</td>
+          <td class="row-thai">ไป/มา</td>
+          <td class="row-thai">กรุงเทพ</td>
+          <td class="row-thai">ยังไง</td>
+        </tr>
+        <tr>
+          <td class="row-phonetic">khun</td>
+          <td class="row-phonetic">bpai / maa</td>
+          <td class="row-phonetic">gruŋ-thêep</td>
+          <td class="row-phonetic">yaŋ-ŋai</td>
+        </tr>
+        <tr>
+          <td class="row-english">You</td>
+          <td class="row-english">Go / Come</td>
+          <td class="row-english">Bangkok</td>
+          <td class="row-english">How</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Structure 2 -->
+  <div class="structure-block">
+    <h3>Structure 2 — I go/get to ………… by …………………</h3>
+    <table class="grammar-table">
+      <thead>
+        <tr>
+          <th>Subject</th>
+          <th>Verb</th>
+          <th>Place</th>
+          <th>Preposition</th>
+          <th>Vehicle</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="row-thai">ผม</td>
+          <td class="row-thai">ไป/มา</td>
+          <td class="row-thai">กรุงเทพ</td>
+          <td class="row-thai">โดย</td>
+          <td class="row-thai">เครื่องบิน</td>
+        </tr>
+        <tr>
+          <td class="row-phonetic">phǒm</td>
+          <td class="row-phonetic">bpai / maa</td>
+          <td class="row-phonetic">gruŋ-thêep</td>
+          <td class="row-phonetic">dooy</td>
+          <td class="row-phonetic">khrûan-bin</td>
+        </tr>
+        <tr>
+          <td class="row-english">I</td>
+          <td class="row-english">Go / Come</td>
+          <td class="row-english">Bangkok</td>
+          <td class="row-english">By</td>
+          <td class="row-english">Airplane</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Structure 3 -->
+  <div class="structure-block">
+    <h3>Structure 3 — I go/get to ………… by ………… (sit/ride)</h3>
+    <table class="grammar-table">
+      <thead>
+        <tr>
+          <th>Subject</th>
+          <th>Verb</th>
+          <th>Vehicle (Noun)</th>
+          <th>Direction Word</th>
+          <th>Place (Noun)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="row-thai">ผม</td>
+          <td class="row-thai">นั่ง</td>
+          <td class="row-thai">เครื่องบิน</td>
+          <td class="row-thai">ไป/มา</td>
+          <td class="row-thai">กรุงเทพฯ</td>
+        </tr>
+        <tr>
+          <td class="row-phonetic">phǒm</td>
+          <td class="row-phonetic">nân</td>
+          <td class="row-phonetic">khrûan-bin</td>
+          <td class="row-phonetic">bpai / maa</td>
+          <td class="row-phonetic">gruŋ-thêep</td>
+        </tr>
+        <tr>
+          <td class="row-english">I</td>
+          <td class="row-english">Sit / Ride</td>
+          <td class="row-english">Airplane</td>
+          <td class="row-english">to</td>
+          <td class="row-english">Bangkok</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Structure 4 -->
+  <div class="structure-block">
+    <h3>Structure 4 — How long does it take (time) from A to B?</h3>
+    <table class="grammar-table">
+      <thead>
+        <tr>
+          <th>From</th>
+          <th>Subject</th>
+          <th>Noun</th>
+          <th>Subject</th>
+          <th>Verb</th>
+          <th>Question Word</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="row-thai">จาก</td>
+          <td class="row-thai">เชียงใหม่</td>
+          <td class="row-thai">ไป/มา</td>
+          <td class="row-thai">ภูเก็ต</td>
+          <td class="row-thai">ใช้เวลา</td>
+          <td class="row-thai">นานเท่าไหร่</td>
+        </tr>
+        <tr>
+          <td class="row-phonetic">jàak</td>
+          <td class="row-phonetic">chiaŋ-mài</td>
+          <td class="row-phonetic">bpai/maa</td>
+          <td class="row-phonetic">phuu-gèt</td>
+          <td class="row-phonetic">chái wee-laa</td>
+          <td class="row-phonetic">naan thâw-rài</td>
+        </tr>
+        <tr>
+          <td class="row-english">From</td>
+          <td class="row-english">Chiang Mai</td>
+          <td class="row-english">to</td>
+          <td class="row-english">Phuket</td>
+          <td class="row-english">Take (Time)</td>
+          <td class="row-english">How long</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Structure 5 -->
+  <div class="structure-block">
+    <h3>Structure 5 — It takes ………… from A to B</h3>
+    <table class="grammar-table">
+      <thead>
+        <tr>
+          <th>From</th>
+          <th>Subject</th>
+          <th>Noun</th>
+          <th>Subject</th>
+          <th>Verb</th>
+          <th>Number</th>
+          <th>Classifier</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="row-thai">จาก</td>
+          <td class="row-thai">เชียงใหม่</td>
+          <td class="row-thai">ไป/มา</td>
+          <td class="row-thai">ภูเก็ต</td>
+          <td class="row-thai">ใช้เวลา</td>
+          <td class="row-thai">2</td>
+          <td class="row-thai">ชั่วโมง</td>
+        </tr>
+        <tr>
+          <td class="row-phonetic">jàak</td>
+          <td class="row-phonetic">chiaŋ-mài</td>
+          <td class="row-phonetic">bpai/maa</td>
+          <td class="row-phonetic">phuu-gèt</td>
+          <td class="row-phonetic">chái wee-laa</td>
+          <td class="row-phonetic">sɔ̌ɔŋ</td>
+          <td class="row-phonetic">chûa-moon</td>
+        </tr>
+        <tr>
+          <td class="row-english">From</td>
+          <td class="row-english">Chiang Mai</td>
+          <td class="row-english">to</td>
+          <td class="row-english">Phuket</td>
+          <td class="row-english">Take (Time)</td>
+          <td class="row-english">2</td>
+          <td class="row-english">hours</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ══ EXAMPLE SENTENCES ══ -->
+  <div class="section-title">Example Sentences · ประโยคตัวอย่าง</div>
+
+  <div class="examples-block">
+    <h3>Dialogues · บทสนทนา</h3>
+    <div class="dialogue">
+
+      <div class="dialogue-item">
+        <span class="speaker-label">A</span>
+        <div class="dialogue-text">
+          <div class="d-thai"><button class="speaker-btn" onclick="speak('คุณจะไปจังหวัดลพบุรียังไงคะ')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg></button>คุณจะไปจังหวัดลพบุรียังไงคะ</div>
+          <div class="d-english">How are you going to Lopburi province?</div>
+        </div>
+      </div>
+
+      <div class="dialogue-item">
+        <span class="speaker-label b">B</span>
+        <div class="dialogue-text">
+          <div class="d-thai"><button class="speaker-btn" onclick="speak('ผมจะไปโดยรถไฟครับ')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg></button>ผมจะไปโดยรถไฟครับ</div>
+          <div class="d-phonetic">phǒm jà bpai dooy rót-fai khráp</div>
+          <div class="d-english">I'll go by train.</div>
+        </div>
+      </div>
+
+      <div class="dialogue-item">
+        <span class="speaker-label b">B</span>
+        <div class="dialogue-text">
+          <div class="d-thai"><button class="speaker-btn" onclick="speak('ผมจะนั่งรถไฟไปครับ')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg></button>ผมจะนั่งรถไฟไปครับ</div>
+          <div class="d-phonetic">phǒm jà nân rót-fai bpai khráp</div>
+          <div class="d-english">I'll ride the train there.</div>
+        </div>
+      </div>
+
+      <hr class="dialogue-separator"/>
+
+      <div class="dialogue-item">
+        <span class="speaker-label">A</span>
+        <div class="dialogue-text">
+          <div class="d-thai"><button class="speaker-btn" onclick="speak('คุณไปเกาะสมุยยังไงคะ')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg></button>คุณไปเกาะสมุยยังไงคะ</div>
+          <div class="d-phonetic">khun bpai gɔ̀ sà-muy yaŋ-ŋai khá</div>
+          <div class="d-english">How did you get to Samui Island?</div>
+        </div>
+      </div>
+
+      <div class="dialogue-item">
+        <span class="speaker-label b">B</span>
+        <div class="dialogue-text">
+          <div class="d-thai"><button class="speaker-btn" onclick="speak('ผมไปเกาะสมุยโดยเรือครับ')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg></button>ผมไปเกาะสมุยโดยเรือครับ</div>
+          <div class="d-phonetic">phǒm bpai gɔ̀ sà-muy dooy rua khráp</div>
+          <div class="d-english">I went to Samui Island by boat.</div>
+        </div>
+      </div>
+
+      <hr class="dialogue-separator"/>
+
+      <div class="dialogue-item">
+        <span class="speaker-label">A</span>
+        <div class="dialogue-text">
+          <div class="d-thai"><button class="speaker-btn" onclick="speak('คุณมาที่นี่ยังไงคะ')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg></button>คุณมาที่นี่ยังไงคะ</div>
+          <div class="d-phonetic">khun maa thîi-nîi yaŋ-ŋai khá</div>
+          <div class="d-english">How did you get here?</div>
+        </div>
+      </div>
+
+      <div class="dialogue-item">
+        <span class="speaker-label b">B</span>
+        <div class="dialogue-text">
+          <div class="d-thai"><button class="speaker-btn" onclick="speak('ผมมาที่นี่โดยรถเมล์ครับ')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg></button>ผมมาที่นี่โดยรถเมล์ครับ</div>
+          <div class="d-phonetic">phǒm maa thîi-nîi dooy rót-mee khráp</div>
+          <div class="d-english">I came here by city bus.</div>
+        </div>
+      </div>
+
+      <hr class="dialogue-separator"/>
+
+      <div class="dialogue-item">
+        <span class="speaker-label">A</span>
+        <div class="dialogue-text">
+          <div class="d-thai"><button class="speaker-btn" onclick="speak('จากเชียงใหม่ไปกรุงเทพฯใช้เวลาเท่าไหร่')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg></button>จากเชียงใหม่ไปกรุงเทพฯใช้เวลาเท่าไหร่</div>
+          <div class="d-phonetic">jàak chiaŋ-mài bpai gruŋ-thêep chái wee-laa thâw-rài</div>
+          <div class="d-english">How long does it take to get from Chiang Mai to Bangkok?</div>
+        </div>
+      </div>
+
+      <div class="dialogue-item">
+        <span class="speaker-label b">B</span>
+        <div class="dialogue-text">
+          <div class="d-thai"><button class="speaker-btn" onclick="speak('ถ้านั่งเครื่องบินไป ใช้เวลาประมาณหนึ่งชั่วโมง')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg></button>ถ้านั่งเครื่องบินไป ใช้เวลาประมาณหนึ่งชั่วโมง</div>
+          <div class="d-phonetic">thâa nân khrûan-bin bpai chái wee-laa bprà-maan nùŋ chûa-moon</div>
+          <div class="d-english">If you fly, it takes about 1 hour.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══ EXERCISE 2 ══ -->
+  <div class="section-title">Exercise 2 · แบบฝึกหัด 2</div>
+
+  <div class="exercise-block">
+    <h3>Complete the following sentences</h3>
+    <p class="ex-instruction">"How do you get to ….?" — Write A (question) and B (answer) in Thai using the hints provided.</p>
+    <div style="background:rgba(58,122,191,0.06);border-radius:10px;padding:0.8rem 1rem;margin-bottom:1rem;font-size:0.88rem;">
+      <strong style="color:var(--dark)">Example:</strong><br>
+      <span style="color:var(--blue)">A:</span> คุณไปกรุงเทพฯยังไง? &nbsp;
+      <span style="color:var(--blue)">B:</span> ผมนั่งรถไฟไป
+    </div>
+    <div class="ex-grid">
+      <div class="ex-item">
+        <div class="ex-num">1. 🚌</div>
+        <div class="ex-line"><span class="ex-label">A:</span><span class="fill-blank"></span><span class="ex-hint">(School)</span></div>
+        <div class="ex-line"><span class="ex-label">B:</span><span class="fill-blank"></span><span class="ex-hint">(By city bus)</span></div>
+      </div>
+      <div class="ex-item">
+        <div class="ex-num">2. 🚌</div>
+        <div class="ex-line"><span class="ex-label">A:</span><span class="fill-blank"></span><span class="ex-hint">(Southern region)</span></div>
+        <div class="ex-line"><span class="ex-label">B:</span><span class="fill-blank"></span><span class="ex-hint">(By coach bus)</span></div>
+      </div>
+      <div class="ex-item">
+        <div class="ex-num">3. ⛵</div>
+        <div class="ex-line"><span class="ex-label">A:</span><span class="fill-blank"></span><span class="ex-hint">(Samui Island)</span></div>
+        <div class="ex-line"><span class="ex-label">B:</span><span class="fill-blank"></span><span class="ex-hint">(By boat)</span></div>
+      </div>
+      <div class="ex-item">
+        <div class="ex-num">4. ✈️</div>
+        <div class="ex-line"><span class="ex-label">A:</span><span class="fill-blank"></span><span class="ex-hint">(Vietnam)</span></div>
+        <div class="ex-line"><span class="ex-label">B:</span><span class="fill-blank"></span><span class="ex-hint">(By plane)</span></div>
+      </div>
+      <div class="ex-item">
+        <div class="ex-num">5. 🏍️</div>
+        <div class="ex-line"><span class="ex-label">A:</span><span class="fill-blank"></span><span class="ex-hint">(Post office)</span></div>
+        <div class="ex-line"><span class="ex-label">B:</span><span class="fill-blank"></span><span class="ex-hint">(By motorcycle)</span></div>
+      </div>
+      <div class="ex-item">
+        <div class="ex-num">6. 🚲</div>
+        <div class="ex-line"><span class="ex-label">A:</span><span class="fill-blank"></span><span class="ex-hint">(Market)</span></div>
+        <div class="ex-line"><span class="ex-label">B:</span><span class="fill-blank"></span><span class="ex-hint">(By bicycle)</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ EXERCISE 3 — Listening ══ -->
+  <div class="section-title">Exercise 3 · แบบฝึกหัด 3 — Listening Practice</div>
+
+  <div class="exercise-block">
+    <h3>Listening Practice · ฝึกฟัง</h3>
+    <p class="ex-instruction">Listen and write the translation/answer on the dotted lines.</p>
+    <div class="listening-list">
+
+      <div class="listening-item">
+        <div class="l-num">1.</div>
+        <div class="l-thai"><button class="speaker-btn" onclick="speak('ปกติผมนั่งรถเมล์ไปโรงเรียน')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg></button>ปกติผมนั่งรถเมล์ไปโรงเรียน</div>
+        <div class="l-phonetic">bpòk-gà-dtì phǒm nân rót-mee bpai roon-rian</div>
+      </div>
+
+      <div class="listening-item">
+        <div class="l-num">2.</div>
+        <div class="l-thai"><button class="speaker-btn" onclick="speak('เมื่อวานผมนั่งแท็กซี่ไปสนามบิน')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg></button>เมื่อวานผมนั่งแท็กซี่ไปสนามบิน</div>
+        <div class="l-phonetic">mûa-waan phǒm nân ték-sîi bpai sà-naam bin</div>
+      </div>
+
+      <div class="listening-item">
+        <div class="l-num">3.</div>
+        <div class="l-thai"><button class="speaker-btn" onclick="speak('เมื่อคืนพี่สาวขี่จักรยานไปตลาด')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg></button>เมื่อคืนพี่สาวขี่จักรยานไปตลาด</div>
+        <div class="l-phonetic">mûa-kuuun phîi-sǎaw khii jàk-grà-yaan bpai dtà-làat</div>
+      </div>
+
+      <div class="listening-item">
+        <div class="l-num">4.</div>
+        <div class="l-thai"><button class="speaker-btn" onclick="speak('อาทิตย์ที่แล้วคุณแม่นั่งรถไฟไปกรุงเทพฯ')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg></button>อาทิตย์ที่แล้วคุณแม่นั่งรถไฟไปกรุงเทพฯ</div>
+        <div class="l-phonetic">aa-thit thîi-léew khun-mêe nân rót-fai bpai gruŋ-thêep</div>
+      </div>
+
+      <div class="listening-item">
+        <div class="l-num">5.</div>
+        <div class="l-thai"><button class="speaker-btn" onclick="speak('วันศุกร์เพื่อนของผมนั่งเครื่องบินไปญี่ปุ่น')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg></button>วันศุกร์เพื่อนของผมนั่งเครื่องบินไปญี่ปุ่น</div>
+        <div class="l-phonetic">wan-sùk phûan khɔ̌ɔŋ phǒm nân khrûan-bin bpai yîi-bpun</div>
+      </div>
+
+      <div class="listening-item">
+        <div class="l-num">6.</div>
+        <div class="l-thai"><button class="speaker-btn" onclick="speak('ปกติผมขับรถยนต์ไปทำงาน')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg></button>ปกติผมขับรถยนต์ไปทำงาน</div>
+        <div class="l-phonetic">bpòk-gà-dtì phǒm khàp rót-yon bpai tham-ŋaan</div>
+      </div>
+
+      <div class="listening-item">
+        <div class="l-num">7.</div>
+        <div class="l-thai"><button class="speaker-btn" onclick="speak('วันพรุ่งนี้น้องชายจะนั่งรถทัวร์ไปต่างจังหวัด')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg></button>วันพรุ่งนี้น้องชายจะนั่งรถทัวร์ไปต่างจังหวัด</div>
+        <div class="l-phonetic">wan-phrûŋ níi nɔ́ɔŋ-chaay jà nân rót-thua bpai dtàaŋ jaŋ-wàt</div>
+      </div>
+
+      <div class="listening-item">
+        <div class="l-num">8.</div>
+        <div class="l-thai"><button class="speaker-btn" onclick="speak('วันหยุดนี้ผมจะนั่งเรือไปเกาะสมุย')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg></button>วันหยุดนี้ผมจะนั่งเรือไปเกาะสมุย</div>
+        <div class="l-phonetic">wan-yùt níi phǒm jà nân rua bpai gɔ̀ sà-muy</div>
+      </div>
+
+      <div class="listening-item">
+        <div class="l-num">9.</div>
+        <div class="l-thai"><button class="speaker-btn" onclick="speak('ปกติลูกชายชอบขี่มอเตอร์ไซค์ไปเที่ยวในวันเสาร์อาทิตย์')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg></button>ปกติลูกชายชอบขี่มอเตอร์ไซค์ไปเที่ยวในวันเสาร์อาทิตย์</div>
+        <div class="l-phonetic">bpòk-gà-dtì lûuk-chaay chɔ̂ɔp khîi mɔɔ-dtəə-sai bpai-thiaw nai wan sǎaw aa-thit</div>
+      </div>
+
+      <div class="listening-item">
+        <div class="l-num">10.</div>
+        <div class="l-thai"><button class="speaker-btn" onclick="speak('ฉันจะไปขึ้นรถเมล์หน้ามหาวิทยาลัย คุณจะไปด้วยกันไหม')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg></button>ฉันจะไปขึ้นรถเมล์หน้ามหาวิทยาลัย คุณจะไปด้วยกันไหม</div>
+        <div class="l-phonetic">chǎn jà bpai khûn rót-mee nâa má-hǎa-wít-tá-yaa-lai / khun jà bpai dûay-gan mǎi</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══ EXERCISE 4 ══ -->
+  <div class="section-title">Exercise 4 · แบบฝึกหัด 4</div>
+
+  <div class="exercise-block">
+    <h3>Complete the sentences — "How long does it take (to get) from A to B?"</h3>
+    <p class="ex-instruction">Write A (question) and B (answer) in Thai using the route and time hints.</p>
+    <div style="background:rgba(58,122,191,0.06);border-radius:10px;padding:0.8rem 1rem;margin-bottom:1rem;font-size:0.88rem;">
+      <strong style="color:var(--dark)">Example:</strong><br>
+      <span style="color:var(--blue)">A:</span> จากเชียงใหม่ไปลำพูนใช้เวลานานเท่าไหร่ <br>
+      <span style="color:var(--blue)">B:</span> ถ้านั่งรถทัวร์ไปใช้เวลา 30-40 นาที
+    </div>
+    <div class="ex-grid">
+      <div class="ex-item">
+        <div class="ex-num">1.</div>
+        <div class="ex-line"><span class="ex-label">A:</span><span class="fill-blank"></span><span class="ex-hint">(Bangkok → Tokyo)</span></div>
+        <div class="ex-line"><span class="ex-label">B:</span><span class="fill-blank"></span><span class="ex-hint">(8-9 hrs by plane)</span></div>
+      </div>
+      <div class="ex-item">
+        <div class="ex-num">2.</div>
+        <div class="ex-line"><span class="ex-label">A:</span><span class="fill-blank"></span><span class="ex-hint">(Bangkok → Pattaya)</span></div>
+        <div class="ex-line"><span class="ex-label">B:</span><span class="fill-blank"></span><span class="ex-hint">(2 hrs by car)</span></div>
+      </div>
+      <div class="ex-item">
+        <div class="ex-num">3.</div>
+        <div class="ex-line"><span class="ex-label">A:</span><span class="fill-blank"></span><span class="ex-hint">(Bangkok → HuaHin)</span></div>
+        <div class="ex-line"><span class="ex-label">B:</span><span class="fill-blank"></span><span class="ex-hint">(3-4 hrs by train)</span></div>
+      </div>
+      <div class="ex-item">
+        <div class="ex-num">4.</div>
+        <div class="ex-line"><span class="ex-label">A:</span><span class="fill-blank"></span><span class="ex-hint">(Chiang Mai → Chiang Rai)</span></div>
+        <div class="ex-line"><span class="ex-label">B:</span><span class="fill-blank"></span><span class="ex-hint">(4-5 hrs by car)</span></div>
+      </div>
+      <div class="ex-item">
+        <div class="ex-num">5.</div>
+        <div class="ex-line"><span class="ex-label">A:</span><span class="fill-blank"></span><span class="ex-hint">(Your house → market)</span></div>
+        <div class="ex-line"><span class="ex-label">B:</span><span class="fill-blank"></span><span class="ex-hint">(10-15 mins by motorcycle)</span></div>
+      </div>
+      <div class="ex-item">
+        <div class="ex-num">6.</div>
+        <div class="ex-line"><span class="ex-label">A:</span><span class="fill-blank"></span><span class="ex-hint">(School → post office)</span></div>
+        <div class="ex-line"><span class="ex-label">B:</span><span class="fill-blank"></span><span class="ex-hint">(5-10 mins by bicycle)</span></div>
+      </div>
+      <div class="ex-item">
+        <div class="ex-num">7.</div>
+        <div class="ex-line"><span class="ex-label">A:</span><span class="fill-blank"></span><span class="ex-hint">(Hotel → beach)</span></div>
+        <div class="ex-line"><span class="ex-label">B:</span><span class="fill-blank"></span><span class="ex-hint">(4 mins walking)</span></div>
+      </div>
+    </div>
+  </div>
+
+  <footer>Lesson 4 · Transportation · การเดินทาง · TSL School Chiang Mai &nbsp;·&nbsp; <a href="lessons.html" style="color:inherit;text-decoration:underline;opacity:0.8;">← Back to lessons</a></footer>
+
+</div>
+
+<script>
+  function speak(text) {
+    if (!window.speechSynthesis) return;
+    window.speechSynthesis.cancel();
+    const utter = new SpeechSynthesisUtterance(text.replace(/\s*\/\s*/g, ", "));
+    utter.lang = 'th-TH';
+    utter.rate = 0.85;
+    utter.pitch = 1;
+    const voices = window.speechSynthesis.getVoices();
+    const thaiVoice = voices.find(v => v.lang.startsWith('th'));
+    if (thaiVoice) utter.voice = thaiVoice;
+    window.speechSynthesis.speak(utter);
+  }
+  window.speechSynthesis.onvoiceschanged = () => window.speechSynthesis.getVoices();
+</script>
+
+</body>
+</html>

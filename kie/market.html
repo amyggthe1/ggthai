@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Leçon 2 – Je vais au marché</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Playfair+Display:wght@400;700&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --red:    #c0392b;
+      --dark:   #1a1a1a;
+      --gold:   #d4a012;
+      --cream:  #fdf6ec;
+      --slate:  #2c3e50;
+      --lgray:  #f0ede8;
+      --teal:   #1a7a6e;
+      --yellow: #f9e04b;
+      --blue:   #2a5fa5;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Source Sans 3', sans-serif;
+      background: var(--cream);
+      color: var(--dark);
+      line-height: 1.6;
+    }
+
+    /* HERO */
+    .hero {
+      background: var(--dark);
+      padding: 40px 60px;
+      border-bottom: 5px solid var(--gold);
+    }
+    .hero h1 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(2.4rem, 6vw, 4.5rem);
+      color: #fff;
+      letter-spacing: 4px;
+      line-height: 1;
+    }
+    .hero h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1rem, 2vw, 1.4rem);
+      color: var(--gold);
+      font-weight: 400;
+      margin-top: 6px;
+      font-style: italic;
+    }
+
+    /* SECTION TITLE */
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.25rem;
+      color: var(--slate);
+      padding: 28px 0 12px;
+      letter-spacing: 1px;
+      border-bottom: 2px solid var(--gold);
+      margin: 0 40px;
+    }
+
+    /* TABLE */
+    .table-wrap { padding: 20px 40px 40px; overflow-x: auto; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #fff;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    }
+    thead tr { background: var(--slate); }
+    thead th {
+      padding: 13px 18px;
+      text-align: left;
+      font-size: 0.76rem;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--yellow);
+    }
+    tbody tr {
+      border-bottom: 1px solid var(--lgray);
+      transition: background 0.15s;
+    }
+    tbody tr:last-child { border-bottom: none; }
+    tbody tr:hover { background: #fef9ee; }
+    td { padding: 12px 18px; vertical-align: middle; }
+
+    .col-thai     { font-size: 1.05rem; font-weight: 600; color: var(--red); white-space: nowrap; }
+    .col-phonetic { font-size: 0.88rem; color: #555; font-style: italic; }
+    .col-fr       { font-size: 0.93rem; font-weight: 600; color: var(--blue); }
+
+    /* SPEAKER */
+    .thai-row { display: flex; align-items: center; gap: 7px; }
+    .speak-btn {
+      display: inline-flex; align-items: center; justify-content: center;
+      background: none; border: none; cursor: pointer; padding: 3px;
+      border-radius: 50%; color: var(--teal); opacity: 0.38;
+      transition: opacity 0.2s, transform 0.15s; flex-shrink: 0;
+    }
+    .speak-btn:hover { opacity: 1; transform: scale(1.2); }
+    .speak-btn.speaking { opacity: 1; animation: pulse 0.55s ease-in-out infinite alternate; }
+    @keyframes pulse { from { transform: scale(1); } to { transform: scale(1.3); } }
+
+    /* GRAMMAR */
+    .grammar-wrap { padding: 20px 40px 40px; }
+    .grammar-table {
+      width: 100%; border-collapse: collapse; margin-bottom: 18px;
+      font-size: 0.93rem; background: #fff; border-radius: 8px;
+      overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+    }
+    .grammar-table th {
+      background: var(--lgray); padding: 10px 14px; text-align: center;
+      font-weight: 700; border: 1px solid #d8cfc4; font-size: 0.78rem;
+      letter-spacing: 1px; text-transform: uppercase; color: var(--slate);
+    }
+    .grammar-table td { padding: 10px 14px; text-align: center; border: 1px solid #e3ddd5; }
+    .grammar-table .row-thai td { font-weight: 600; color: var(--red); }
+    .grammar-table .row-fr   td { color: var(--blue); font-style: italic; }
+    .grammar-table .thai-row { justify-content: center; }
+
+    .example {
+      background: #eef4fb; border-left: 4px solid #4a90d9;
+      border-radius: 6px; padding: 14px 20px; margin-bottom: 16px; font-size: 0.93rem;
+    }
+    .example .ex-thai { font-weight: 600; color: var(--red); }
+    .example .ex-fr   { color: var(--blue); margin-top: 3px; font-style: italic; }
+
+    hr { border: none; border-top: 2px solid var(--gold); margin: 6px 40px 24px; }
+
+    footer {
+      background: var(--dark); color: #888; text-align: center;
+      padding: 24px; font-size: 0.8rem; letter-spacing: 1px;
+    }
+    footer span { color: var(--gold); }
+
+    /* ── QUIZ CTA ── */
+    .quiz-cta {
+      display: inline-block;
+      background: linear-gradient(135deg, var(--gold) 0%, var(--red) 100%);
+      color: #fff;
+      text-decoration: none;
+      padding: 10px 22px;
+      border-radius: 24px;
+      font-family: 'Playfair Display', serif;
+      font-size: 0.9rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      margin-top: 1.2rem;
+      box-shadow: 0 4px 14px rgba(212,160,18,0.35);
+      transition: transform .15s, box-shadow .15s;
+    }
+    .quiz-cta:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(212,160,18,0.5);
+    }
+  </style>
+</head>
+<body>
+
+<!-- HERO -->
+<section class="hero">
+  <h1>Leçon 2 : Je vais au marché / Lesson 2: I'm going to the market</h1>
+  <h2>bòt tîi sɔ̌ɔng &nbsp;·&nbsp; pǒm bpai dtalàad</h2>
+  <a href="index.html?source=Market" class="quiz-cta">🎯 Take the quiz of this lesson →</a>
+</section>
+
+<!-- SECTION 1: General vocabulary -->
+<h3 class="section-title">Vocabulaire général / General vocabulary – kam sàp</h3>
+<div class="table-wrap">
+  <table>
+    <thead>
+      <tr>
+        <th>ภาษาไทย</th>
+        <th>Pronunciation</th>
+        <th>Français / English</th>
+      </tr>
+    </thead>
+    <tbody id="tbody-general"></tbody>
+  </table>
+</div>
+
+<hr/>
+
+<!-- SECTION 2: Fruits -->
+<h3 class="section-title">Les fruits / Fruits – pǒn lá mái (ผลไม้)</h3>
+<div class="table-wrap">
+  <table>
+    <thead>
+      <tr>
+        <th>ภาษาไทย</th>
+        <th>Pronunciation</th>
+        <th>Français / English</th>
+      </tr>
+    </thead>
+    <tbody id="tbody-fruits"></tbody>
+  </table>
+</div>
+
+<hr/>
+
+<!-- SECTION 3: Vegetables -->
+<h3 class="section-title">Les légumes / Vegetables – pàk (ผัก)</h3>
+<div class="table-wrap">
+  <table>
+    <thead>
+      <tr>
+        <th>ภาษาไทย</th>
+        <th>Pronunciation</th>
+        <th>Français / English</th>
+      </tr>
+    </thead>
+    <tbody id="tbody-veg"></tbody>
+  </table>
+</div>
+
+<hr/>
+
+<!-- SECTION 4: Meat & Fish -->
+<h3 class="section-title">La viande et le poisson / Meat &amp; Fish – nɯ́aa &amp; bplaa</h3>
+<div class="table-wrap">
+  <table>
+    <thead>
+      <tr>
+        <th>ภาษาไทย</th>
+        <th>Pronunciation</th>
+        <th>Français / English</th>
+      </tr>
+    </thead>
+    <tbody id="tbody-meat"></tbody>
+  </table>
+</div>
+
+<hr/>
+
+<!-- USAGE / GRAMMAR -->
+<h3 class="section-title">Utilisation / Usage – At the market</h3>
+<div class="grammar-wrap">
+
+  <!-- Asking the price -->
+  <table class="grammar-table">
+    <thead><tr><th>Sujet</th><th>Verbe</th><th>Objet</th><th>Question</th></tr></thead>
+    <tbody>
+      <tr class="row-thai"><td>—</td><td>raakaa</td><td>—</td><td>tâo rài ?</td></tr>
+      <tr class="row-fr">  <td>—</td><td>(le) prix</td><td>—</td><td>combien ?</td></tr>
+    </tbody>
+  </table>
+
+  <div class="example">
+    <div class="ex-thai" data-speak="raakaa tâo rài">raakaa tâo rài ?</div>
+    <div class="ex-fr">Combien ça coûte ? / How much does it cost?</div>
+  </div>
+
+  <!-- Buying X kilo -->
+  <table class="grammar-table">
+    <thead><tr><th>Verbe</th><th>Objet</th><th>Quantité</th><th>Classificateur</th></tr></thead>
+    <tbody>
+      <tr class="row-thai"><td>ao</td><td>(item)</td><td>krɯ̂ŋ</td><td>gìloo</td></tr>
+      <tr class="row-fr">  <td>prendre</td><td>(objet)</td><td>demi</td><td>kilo</td></tr>
+    </tbody>
+  </table>
+
+  <div class="example">
+    <div class="ex-thai" data-speak="ao málágɔɔ krɯ̂ŋ gìloo">ao málágɔɔ krɯ̂ŋ gìloo</div>
+    <div class="ex-fr">Je prends un demi-kilo de papaye / I'll take half a kilo of papaya.</div>
+  </div>
+
+  <div class="example">
+    <div class="ex-thai" data-speak="táng mòd tâo rài">táng mòd tâo rài ?</div>
+    <div class="ex-fr">Combien en tout ? / How much in total?</div>
+  </div>
+</div>
+
+<footer>
+  <span>Leçon 2</span> &nbsp;·&nbsp; Je vais au marché – Thai Language
+ &nbsp;·&nbsp; <a href="lessons.html" style="color:inherit;text-decoration:underline;opacity:0.8;">← Back to lessons</a></footer>
+
+<script>
+  // ── DATA ────────────────────────────────────────────────────────────
+  const general = [
+    { thai: "ตลาด",     phonemic: "(dtalàad) ta.làːt",       fr: "le marché / market" },
+    { thai: "ไป",       phonemic: "(bpai) paj",              fr: "aller / to go" },
+    { thai: "ซื้อ",      phonemic: "(sɯ́ɯ / sώω) sɯ́ː",        fr: "acheter / to buy" },
+    { thai: "เอา",      phonemic: "(ao) ʔaw",                fr: "prendre / to take" },
+    { thai: "มี",       phonemic: "(mii) miː",               fr: "avoir / to have" },
+    { thai: "ราคา",     phonemic: "(raakaa) raː.kʰaː",       fr: "le prix / the price" },
+    { thai: "เท่าไหร่",  phonemic: "(tâo rài) tʰâw rài",      fr: "combien / how much" },
+    { thai: "กี่",       phonemic: "(gìi) kìː",                fr: "combien (+ classificateur) / how many" },
+    { thai: "อะไร",     phonemic: "(àrai) ʔa.raj",           fr: "que / quoi / what" },
+    { thai: "ละ",       phonemic: "(lá) láʔ",                 fr: "par / per" },
+    { thai: "กิโล",     phonemic: "(gìloo) kì.loː",          fr: "kilogramme / kilogram" },
+    { thai: "ครึ่ง",     phonemic: "(krɯ̂ŋ / krω̂ng) krɯ̂ŋ",     fr: "demi / half" },
+    { thai: "ทั้งหมด",   phonemic: "(táng mòd) tʰáŋ mòt",    fr: "le total / all together" },
+  ];
+
+  const fruits = [
+    { thai: "ผลไม้",      phonemic: "(pǒn lá mái) pʰǒn lá máj",   fr: "un fruit / les fruits / fruit" },
+    { thai: "มะละกอ",    phonemic: "(málágɔɔ) ma.lá.kɔː",        fr: "la papaye / papaya" },
+    { thai: "สับปะรด",   phonemic: "(sàp bpà ród) sàp.pa.rót",   fr: "l'ananas / pineapple" },
+    { thai: "ส้ม",        phonemic: "(sôm) sôm",                  fr: "l'orange / orange" },
+    { thai: "องุ่น",      phonemic: "(à ngùn) ʔa.ŋùn",            fr: "le raisin / grape" },
+    { thai: "แตงโม",     phonemic: "(dtεεng moo) tɛːŋ moː",      fr: "la pastèque / watermelon" },
+    { thai: "ทุเรียน",    phonemic: "(tú riiaan) tʰú.riːan",      fr: "le durian / durian" },
+    { thai: "มะม่วง",    phonemic: "(má muûaang) má.mûːaŋ",     fr: "la mangue / mango" },
+    { thai: "เงาะ",       phonemic: "(ngɔ́) ŋɔ́ʔ",                  fr: "le ramboutan / rambutan" },
+  ];
+
+  const veg = [
+    { thai: "ผัก",         phonemic: "(pàk) pàk",                fr: "un légume / les légumes / vegetable" },
+    { thai: "มันฝรั่ง",     phonemic: "(man faràng) man fa.ràŋ",  fr: "la pomme de terre / potato" },
+    { thai: "หัวหอม",      phonemic: "(huǔaa hɔ̌ɔm) hǔa hɔ̌ːm",   fr: "l'oignon / onion" },
+    { thai: "มะเขือเทศ",   phonemic: "(má kɯ̌aa tə̂əd) má.kʰɯ̌a.tʰêːt", fr: "la tomate / tomato" },
+    { thai: "กระเทียม",    phonemic: "(grá tiiaam) kra.tʰiːam",   fr: "l'ail / garlic" },
+  ];
+
+  const meat = [
+    { thai: "เนื้อ",     phonemic: "(nɯ́aa / nωώaa) nɯ́ːa",  fr: "la viande / meat" },
+    { thai: "หมู",      phonemic: "(mǔu) mǔː",             fr: "le porc / pork" },
+    { thai: "ไก่",      phonemic: "(gài) kàj",             fr: "le poulet / chicken" },
+    { thai: "ปลา",     phonemic: "(bplaa) plaː",          fr: "le poisson / fish" },
+  ];
+
+  // ── TTS ─────────────────────────────────────────────────────────────
+  const synth = window.speechSynthesis;
+  let currentBtn = null;
+
+  function speakText(text, btn) {
+    synth.cancel();
+    if (currentBtn && currentBtn !== btn) currentBtn.classList.remove('speaking');
+    const utter = new SpeechSynthesisUtterance(text.replace(/\s*\/\s*/g, ", "));
+    utter.lang = 'th-TH'; utter.rate = 0.85;
+    const v = synth.getVoices().find(v => v.lang === 'th-TH' || v.lang.startsWith('th'));
+    if (v) utter.voice = v;
+    btn.classList.add('speaking'); currentBtn = btn;
+    utter.onend = utter.onerror = () => { btn.classList.remove('speaking'); currentBtn = null; };
+    synth.speak(utter);
+  }
+
+  function speakerSVG() {
+    return `<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/>
+      <path d="M14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
+    </svg>`;
+  }
+
+  function makeBtn(text) {
+    const btn = document.createElement('button');
+    btn.className = 'speak-btn'; btn.title = 'Play pronunciation';
+    btn.innerHTML = speakerSVG();
+    btn.addEventListener('click', e => { e.stopPropagation(); speakText(text, btn); });
+    return btn;
+  }
+
+  // ── Render vocab tables ──────────────────────────────────────────────
+  function renderTable(tbodyId, data) {
+    const tbody = document.getElementById(tbodyId);
+    data.forEach(row => {
+      const tr = document.createElement('tr');
+
+      const tdThai = document.createElement('td');
+      tdThai.className = 'col-thai';
+      const tRow = document.createElement('div');
+      tRow.className = 'thai-row';
+      const s = document.createElement('span'); s.textContent = row.thai;
+      tRow.appendChild(s); tRow.appendChild(makeBtn(row.thai));
+      tdThai.appendChild(tRow);
+
+      const tdPhon = document.createElement('td');
+      tdPhon.className = 'col-phonetic';
+      // Split "(romanization) IPA" into styled parts
+      const match = row.phonemic.match(/^(\(.*?\))\s*(.*)$/);
+      if (match) {
+        const ipaSpan = document.createElement('span');
+        ipaSpan.textContent = match[2];
+        const romSpan = document.createElement('span');
+        romSpan.style.cssText = 'color:#999; font-style:normal; margin-left:8px;';
+        romSpan.textContent = match[1];
+        tdPhon.appendChild(ipaSpan);
+        tdPhon.appendChild(romSpan);
+      } else {
+        tdPhon.textContent = row.phonemic;
+      }
+
+      const tdFr = document.createElement('td');
+      tdFr.className = 'col-fr'; tdFr.textContent = row.fr;
+
+      tr.appendChild(tdThai); tr.appendChild(tdPhon); tr.appendChild(tdFr);
+      tbody.appendChild(tr);
+    });
+  }
+
+  // ── Static buttons (examples, grammar) ───────────────────────────────
+  function injectStaticButtons() {
+    document.querySelectorAll('.ex-thai[data-speak]').forEach(el => {
+      const row = document.createElement('div'); row.className = 'thai-row';
+      el.parentNode.insertBefore(row, el);
+      row.appendChild(el); row.appendChild(makeBtn(el.dataset.speak));
+    });
+
+    document.querySelectorAll('.grammar-table .row-thai td').forEach(td => {
+      const text = td.textContent.trim();
+      if (!text || text === '—') return;
+      const row = document.createElement('span'); row.className = 'thai-row';
+      td.innerHTML = '';
+      const s = document.createElement('span'); s.textContent = text;
+      row.appendChild(s); row.appendChild(makeBtn(text)); td.appendChild(row);
+    });
+  }
+
+  function init() {
+    renderTable('tbody-general', general);
+    renderTable('tbody-fruits', fruits);
+    renderTable('tbody-veg', veg);
+    renderTable('tbody-meat', meat);
+    injectStaticButtons();
+  }
+
+  if (synth.onvoiceschanged !== undefined) synth.onvoiceschanged = init;
+  init();
+</script>
+</body>
+</html>

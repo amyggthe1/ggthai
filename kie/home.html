@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#1a1a1a">
+<meta name="description" content="Thai language lessons, vocabulary quiz and consonant stroke practice.">
+<title>Thai Language — เรียนภาษาไทย</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Source+Sans+3:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --red:#c0392b; --dark:#1a1a1a; --gold:#d4a012; --cream:#fdf6ec;
+    --slate:#2c3e50; --border:#e6dfd5; --muted:#6b6b6b; --radius:14px;
+  }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  body{
+    font-family:'Source Sans 3',sans-serif;background:var(--cream);color:var(--dark);
+    line-height:1.6;min-height:100vh;display:flex;flex-direction:column;
+    -webkit-text-size-adjust:100%;
+  }
+  .hero{
+    background:var(--dark);padding:48px 24px 40px;border-bottom:5px solid var(--gold);
+  }
+  .hero-inner{max-width:920px;margin:0 auto}
+  .hero h1{
+    font-family:'Bebas Neue',sans-serif;font-size:clamp(2.6rem,9vw,4.5rem);
+    color:#fff;letter-spacing:4px;line-height:1;
+  }
+  .hero h2{
+    font-family:'Playfair Display',serif;font-size:clamp(1rem,3vw,1.4rem);
+    color:var(--gold);font-weight:400;margin-top:8px;font-style:italic;
+  }
+  .hero .sub{color:#c9c9c9;font-size:.95rem;margin-top:.7rem;max-width:52ch;line-height:1.5}
+
+  .container{max-width:920px;margin:0 auto;padding:0 1.25rem 3rem;width:100%;flex:1}
+  .section-title{
+    font-family:'Playfair Display',serif;font-size:1.25rem;color:var(--slate);
+    padding:32px 0 12px;letter-spacing:1px;border-bottom:2px solid var(--gold);
+    margin:0;font-style:italic;
+  }
+  .grid{
+    display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));
+    gap:1rem;margin-top:1.2rem;
+  }
+  .card{
+    background:#fff;border:1px solid var(--border);border-radius:var(--radius);
+    padding:1.2rem 1.3rem;text-decoration:none;color:inherit;display:flex;
+    flex-direction:column;gap:.35rem;box-shadow:0 1px 3px rgba(0,0,0,.04);
+    transition:transform .15s,box-shadow .15s,border-color .15s;
+  }
+  .card:hover{transform:translateY(-2px);border-color:var(--gold);box-shadow:0 6px 20px rgba(212,160,18,.18)}
+  .card .icon{font-size:1.8rem;line-height:1}
+  .card h3{font-weight:600;font-size:1.1rem;margin-top:.35rem}
+  .card .thai{font-size:.95rem;color:var(--red);font-weight:600}
+  .card .desc{font-size:.87rem;color:var(--muted);line-height:1.45;margin-top:.15rem}
+  .card .arrow{
+    margin-top:.7rem;color:var(--gold);font-weight:700;font-size:.82rem;
+    font-family:'Playfair Display',serif;font-style:italic;
+  }
+  .card.primary{background:linear-gradient(135deg,#fdf6ec 0%,#fff5d8 100%);border-color:var(--gold)}
+  .card.primary .arrow{color:var(--red)}
+
+  footer{
+    background:var(--dark);color:#888;text-align:center;padding:24px;
+    font-size:.8rem;letter-spacing:1px;
+  }
+  footer span{color:var(--gold)}
+</style>
+</head>
+<body>
+
+<section class="hero">
+  <div class="hero-inner">
+    <h1>THAI LANGUAGE</h1>
+    <h2>เรียนภาษาไทย &nbsp;·&nbsp; riian phaasǎa thai</h2>
+    <p class="sub">Lesson notes, a practice quiz and handwriting drills — everything in one place, built to work on a phone.</p>
+  </div>
+</section>
+
+<div class="container">
+
+  <h2 class="section-title">Start here</h2>
+  <div class="grid">
+
+    <a class="card primary" href="lessons.html">
+      <span class="icon">📚</span>
+      <h3>All Lessons</h3>
+      <span class="thai">บทเรียน</span>
+      <span class="desc">Sixteen lesson pages — vocabulary, grammar notes and exercises.</span>
+      <span class="arrow">Browse lessons →</span>
+    </a>
+
+    <a class="card" href="index.html">
+      <span class="icon">🎯</span>
+      <h3>Vocabulary Quiz</h3>
+      <span class="thai">แบบทดสอบ</span>
+      <span class="desc">Nearly 600 items across seven modes, drawn from every lesson.</span>
+      <span class="arrow">Take the quiz →</span>
+    </a>
+
+  </div>
+
+  <h2 class="section-title">Script &amp; Handwriting</h2>
+  <div class="grid">
+
+    <a class="card" href="glyph.html">
+      <span class="icon">✍️</span>
+      <h3>Stroke Practice</h3>
+      <span class="thai">การเขียนพยัญชนะ</span>
+      <span class="desc">Animated stroke order for all 44 consonants, with a tracing canvas.</span>
+      <span class="arrow">Open practice →</span>
+    </a>
+
+    <a class="card" href="glyph/alphabet.html">
+      <span class="icon">🎮</span>
+      <h3>Script Recognition Game</h3>
+      <span class="thai">เกมพยัญชนะ</span>
+      <span class="desc">Learn to recognise the consonants with three question modes.</span>
+      <span class="arrow">Play game →</span>
+    </a>
+
+  </div>
+
+</div>
+
+<footer>
+  <span>Thai Language Cheat Sheets</span> &nbsp;·&nbsp; 16 lessons &nbsp;·&nbsp; 44 consonants
+</footer>
+
+</body>
+</html>

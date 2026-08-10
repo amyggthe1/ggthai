@@ -1,0 +1,1240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Thai Script — Recognition Game</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,300;0,400;1,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink: #1a120a;
+  --ink2: #4a3828;
+  --ink3: #8a7868;
+  --paper: #f7f3ee;
+  --paper2: #ede8e1;
+  --paper3: #e0d9d0;
+  --gold: #c8882a;
+  --gold-light: #f5e8d0;
+  --red: #c0392b;
+  --red-light: #fde8e6;
+  --green: #2d6a4f;
+  --green-light: #e8f5ee;
+  --radius: 14px;
+  --shadow: 0 2px 16px rgba(26,18,10,0.10);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { font-size: 16px; }
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: 'Crimson Pro', Georgia, serif;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0;
+  overflow-x: hidden;
+}
+
+/* ── SCREENS ── */
+.screen { width: 100%; max-width: 520px; min-height: 100vh; display: none; flex-direction: column; padding: 0 1.25rem 2rem; }
+.screen.active { display: flex; }
+
+/* ── HEADER ── */
+.top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.25rem 0 1rem;
+  border-bottom: 0.5px solid var(--paper3);
+  margin-bottom: 1.5rem;
+  flex-shrink: 0;
+}
+
+.logo {
+  font-family: 'Crimson Pro', serif;
+  font-style: italic;
+  font-weight: 300;
+  font-size: 20px;
+  color: var(--ink2);
+  letter-spacing: -0.3px;
+}
+
+.logo span { color: var(--gold); }
+
+.stats-row {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1px;
+}
+
+.stat-val {
+  font-family: 'DM Mono', monospace;
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--ink);
+  line-height: 1;
+}
+
+.stat-lbl {
+  font-size: 10px;
+  color: var(--ink3);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.streak-val { color: var(--gold); }
+
+/* ── PROGRESS BAR ── */
+.progress-wrap {
+  margin-bottom: 1.5rem;
+  flex-shrink: 0;
+}
+
+.progress-track {
+  height: 3px;
+  background: var(--paper3);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: var(--gold);
+  border-radius: 2px;
+  transition: width 0.4s cubic-bezier(.4,0,.2,1);
+}
+
+.progress-label {
+  font-size: 11px;
+  color: var(--ink3);
+  margin-top: 5px;
+  font-family: 'DM Mono', monospace;
+}
+
+/* ── CHAR CARD ── */
+.char-card {
+  background: white;
+  border: 0.5px solid var(--paper3);
+  border-radius: 20px;
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1.5rem 1.5rem;
+  margin-bottom: 1.5rem;
+  flex-shrink: 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.char-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: var(--gold);
+  opacity: 0.4;
+}
+
+.char-display {
+  font-family: "Noto Sans Thai", "Leelawadee UI", "Angsana New", "TH Sarabun New", serif;
+  font-size: 120px;
+  line-height: 1.1;
+  color: var(--ink);
+  margin-bottom: 0.5rem;
+  transition: transform 0.15s ease;
+  user-select: none;
+}
+
+.char-hint {
+  font-size: 13px;
+  color: var(--ink3);
+  font-style: italic;
+}
+
+.class-pip {
+  position: absolute;
+  top: 14px;
+  right: 16px;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 3px 10px;
+  border-radius: 20px;
+}
+.pip-mid { background: #eaf3de; color: #2d6a2d; }
+.pip-high { background: #e8eef8; color: #1e3a6e; }
+.pip-low { background: #fbf0e8; color: #7a4010; }
+
+/* ── CHOICES ── */
+.choices {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 1.5rem;
+}
+
+.choice-btn {
+  background: white;
+  border: 1px solid var(--paper3);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+  cursor: pointer;
+  font-family: 'Crimson Pro', serif;
+  font-size: 17px;
+  color: var(--ink);
+  text-align: left;
+  transition: all 0.12s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  position: relative;
+  overflow: hidden;
+}
+
+.choice-btn:hover:not(:disabled) {
+  border-color: var(--gold);
+  background: var(--gold-light);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(200,136,42,0.15);
+}
+
+.choice-btn:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.choice-romanize {
+  font-size: 13px;
+  color: var(--ink3);
+  font-style: italic;
+}
+
+.choice-btn.correct {
+  border-color: var(--green);
+  background: var(--green-light);
+  color: var(--green);
+}
+.choice-btn.correct .choice-romanize { color: var(--green); opacity: 0.7; }
+
+.choice-btn.wrong {
+  border-color: var(--red);
+  background: var(--red-light);
+  color: var(--red);
+  animation: shake 0.35s ease;
+}
+.choice-btn.wrong .choice-romanize { color: var(--red); opacity: 0.7; }
+
+.choice-btn.dimmed {
+  opacity: 0.35;
+  border-color: var(--paper3);
+}
+
+.choice-btn:disabled { cursor: default; }
+
+@keyframes shake {
+  0%,100%{transform:translateX(0)}
+  20%{transform:translateX(-5px)}
+  40%{transform:translateX(5px)}
+  60%{transform:translateX(-4px)}
+  80%{transform:translateX(4px)}
+}
+
+/* ── FEEDBACK ── */
+.feedback {
+  text-align: center;
+  min-height: 52px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  margin-bottom: 1rem;
+}
+
+.feedback-main {
+  font-size: 17px;
+  font-weight: 400;
+  color: var(--ink);
+  transition: opacity 0.2s;
+}
+
+.feedback-sub {
+  font-size: 14px;
+  font-style: italic;
+  color: var(--ink3);
+}
+
+.feedback.correct-fb .feedback-main { color: var(--green); }
+.feedback.wrong-fb .feedback-main { color: var(--red); }
+
+/* ── EXAMPLE WORD ── */
+.feedback-example {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+  padding: 8px 14px;
+  border-radius: 10px;
+  background: var(--paper2);
+  border: 0.5px solid var(--paper3);
+}
+
+.example-speak-btn {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 1px solid var(--paper3);
+  background: white;
+  color: var(--gold);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all 0.15s;
+  padding: 0;
+}
+.example-speak-btn:hover { background: var(--gold-light); border-color: var(--gold); }
+.example-speak-btn.speaking {
+  background: var(--gold-light);
+  border-color: var(--gold);
+  animation: pulse-ring 0.9s ease-out infinite;
+}
+
+.example-word {
+  font-family: "Noto Sans Thai", "Leelawadee UI", serif;
+  font-size: 22px;
+  color: var(--ink);
+  line-height: 1.2;
+}
+
+.example-label {
+  font-size: 13px;
+  font-style: italic;
+  color: var(--ink3);
+}
+
+/* ── NEXT BUTTON ── */
+.next-btn {
+  width: 100%;
+  padding: 14px;
+  border-radius: var(--radius);
+  border: none;
+  background: var(--ink);
+  color: var(--paper);
+  font-family: 'Crimson Pro', serif;
+  font-size: 17px;
+  cursor: pointer;
+  transition: all 0.15s;
+  display: none;
+  letter-spacing: 0.02em;
+}
+.next-btn.visible { display: block; }
+.next-btn:hover { background: var(--ink2); transform: translateY(-1px); }
+
+/* ── MODE PILLS ── */
+.mode-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 1.25rem;
+  flex-shrink: 0;
+}
+
+.mode-pill {
+  flex: 1;
+  padding: 8px 6px;
+  border-radius: 10px;
+  border: 0.5px solid var(--paper3);
+  background: white;
+  font-family: 'Crimson Pro', serif;
+  font-size: 14px;
+  color: var(--ink2);
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.12s;
+}
+.mode-pill.active {
+  background: var(--ink);
+  color: var(--paper);
+  border-color: var(--ink);
+}
+.mode-pill:hover:not(.active) {
+  border-color: var(--ink2);
+}
+
+/* ── START SCREEN ── */
+#startScreen {
+  justify-content: center;
+  align-items: center;
+  gap: 0;
+  padding-top: 3rem;
+}
+
+.start-thai {
+  font-family: "Noto Sans Thai", "Leelawadee UI", serif;
+  font-size: 72px;
+  line-height: 1;
+  color: var(--gold);
+  margin-bottom: 0.5rem;
+  text-align: center;
+}
+
+.start-title {
+  font-family: 'Crimson Pro', serif;
+  font-style: italic;
+  font-weight: 300;
+  font-size: 32px;
+  color: var(--ink);
+  text-align: center;
+  margin-bottom: 6px;
+  letter-spacing: -0.5px;
+}
+
+.start-sub {
+  font-size: 15px;
+  color: var(--ink3);
+  text-align: center;
+  margin-bottom: 2.5rem;
+  font-style: italic;
+}
+
+.start-options {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 2rem;
+}
+
+.option-card {
+  background: white;
+  border: 0.5px solid var(--paper3);
+  border-radius: var(--radius);
+  padding: 14px 18px;
+  cursor: pointer;
+  transition: all 0.12s;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.option-card:hover { border-color: var(--gold); background: var(--gold-light); }
+.option-card.selected { border-color: var(--gold); border-width: 1.5px; background: var(--gold-light); }
+
+.option-icon {
+  font-family: "Noto Sans Thai", serif;
+  font-size: 28px;
+  width: 44px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.option-text strong {
+  display: block;
+  font-size: 16px;
+  font-weight: 400;
+  color: var(--ink);
+  margin-bottom: 2px;
+}
+.option-text span {
+  font-size: 13px;
+  color: var(--ink3);
+  font-style: italic;
+}
+
+.start-btn {
+  width: 100%;
+  padding: 16px;
+  border-radius: var(--radius);
+  border: none;
+  background: var(--gold);
+  color: white;
+  font-family: 'Crimson Pro', serif;
+  font-size: 18px;
+  cursor: pointer;
+  letter-spacing: 0.02em;
+  transition: all 0.15s;
+  box-shadow: 0 4px 16px rgba(200,136,42,0.30);
+}
+.start-btn:hover { background: #b5761a; transform: translateY(-1px); box-shadow: 0 6px 20px rgba(200,136,42,0.35); }
+
+/* ── RESULTS SCREEN ── */
+#resultsScreen {
+  justify-content: center;
+  align-items: center;
+  padding-top: 2rem;
+}
+
+.results-char {
+  font-family: "Noto Sans Thai", serif;
+  font-size: 64px;
+  color: var(--gold);
+  margin-bottom: 1rem;
+}
+
+.results-title {
+  font-family: 'Crimson Pro', serif;
+  font-style: italic;
+  font-size: 30px;
+  font-weight: 300;
+  margin-bottom: 6px;
+  text-align: center;
+}
+
+.results-sub {
+  font-size: 14px;
+  color: var(--ink3);
+  margin-bottom: 2rem;
+  font-style: italic;
+  text-align: center;
+}
+
+.results-grid {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 2rem;
+}
+
+.res-stat {
+  background: white;
+  border: 0.5px solid var(--paper3);
+  border-radius: var(--radius);
+  padding: 14px 10px;
+  text-align: center;
+}
+
+.res-stat-val {
+  font-family: 'DM Mono', monospace;
+  font-size: 26px;
+  font-weight: 500;
+  color: var(--ink);
+  line-height: 1;
+  margin-bottom: 4px;
+}
+
+.res-stat-lbl {
+  font-size: 11px;
+  color: var(--ink3);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.miss-section {
+  width: 100%;
+  margin-bottom: 2rem;
+}
+
+.miss-title {
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--ink3);
+  margin-bottom: 10px;
+}
+
+.miss-chars {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.miss-char {
+  background: var(--red-light);
+  border: 0.5px solid rgba(192,57,43,0.2);
+  border-radius: 8px;
+  padding: 6px 12px;
+  font-family: "Noto Sans Thai", serif;
+  font-size: 22px;
+  color: var(--red);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.miss-char small {
+  font-family: 'Crimson Pro', serif;
+  font-size: 12px;
+  color: var(--red);
+  opacity: 0.7;
+  font-style: italic;
+}
+
+.results-btns {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.btn-primary {
+  width: 100%;
+  padding: 15px;
+  border-radius: var(--radius);
+  border: none;
+  background: var(--gold);
+  color: white;
+  font-family: 'Crimson Pro', serif;
+  font-size: 17px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.btn-primary:hover { background: #b5761a; transform: translateY(-1px); }
+
+.btn-secondary {
+  width: 100%;
+  padding: 14px;
+  border-radius: var(--radius);
+  border: 1px solid var(--paper3);
+  background: white;
+  color: var(--ink2);
+  font-family: 'Crimson Pro', serif;
+  font-size: 17px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.btn-secondary:hover { border-color: var(--ink2); }
+
+/* ── REVIEW STRIP ── */
+.review-strip {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-top: auto;
+  padding-top: 1rem;
+  border-top: 0.5px solid var(--paper3);
+}
+
+.review-dot {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: "Noto Sans Thai", serif;
+  font-size: 14px;
+}
+.dot-correct { background: var(--green-light); color: var(--green); }
+.dot-wrong { background: var(--red-light); color: var(--red); }
+.dot-pending { background: var(--paper2); color: var(--ink3); }
+
+/* ── ANIM ── */
+@keyframes popIn {
+  0%{transform:scale(0.85);opacity:0}
+  60%{transform:scale(1.04)}
+  100%{transform:scale(1);opacity:1}
+}
+.pop { animation: popIn 0.25s cubic-bezier(.4,0,.2,1) forwards; }
+
+@keyframes fadeUp {
+  from{transform:translateY(10px);opacity:0}
+  to{transform:translateY(0);opacity:1}
+}
+.fade-up { animation: fadeUp 0.3s ease forwards; }
+
+/* ── SPEAKER ── */
+.speaker-btn {
+  display: none;
+  align-items: center;
+  gap: 7px;
+  margin-top: 10px;
+  padding: 7px 16px;
+  border-radius: 20px;
+  border: 1px solid var(--paper3);
+  background: white;
+  color: var(--ink2);
+  font-family: 'Crimson Pro', serif;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.speaker-btn.show { display: inline-flex; }
+.speaker-btn:hover { border-color: var(--gold); color: var(--gold); }
+.speaker-btn.speaking { border-color: var(--gold); color: var(--gold); background: var(--gold-light); }
+
+.speaker-icon {
+  width: 18px; height: 18px;
+  flex-shrink: 0;
+  transition: transform 0.15s;
+}
+.speaker-btn.speaking .speaker-icon { transform: scale(1.15); }
+
+@keyframes pulse-ring {
+  0%   { box-shadow: 0 0 0 0 rgba(200,136,42,0.35); }
+  70%  { box-shadow: 0 0 0 8px rgba(200,136,42,0); }
+  100% { box-shadow: 0 0 0 0 rgba(200,136,42,0); }
+}
+.speaker-btn.speaking { animation: pulse-ring 0.9s ease-out infinite; }
+
+.miss-char { cursor: pointer; transition: background 0.12s; }
+.miss-char:hover { background: rgba(192,57,43,0.12); }
+
+.no-tts {
+  font-size: 11px;
+  color: var(--ink3);
+  font-style: italic;
+  margin-top: 6px;
+  display: none;
+}
+
+/* ── MOBILE ── */
+@media(max-width:420px){
+  .char-display{font-size:96px}
+  .choices{gap:8px}
+  .choice-btn{padding:12px 12px}
+}
+</style>
+</head>
+<body>
+
+<!-- START SCREEN -->
+<div class="screen active" id="startScreen">
+  <div class="start-thai">กขค</div>
+  <div class="start-title">Learn Thai Script</div>
+  <div class="start-sub">Recognise all 44 consonants</div>
+
+  <div class="start-options">
+    <div class="option-card selected" data-mode="all" onclick="selectMode(this,'all')">
+      <div class="option-icon">ก–ฮ</div>
+      <div class="option-text">
+        <strong>All consonants</strong>
+        <span>All 44 characters · adaptive difficulty</span>
+      </div>
+    </div>
+    <div class="option-card" data-mode="mid" onclick="selectMode(this,'mid')">
+      <div class="option-icon">ก</div>
+      <div class="option-text">
+        <strong>Middle class</strong>
+        <span>9 characters · start here</span>
+      </div>
+    </div>
+    <div class="option-card" data-mode="high" onclick="selectMode(this,'high')">
+      <div class="option-icon">ข</div>
+      <div class="option-text">
+        <strong>High class</strong>
+        <span>11 characters</span>
+      </div>
+    </div>
+    <div class="option-card" data-mode="low" onclick="selectMode(this,'low')">
+      <div class="option-icon">ค</div>
+      <div class="option-text">
+        <strong>Low class</strong>
+        <span>24 characters</span>
+      </div>
+    </div>
+  </div>
+
+  <button class="start-btn" onclick="startGame()">Begin →</button>
+</div>
+
+<!-- GAME SCREEN -->
+<div class="screen" id="gameScreen">
+  <div class="top-bar">
+    <div class="logo">Thai <span>Script</span></div>
+    <div class="stats-row">
+      <div class="stat">
+        <div class="stat-val streak-val" id="streakVal">0</div>
+        <div class="stat-lbl">streak</div>
+      </div>
+      <div class="stat">
+        <div class="stat-val" id="scoreVal">0</div>
+        <div class="stat-lbl">score</div>
+      </div>
+      <div class="stat">
+        <div class="stat-val" id="qNumVal">1/20</div>
+        <div class="stat-lbl">round</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="progress-wrap">
+    <div class="progress-track"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+    <div class="progress-label" id="progressLabel">Question 1 of 20</div>
+  </div>
+
+  <div class="mode-row">
+    <div class="mode-pill active" id="modeChar" onclick="setQuestionMode('char')">Thai → Name</div>
+    <div class="mode-pill" id="modeMean" onclick="setQuestionMode('meaning')">Thai → Meaning</div>
+    <div class="mode-pill" id="modeRom" onclick="setQuestionMode('romanize')">Sound → Thai</div>
+  </div>
+
+  <div class="char-card" id="charCard">
+    <div class="class-pip pip-mid" id="classPip">middle</div>
+    <div class="char-display" id="charDisplay">ก</div>
+    <div class="char-hint" id="charHint"></div>
+    <button class="speaker-btn" id="speakerBtn" onclick="speakCurrent()" aria-label="Hear pronunciation">
+      <svg class="speaker-icon" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M3 7.5h3l4-4v13l-4-4H3v-5z" fill="currentColor" opacity="0.9"/>
+        <path d="M13 7a4 4 0 0 1 0 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        <path d="M15 4.5a7 7 0 0 1 0 11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" opacity="0.5"/>
+      </svg>
+      Hear it
+    </button>
+    <div class="no-tts" id="noTts">Thai voice not available on this device</div>
+  </div>
+
+  <div class="choices" id="choices"></div>
+
+  <div class="feedback" id="feedback">
+    <div class="feedback-main" id="feedbackMain"></div>
+    <div class="feedback-sub" id="feedbackSub"></div>
+    <div class="feedback-example" id="feedbackExample" style="display:none">
+      <button class="example-speak-btn" id="exampleSpeakBtn" onclick="speakExample()" aria-label="Hear example word">
+        <svg width="15" height="15" viewBox="0 0 20 20" fill="none">
+          <path d="M3 7.5h3l4-4v13l-4-4H3v-5z" fill="currentColor" opacity="0.9"/>
+          <path d="M13 7a4 4 0 0 1 0 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+      </button>
+      <span class="example-word" id="exampleWord"></span>
+      <span class="example-label" id="exampleLabel"></span>
+    </div>
+  </div>
+
+  <button class="next-btn" id="nextBtn" onclick="nextQuestion()">Next →</button>
+
+  <div class="review-strip" id="reviewStrip"></div>
+</div>
+
+<!-- RESULTS SCREEN -->
+<div class="screen" id="resultsScreen">
+  <div class="results-char" id="resultsEmoji">ก</div>
+  <div class="results-title" id="resultsTitle">Round complete!</div>
+  <div class="results-sub" id="resultsSub">Here's how you did</div>
+
+  <div class="results-grid">
+    <div class="res-stat">
+      <div class="res-stat-val" id="resCorrect">—</div>
+      <div class="res-stat-lbl">Correct</div>
+    </div>
+    <div class="res-stat">
+      <div class="res-stat-val" id="resAccuracy">—</div>
+      <div class="res-stat-lbl">Accuracy</div>
+    </div>
+    <div class="res-stat">
+      <div class="res-stat-val" id="resBest">—</div>
+      <div class="res-stat-lbl">Best streak</div>
+    </div>
+  </div>
+
+  <div class="miss-section" id="missSection" style="display:none">
+    <div class="miss-title">Characters to review</div>
+    <div class="miss-chars" id="missChars"></div>
+  </div>
+
+  <div class="results-btns">
+    <button class="btn-primary" onclick="startGame()">Play again →</button>
+    <button class="btn-secondary" onclick="showStart()">Change mode</button>
+  </div>
+</div>
+
+<script>
+// ── SPEECH ──
+let thaiVoice = null;
+let ttsReady = false;
+
+function initTTS() {
+  if (!window.speechSynthesis) return;
+  function findVoice() {
+    const voices = speechSynthesis.getVoices();
+    const thai = voices.filter(v => v.lang === 'th-TH' || v.lang.startsWith('th'));
+    // prefer female: name contains 'female', 'woman', or known female voice names
+    const femaleKeywords = /female|woman|girl|kanya|นภา|อรทัย|ฐิติมา/i;
+    // also avoid names that hint male
+    const maleKeywords = /male(?!s)|man\b|guy|boy/i;
+    thaiVoice =
+      thai.find(v => femaleKeywords.test(v.name)) ||
+      thai.find(v => !maleKeywords.test(v.name)) ||
+      thai[0] ||
+      null;
+    ttsReady = true;
+  }
+  findVoice();
+  if (!thaiVoice) speechSynthesis.addEventListener('voiceschanged', findVoice, { once: true });
+}
+
+function speakText(text) {
+  if (!window.speechSynthesis) return;
+  speechSynthesis.cancel();
+  const utt = new SpeechSynthesisUtterance(text.replace(/\s*\/\s*/g, ", "));
+  utt.lang = 'th-TH';
+  if (thaiVoice) utt.voice = thaiVoice;
+  utt.rate = 1.0;
+  utt.pitch = 1.0;
+  const btn = document.getElementById('speakerBtn');
+  if (btn) btn.classList.add('speaking');
+  utt.onend = () => { if (btn) btn.classList.remove('speaking'); };
+  utt.onerror = () => { if (btn) btn.classList.remove('speaking'); };
+  speechSynthesis.speak(utt);
+}
+
+function speakCurrent() {
+  if (!currentChar) return;
+  speakText(currentChar.th);
+}
+
+function speakExample() {
+  if (!currentChar) return;
+  const btn = document.getElementById('exampleSpeakBtn');
+  if (!window.speechSynthesis) return;
+  speechSynthesis.cancel();
+  const utt = new SpeechSynthesisUtterance(currentChar.word);
+  utt.lang = 'th-TH';
+  if (thaiVoice) utt.voice = thaiVoice;
+  utt.rate = 1.0;
+  utt.pitch = 1.0;
+  btn.classList.add('speaking');
+  utt.onend = () => btn.classList.remove('speaking');
+  utt.onerror = () => btn.classList.remove('speaking');
+  speechSynthesis.speak(utt);
+}
+
+function showSpeakerBtn() {
+  const btn = document.getElementById('speakerBtn');
+  const noTts = document.getElementById('noTts');
+  btn.classList.add('show');
+  if (ttsReady && !thaiVoice) {
+    noTts.style.display = 'block';
+  }
+  // Auto-speak on reveal
+  setTimeout(() => speakCurrent(), 120);
+}
+
+function hideSpeakerBtn() {
+  const btn = document.getElementById('speakerBtn');
+  btn.classList.remove('show', 'speaking');
+  document.getElementById('noTts').style.display = 'none';
+  speechSynthesis && speechSynthesis.cancel();
+}
+
+initTTS();
+
+// Fisher-Yates in-place shuffle; also returns the array for chaining
+function shuffle(a) {
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+const CHARS = [
+  {th:'ก',rom:'g / k',cls:'mid',mean:'chicken',phon:'gɔɔ gài',word:'ไก่'},
+  {th:'จ',rom:'j',cls:'mid',mean:'plate',phon:'jɔɔ jaan',word:'จาน'},
+  {th:'ด',rom:'d',cls:'mid',mean:'child',phon:'dɔɔ dèk',word:'เด็ก'},
+  {th:'ต',rom:'dt / t',cls:'mid',mean:'turtle',phon:'dtɔɔ dtào',word:'เต่า'},
+  {th:'บ',rom:'b',cls:'mid',mean:'leaf',phon:'bɔɔ bai máai',word:'ใบไม้'},
+  {th:'ป',rom:'bp / p',cls:'mid',mean:'fish',phon:'bpɔɔ bplaa',word:'ปลา'},
+  {th:'พ',rom:'ph',cls:'mid',mean:'tray',phon:'phɔɔ phaan',word:'พาน'},
+  {th:'ฟ',rom:'f',cls:'mid',mean:'teeth',phon:'fɔɔ fan',word:'ฟัน'},
+  {th:'อ',rom:'o / silent',cls:'mid',mean:'basin',phon:'ɔɔ àang',word:'อ่าง'},
+  {th:'ข',rom:'kh',cls:'high',mean:'egg',phon:'khɔɔ khài',word:'ไข่'},
+  {th:'ฉ',rom:'ch',cls:'high',mean:'cymbals',phon:'chɔɔ chìng',word:'ฉิ่ง'},
+  {th:'ถ',rom:'th',cls:'high',mean:'bag',phon:'thɔɔ thǔng',word:'ถุง'},
+  {th:'ผ',rom:'ph',cls:'high',mean:'bee',phon:'phɔɔ phûeng',word:'ผึ้ง'},
+  {th:'ฝ',rom:'f',cls:'high',mean:'lid',phon:'fɔɔ fǎa',word:'ฝา'},
+  {th:'ศ',rom:'s',cls:'high',mean:'hermit',phon:'sɔɔ sǎalaa',word:'ศาลา'},
+  {th:'ษ',rom:'s',cls:'high',mean:'sage',phon:'sɔɔ rʉʉsǐi',word:'ฤๅษี'},
+  {th:'ส',rom:'s',cls:'high',mean:'tiger',phon:'sɔɔ sʉʉa',word:'เสือ'},
+  {th:'ห',rom:'h',cls:'high',mean:'chest',phon:'hɔɔ hìip',word:'หีบ'},
+  {th:'ฐ',rom:'th',cls:'high',mean:'pedestal',phon:'thɔɔ thǎan',word:'ฐาน'},
+  {th:'ค',rom:'kh',cls:'low',mean:'buffalo',phon:'khɔɔ khwaai',word:'ควาย'},
+  {th:'ง',rom:'ng',cls:'low',mean:'snake',phon:'ngɔɔ nguu',word:'งู'},
+  {th:'ช',rom:'ch',cls:'low',mean:'elephant',phon:'chɔɔ cháang',word:'ช้าง'},
+  {th:'ซ',rom:'s',cls:'low',mean:'chain',phon:'sɔɔ sôo',word:'โซ่'},
+  {th:'ญ',rom:'y',cls:'low',mean:'woman',phon:'yɔɔ yǐng',word:'หญิง'},
+  {th:'ณ',rom:'n',cls:'low',mean:'person',phon:'nɔɔ neen',word:'เณร'},
+  {th:'น',rom:'n',cls:'low',mean:'mouse',phon:'nɔɔ nǔu',word:'หนู'},
+  {th:'ม',rom:'m',cls:'low',mean:'horse',phon:'mɔɔ máa',word:'ม้า'},
+  {th:'ย',rom:'y',cls:'low',mean:'giant',phon:'yɔɔ yâak',word:'ยักษ์'},
+  {th:'ร',rom:'r',cls:'low',mean:'boat',phon:'rɔɔ reua',word:'เรือ'},
+  {th:'ล',rom:'l',cls:'low',mean:'monkey',phon:'lɔɔ ling',word:'ลิง'},
+  {th:'ว',rom:'w',cls:'low',mean:'ring',phon:'wɔɔ wɛɛn',word:'แหวน'},
+  {th:'ท',rom:'th',cls:'low',mean:'soldier',phon:'thɔɔ tháhǎan',word:'ทหาร'},
+  {th:'ธ',rom:'th',cls:'low',mean:'flag',phon:'thɔɔ thong',word:'ธง'},
+  {th:'ภ',rom:'ph',cls:'low',mean:'mountain',phon:'phɔɔ phukhǎo',word:'ภูเขา'},
+  {th:'ฆ',rom:'kh',cls:'low',mean:'bell',phon:'khɔɔ rakhang',word:'ระฆัง'},
+  {th:'ฌ',rom:'ch',cls:'low',mean:'tree',phon:'chɔɔ chə̂ə',word:'เฌอ'},
+  {th:'ฬ',rom:'l',cls:'low',mean:'kite',phon:'lɔɔ julaa',word:'จุฬา'},
+  {th:'ฮ',rom:'h',cls:'low',mean:'owl',phon:'hɔɔ nók hûuk',word:'นกฮูก'},
+  {th:'ฎ',rom:'d',cls:'low',mean:'headdress',phon:'dɔɔ chadaa',word:'ชฎา'},
+  {th:'ฏ',rom:'dt',cls:'low',mean:'crown',phon:'dtɔɔ bpatàk',word:'ปฏัก'},
+  {th:'ฑ',rom:'th / dt',cls:'low',mean:'old woman',phon:'thɔɔ montho',word:'มณโฑ'},
+  {th:'ฒ',rom:'th',cls:'low',mean:'elder',phon:'thɔɔ phûu thâo',word:'ผู้เฒ่า'},
+  {th:'ฃ',rom:'kh',cls:'high',mean:'bottle',phon:'khɔɔ khùat',word:'ขวด'},
+  {th:'ฅ',rom:'kh',cls:'low',mean:'person',phon:'khɔɔ khon',word:'คน'},
+];
+
+const TOTAL_Q = 20;
+let pool = [], weights = {}, questionMode = 'char';
+let currentChar = null, choices = [], answered = false;
+let score = 0, streak = 0, bestStreak = 0, qNum = 0;
+let history = []; // 'correct' | 'wrong'
+let missed = [];
+let selectedSet = 'all';
+
+function selectMode(el, mode) {
+  document.querySelectorAll('.option-card').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+  selectedSet = mode;
+}
+
+function getPool() {
+  if (selectedSet === 'all') return CHARS;
+  return CHARS.filter(c => c.cls === selectedSet);
+}
+
+function startGame() {
+  pool = getPool();
+  // init weights (higher = more likely to appear)
+  pool.forEach(c => { if (!weights[c.th]) weights[c.th] = 3; });
+  score = 0; streak = 0; bestStreak = 0; qNum = 0;
+  history = []; missed = [];
+  updateStats();
+  showScreen('gameScreen');
+  nextQuestion();
+}
+
+function showStart() { showScreen('startScreen'); }
+
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+function weightedRandom() {
+  const total = pool.reduce((s, c) => s + (weights[c.th] || 1), 0);
+  let r = Math.random() * total;
+  for (const c of pool) {
+    r -= weights[c.th] || 1;
+    if (r <= 0) return c;
+  }
+  return pool[pool.length - 1];
+}
+
+function setQuestionMode(mode) {
+  questionMode = mode;
+  ['Char','Mean','Rom'].forEach(m => document.getElementById('mode'+m).classList.remove('active'));
+  const map = {char:'Char', meaning:'Mean', romanize:'Rom'};
+  document.getElementById('mode'+map[mode]).classList.add('active');
+  if (currentChar) renderQuestion();
+}
+
+function nextQuestion() {
+  if (qNum >= TOTAL_Q) { showResults(); return; }
+  answered = false;
+  document.getElementById('nextBtn').classList.remove('visible');
+  document.getElementById('feedback').className = 'feedback';
+  document.getElementById('feedbackMain').textContent = '';
+  document.getElementById('feedbackSub').textContent = '';
+  document.getElementById('feedbackExample').style.display = 'none';
+  hideSpeakerBtn();
+
+  currentChar = weightedRandom();
+  qNum++;
+  renderQuestion();
+  updateStats();
+  updateProgress();
+  updateReviewStrip();
+}
+
+function renderQuestion() {
+  const c = currentChar;
+
+  // Class pip
+  const pip = document.getElementById('classPip');
+  pip.textContent = c.cls + ' class';
+  pip.className = 'class-pip pip-' + c.cls;
+
+  // Question display & hint
+  const display = document.getElementById('charDisplay');
+  const hint = document.getElementById('charHint');
+  display.classList.remove('pop');
+  void display.offsetWidth;
+  display.classList.add('pop');
+
+  if (questionMode === 'romanize') {
+    // Show romanisation, pick the Thai
+    display.style.fontFamily = "'Crimson Pro', Georgia, serif";
+    display.style.fontSize = '52px';
+    display.textContent = c.rom;
+    hint.textContent = 'Which Thai character makes this sound?';
+  } else {
+    display.style.fontFamily = '"Noto Sans Thai","Leelawadee UI","Angsana New",serif';
+    display.style.fontSize = '120px';
+    display.textContent = c.th;
+    if (questionMode === 'char') hint.textContent = 'What is this character called?';
+    else hint.textContent = 'What does this character\'s name mean?';
+  }
+
+  // Build 4 choices: 1 correct + 3 wrong
+  const others = pool.filter(x => x.th !== c.th);
+  shuffle(others);
+  const distractors = others.slice(0, 3);
+  choices = shuffle([c, ...distractors]);
+
+  const container = document.getElementById('choices');
+  container.innerHTML = '';
+  choices.forEach((ch, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'choice-btn fade-up';
+    btn.style.animationDelay = (i * 0.05) + 's';
+    btn.style.opacity = '0';
+
+    let label, sub;
+    if (questionMode === 'char') {
+      label = ch.phon;
+      sub = ch.rom;
+    } else if (questionMode === 'meaning') {
+      label = ch.mean.charAt(0).toUpperCase() + ch.mean.slice(1);
+      sub = ch.phon;
+    } else {
+      // romanize mode — show Thai char only (no English meaning, which would leak the sound)
+      label = ch.th;
+      sub = '';
+      btn.style.fontFamily = '"Noto Sans Thai","Leelawadee UI",serif';
+      btn.style.fontSize = '32px';
+    }
+
+    btn.innerHTML = sub
+      ? `<span>${label}</span><span class="choice-romanize">${sub}</span>`
+      : `<span>${label}</span>`;
+    btn.onclick = () => handleAnswer(ch, btn);
+    container.appendChild(btn);
+  });
+}
+
+function handleAnswer(chosen, btn) {
+  if (answered) return;
+  answered = true;
+  const correct = chosen.th === currentChar.th;
+
+  // Highlight all buttons
+  const btns = document.querySelectorAll('.choice-btn');
+  btns.forEach(b => {
+    b.disabled = true;
+    const ch = choices[Array.from(btns).indexOf(b)];
+    if (ch.th === currentChar.th) b.classList.add('correct');
+    else if (b === btn && !correct) b.classList.add('wrong');
+    else b.classList.add('dimmed');
+  });
+
+  const fb = document.getElementById('feedback');
+  const fbMain = document.getElementById('feedbackMain');
+  const fbSub = document.getElementById('feedbackSub');
+
+  if (correct) {
+    score += 10 + (streak >= 3 ? 5 : 0);
+    streak++;
+    if (streak > bestStreak) bestStreak = streak;
+    weights[currentChar.th] = Math.max(1, (weights[currentChar.th] || 3) - 1);
+    history.push('correct');
+    fb.className = 'feedback correct-fb';
+    fbMain.textContent = streak >= 3 ? `${streak}× streak! +${10 + 5} pts` : 'Correct ✓';
+    fbSub.textContent = `${currentChar.th} — ${currentChar.phon} — "${currentChar.mean}"`;
+  } else {
+    streak = 0;
+    weights[currentChar.th] = Math.min(8, (weights[currentChar.th] || 3) + 2);
+    history.push('wrong');
+    if (!missed.find(m => m.th === currentChar.th)) missed.push(currentChar);
+    fb.className = 'feedback wrong-fb';
+    fbMain.textContent = `That was ${currentChar.th}`;
+    fbSub.textContent = `${currentChar.phon} · "${currentChar.mean}"`;
+  }
+
+  // Show example word with speaker
+  const exEl = document.getElementById('feedbackExample');
+  document.getElementById('exampleWord').textContent = currentChar.word;
+  document.getElementById('exampleLabel').textContent = '· ' + currentChar.mean;
+  exEl.style.display = 'flex';
+  document.getElementById('exampleSpeakBtn').classList.remove('speaking');
+
+  updateStats();
+  document.getElementById('nextBtn').classList.add('visible');
+  document.getElementById('nextBtn').textContent = qNum >= TOTAL_Q ? 'See results →' : 'Next →';
+  showSpeakerBtn();
+}
+
+function updateStats() {
+  document.getElementById('streakVal').textContent = streak;
+  document.getElementById('scoreVal').textContent = score;
+  document.getElementById('qNumVal').textContent = `${qNum}/${TOTAL_Q}`;
+}
+
+function updateProgress() {
+  const pct = ((qNum - 1) / TOTAL_Q) * 100;
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressLabel').textContent = `Question ${qNum} of ${TOTAL_Q}`;
+}
+
+function updateReviewStrip() {
+  const strip = document.getElementById('reviewStrip');
+  strip.innerHTML = '';
+  for (let i = 0; i < TOTAL_Q; i++) {
+    const dot = document.createElement('div');
+    dot.className = 'review-dot ' + (
+      i < history.length ? (history[i] === 'correct' ? 'dot-correct' : 'dot-wrong') : 'dot-pending'
+    );
+    if (i < history.length) {
+      const c = (history[i]==='correct'?pool.find(x=>true):null);
+      dot.title = '';
+    }
+    strip.appendChild(dot);
+  }
+}
+
+function showResults() {
+  const correct = history.filter(h => h === 'correct').length;
+  const pct = Math.round((correct / TOTAL_Q) * 100);
+
+  let title, sub, emoji;
+  if (pct === 100) { title = 'Perfect round!'; sub = 'Flawless — สุดยอด!'; emoji = 'ดี'; }
+  else if (pct >= 80) { title = 'Excellent!'; sub = 'You\'re getting it — เก่งมาก!'; emoji = 'ข'; }
+  else if (pct >= 60) { title = 'Good progress'; sub = 'Keep going — สู้ๆ!'; emoji = 'ก'; }
+  else { title = 'Keep practising'; sub = 'Every mistake is learning — ไม่เป็นไร'; emoji = 'ง'; }
+
+  document.getElementById('resultsEmoji').textContent = emoji;
+  document.getElementById('resultsTitle').textContent = title;
+  document.getElementById('resultsSub').textContent = sub;
+  document.getElementById('resCorrect').textContent = `${correct}/${TOTAL_Q}`;
+  document.getElementById('resAccuracy').textContent = pct + '%';
+  document.getElementById('resBest').textContent = bestStreak;
+
+  if (missed.length > 0) {
+    document.getElementById('missSection').style.display = 'block';
+    document.getElementById('missChars').innerHTML = missed.map(c =>
+      `<div class="miss-char" onclick="speakText('${c.th}')" title="Tap to hear">${c.th} <small>${c.phon}</small></div>`
+    ).join('');
+  } else {
+    document.getElementById('missSection').style.display = 'none';
+  }
+
+  showScreen('resultsScreen');
+}
+
+function init() {
+  initTTS();
+}
+
+// Boot
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', init);
+} else {
+  init();
+}
+</script>
+</body>
+</html>

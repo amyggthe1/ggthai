@@ -1,0 +1,24 @@
+# --- Not published -----------------------------------------------------------
+# Build source for the stroke-order animations. ~34 MB of Python, source data
+# and a duplicate copy of the artwork that already ships in kie/glyph/.
+# Keep it locally; it does not belong on the web host.
+# If you want it version-controlled, put it in its own repository.
+glyph_project/
+
+# Separate, unfinished project — not part of the Thai lesson site.
+graphie/
+
+# --- Junk ---------------------------------------------------------------------
+Thumbs.db
+desktop.ini
+.DS_Store
+*.bak
+*.tmp
+*~
+
+# Staging copies of the site, pre-split into batches for GitHub's 100-file
+# web uploader. Created 10 Aug 2026. Safe to delete once the upload is done.
+_github_upload/
+
+# Scratch folder for things awaiting manual deletion. Not part of the site.
+_to_delete/

@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Use of ดี (dii) – Thai</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Source+Sans+3:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold: #d4a012;
+    --gold-light: #fdf2d6;
+    --gold-dark: #7a5e1a;
+    --teal: #1a7a6e;
+    --teal-light: #e6f3f1;
+    --red: #c0392b;
+    --bg: #fdf6ec;
+    --surface: #fff;
+    --text: #1a1a1a;
+    --muted: #6b6b6b;
+    --border: #e6dfd5;
+    --radius: 12px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Source Sans 3', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding-bottom: 4rem;
+  }
+  header {
+    background: var(--teal);
+    color: #fff;
+    padding: 2.5rem 2rem 2rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  header::before {
+    content: '';
+    position: absolute;
+    top: -40px; left: -40px; right: -40px; bottom: -40px;
+    background: repeating-linear-gradient(45deg, transparent, transparent 20px, rgba(255,255,255,0.03) 20px, rgba(255,255,255,0.03) 40px);
+    pointer-events: none;
+  }
+  .header-badge {
+    display: inline-block;
+    background: var(--gold);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 4px 14px;
+    border-radius: 20px;
+    margin-bottom: 12px;
+  }
+  header h1 {
+    font-family: 'Bebas Neue', serif;
+    font-size: 2.4rem;
+    font-weight: 400;
+    letter-spacing: 0.02em;
+    line-height: 1.2;
+  }
+  header .subtitle {
+    font-size: 1.1rem;
+    opacity: 0.75;
+    margin-top: 6px;
+    font-weight: 300;
+  }
+  .main { max-width: 860px; margin: 0 auto; padding: 2rem 1.5rem; }
+
+  .section { margin-bottom: 2.5rem; }
+  .section-title {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 1rem;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+  .lead {
+    background: var(--gold-light);
+    border-left: 3px solid var(--gold);
+    color: var(--gold-dark);
+    font-size: 14px;
+    padding: 12px 16px;
+    border-radius: 0 8px 8px 0;
+    margin-bottom: 1.5rem;
+    line-height: 1.55;
+  }
+
+  /* VOCAB TABLE */
+  .vocab-table { width: 100%; border-collapse: collapse; background: var(--surface); border-radius: var(--radius); overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,0.04); }
+  .vocab-table thead tr { background: var(--teal); color: #fff; }
+  .vocab-table thead th { padding: 12px 14px; font-size: 12px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; text-align: left; }
+  .vocab-table tbody tr { border-bottom: 1px solid var(--border); transition: background 0.15s; }
+  .vocab-table tbody tr:last-child { border-bottom: none; }
+  .vocab-table tbody tr:hover { background: var(--teal-light); }
+  .vocab-table td { padding: 9px 14px; font-size: 15px; vertical-align: middle; }
+  .vocab-table td.num { color: var(--muted); font-size: 13px; width: 36px; }
+  .vocab-table td.thai { font-size: 17px; font-weight: 600; }
+  .vocab-table td.pron { color: var(--teal); font-size: 14px; font-style: italic; }
+  .vocab-table td.trans { color: var(--text); font-size: 14px; }
+
+  /* EXAMPLE CARDS */
+  .ex-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--teal);
+    border-radius: var(--radius);
+    padding: 1rem 1.2rem;
+    margin-bottom: 0.9rem;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+  }
+  .ex-card .ex-icon { font-size: 1.6rem; margin-right: 8px; }
+  .ex-card .ex-thai { font-size: 1.05rem; font-weight: 600; color: var(--text); margin-bottom: 4px; }
+  .ex-card .ex-phon { font-size: 0.9rem; color: var(--teal); font-style: italic; margin-bottom: 6px; }
+  .ex-card .ex-trans { font-size: 0.92rem; color: var(--muted); }
+
+  /* EXERCISE */
+  .exercise-list { counter-reset: ex; }
+  .ex-item {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 0.9rem 1.1rem 1rem;
+    margin-bottom: 0.7rem;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+    counter-increment: ex;
+    position: relative;
+  }
+  .ex-item::before {
+    content: counter(ex);
+    position: absolute;
+    top: 14px; left: 14px;
+    width: 22px; height: 22px;
+    background: var(--gold);
+    color: #fff;
+    font-size: 0.72rem;
+    font-weight: 700;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .ex-item .ex-q { padding-left: 36px; }
+  .ex-item .q-thai { font-size: 1rem; font-weight: 600; color: var(--text); margin-bottom: 4px; line-height: 1.55; }
+  .ex-item .q-phon { font-size: 0.87rem; color: var(--teal); font-style: italic; line-height: 1.55; }
+  .ex-item .q-ans-thai { font-size: 0.95rem; color: var(--red); font-weight: 600; margin-top: 10px; padding-top: 8px; border-top: 1px dashed var(--border); }
+  .ex-item .q-ans-phon { font-size: 0.84rem; color: #b46060; font-style: italic; }
+
+  /* SPEAKER BUTTON */
+  .speak-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 3px 5px;
+    border-radius: 50%;
+    margin-left: 6px;
+    vertical-align: middle;
+    opacity: 0.55;
+    transition: opacity 0.15s, background 0.15s;
+    flex-shrink: 0;
+  }
+  .speak-btn:hover { opacity: 1; background: var(--teal-light); }
+  .speak-btn.speaking { opacity: 1; animation: pulse 0.8s ease-in-out infinite; }
+  .speak-btn svg { width: 14px; height: 14px; fill: var(--teal); pointer-events: none; }
+  @keyframes pulse { 0%,100% { opacity:1 } 50% { opacity:0.45 } }
+  .thai-wrap { display: inline-flex; align-items: center; }
+
+  .quiz-cta {
+    display: inline-block;
+    background: linear-gradient(135deg, var(--gold) 0%, var(--teal) 100%);
+    color: #fff;
+    text-decoration: none;
+    padding: 10px 22px;
+    border-radius: 24px;
+    font-family: 'Bebas Neue', serif;
+    font-size: 0.95rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    margin-top: 1.2rem;
+    box-shadow: 0 4px 14px rgba(201,168,76,0.35);
+    transition: transform .15s, box-shadow .15s;
+  }
+  .quiz-cta:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(201,168,76,0.5);
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-badge">Grammar Lesson</div>
+  <h1>Use of ดี (dii)</h1>
+  <p class="subtitle">การใช้คำถาม + ดี · expressing deliberation</p>
+  <a href="index.html?source=Question%20Dii" class="quiz-cta">🎯 Take the quiz of this lesson →</a>
+</header>
+
+<div class="main">
+
+  <div class="lead">
+    Adding <strong>ดี (dii)</strong> after a question word transforms a direct question into a
+    softer deliberation — "what shall I…?", "where would be a good place to…?", "who should I…?".
+    It expresses that the speaker is weighing options and seeking advice.
+  </div>
+
+  <!-- VOCAB -->
+  <div class="section">
+    <div class="section-title">Question words · คำถาม</div>
+    <table class="vocab-table">
+      <thead>
+        <tr><th>#</th><th>Thai</th><th>Pronunciation</th><th>Translation</th></tr>
+      </thead>
+      <tbody id="tbody-vocab"></tbody>
+    </table>
+  </div>
+
+  <!-- EXAMPLES -->
+  <div class="section">
+    <div class="section-title">Example sentences · ตัวอย่างประโยค</div>
+    <div id="examples-wrap"></div>
+  </div>
+
+  <!-- EXERCISE -->
+  <div class="section">
+    <div class="section-title">Exercise 5 · เติมประโยคให้สมบูรณ์ (Complete the sentences)</div>
+    <div class="exercise-list" id="exercise-wrap"></div>
+  </div>
+
+</div>
+
+<script>
+  const VOCAB = [
+      {thai:"อะไรดี",phon:"à-rai dii",trans:"What shall...?"},
+      {thai:"ที่ไหนดี",phon:"thîi-năi dii",trans:"Where shall...?"},
+      {thai:"ใครดี",phon:"khrai dii",trans:"Who shall...?"},
+      {thai:"ไหนดี",phon:"...năi dii",trans:"Which (one)...?"},
+      {thai:"ยังไงดี / อย่างไรดี",phon:"yâang-rai dii",trans:"How / What shall...?"},
+      {thai:"เมื่อไหร่ดี",phon:"mûea-rai dii",trans:"When shall...?"}
+  ];
+  const EXAMPLES = [
+      {thai:"ฉันอยากได้เครื่องซักผ้าใหม่ แต่ยังไม่รู้จะซื้อยี่ห้ออะไรดี",phon:"chăn yàak dâi khrûeang sák phâa mài, dtɛ̀ɛ yang mâi rúu jà súue yîi-hɔ̂ɔ à-rai dii",trans:"I'd like a new washing machine, but I don't know what brand to buy.",icon:"🧺"},
+      {thai:"เย็นนี้หลังเลิกงาน ฉันไม่มีนัด เราไปกินอะไรดี",phon:"yen níi lăng lôek ngaan chăn mâi mii nát, rao bpai gin à-rai dii",trans:"Tonight after work I have no plans — what shall we go eat?",icon:"🍽️"},
+      {thai:"ลูกสาวเรียนจบแล้ว แต่ยังไม่รู้จะเรียนต่อที่ไหนดี",phon:"lûuk-săao rian jòp léeo, dtɛ̀ɛ yang mâi rú jà rian dtɔ̀ɔ thîi-năi dii",trans:"My daughter has graduated, but doesn't know where to continue her studies.",icon:"🎓"},
+      {thai:"เสาร์อาทิตย์นี้อยากไปดูหนัง แต่ยังไม่รู้จะชวนใครดี",phon:"săw aa-thít níi yàak bpai duu năng, dtɛ̀ɛ yang mâi rú jà chuan khrai dii",trans:"This weekend I want to see a movie, but I don't know who to invite.",icon:"🎬"},
+      {thai:"อีก 2 วันจะเป็นวันครบรอบ พวกเรายังไม่แน่ใจว่าจะไปฉลองที่ไหนดี",phon:"ìik sɔ̌ɔng wan jà bpen wan khróp-rɔ̂ɔp, phûak-raw yang mâi nɛ̂ɛ-jai wâa jà bpai chà-lɔ̌ɔng thîi-năi dii",trans:"In 2 days it will be our anniversary — we still aren't sure where to celebrate.",icon:"🏆"},
+      {thai:"ตอนนี้พาสปอร์ตของฉันหาย ฉันกังวลมาก ฉันควรทำยังไงดี",phon:"dtɔɔn-níi pháat-bpɔ̀ɔt khɔ̌ɔng chăn hăay, chăn gang-won mâak, chăn khuan tham yang-ngai dii",trans:"My passport is lost right now — I'm very worried, what should I do?",icon:"🛂"},
+      {thai:"ตอนนี้รถเสีย และฉันมีประชุมตอนบ่ายโมง ฉันควรทำยังไงดี",phon:"dtɔɔn-níi rót sĭa, lé chăn mii bprà-chum dtɔɔn bàai moong, chăn khuan tham yang-ngai dii",trans:"My car has broken down and I have a meeting at 1 PM — what should I do?",icon:"🚗"}
+  ];
+  const EXERCISES = [
+      {thai:"มะรืนนี้เป็นวันเกิดคุณแม่ พวกเราจะจัดงานเลี้ยงวันเกิด....",phon:"má-rúuen-níi bpen wan-gòet khun mɛ̂ɛ, phûak-rao jà jàt ngaan-líang wan-gòet____?",btThai:"B: จัดที่บ้านดีไหม สะดวกดี",btPhon:"B: jàt thîi bâan dii mái? sà-dùak dii"},
+      {thai:"วันนี้ผมมีประชุมสำคัญกับลูกค้าตอน 9.30 แต่เลขานุการไม่สบาย มาทำงานไม่ได้ ผมจะทำ....",phon:"wan-níi phŏm mii bprà-chum săm-khan gàp lûuk-kháa dtɔɔn 9.30, dtɛ̀ɛ lee-khăa-nú-gaan mâi sà-baay maa tham-ngaan mâi dâai, phŏm jà tham____?",btThai:"",btPhon:""},
+      {thai:"ที่พักแถวถนนช้างคลานเต็มแล้ว พวกเราจะไปพัก....",phon:"thîi-phák thɛ̌ɛw thà-nŏn CHANG-KLAAN dtem léeo, phûak-raw jà bpai phák____?",btThai:"",btPhon:""},
+      {thai:"ผมมีตั๋วคอนเสิร์ตฟรี แต่พรุ่งนี้ผมไปไม่ได้ ผมจะให้ตั๋ว....",phon:"A: phŏm mii dtŭa khɔɔn-sòet frii dtɛ̀ɛ phrûng-níi phŏm bpai mâi dâai, phŏm jà hâi dtŭa____?",btThai:"B: ให้คุณยูกิดีไหมคะ ฉันได้ยินว่าพรุ่งนี้เขาว่าง",btPhon:"B: hâi khun YUKI dii mái khá? chăn dâa-yin wâa phrûng-níi khăw wâang"},
+      {thai:"ผมไม่ค่อยเข้าใจภาษาไทย ผมควรจะทำ....",phon:"A: phŏm mâi khɔ̂i khâo-jai phaa-săa thai, phŏm khuan jà tham____?",btThai:"B: ฉันคิดว่าคุณควรไปเรียนที่ TSL CHIANG MAI ได้ยินว่าครูสอนสนุกมาก",btPhon:"B: chăn khít wâa khun khuan bpai rian thîi TSL CHIANG MAI, dâa-yin wâa khruu sɔ̌ɔn sà-nùk mâak"},
+      {thai:"กระเป๋าเงินของฉันหาย จะทำ....",phon:"A: grà-bpăw-ngern khɔ̌ɔng chăn hăay, jà tham____?",btThai:"B: คุณต้องไปแจ้งความที่โรงพัก",btPhon:"B: khun dtɔ̂ng bpai jɛ̂ɛng-khwaam thîi roong-phák"},
+      {thai:"อาหารเย็นวันนี้คุณจะทาน.... คะ",phon:"A: aa-hăan yen wan-níi, khun jà thaan____ khá?",btThai:"B: เราไปทานก๋วยเตี๋ยวร้านใกล้ๆ หอพักดีไหมครับ",btPhon:"B: raw bpai thaan gŭay-dtĭaw ráan glâi glâi hɔ̌ɔ-phák dii mái khráp?"},
+      {thai:"เขาชวนฉันไปชายทะเล แต่ฉันไม่อยากไป ฉันจะบอกเขา....",phon:"khăw chuan chăn bpai chaay-thá-lee dtɛ̀ɛ chăn mâi yàak bpai, chăn jà bɔ̀ɔk khăw____?",btThai:"",btPhon:""},
+      {thai:"คุณรู้ไหมว่าแถวนี้เราควรไปร้านอาหาร....",phon:"A: khun rúu mái wâa thɛ̌ɛw-níi rao khuan bpai ráan aa-hăan____?",btThai:"",btPhon:""},
+      {thai:"ผมจะซื้อของขวัญวันเกิดให้ภรรยา แต่ไม่รู้ว่าจะซื้อ....",phon:"A: phŏm jà súue khɔ̌ɔng-khwăn wan-gòet hâi phan-rá-yaa dtɛ̀ɛ mâi rúu wâa jà súue____?",btThai:"B: ซื้อแหวนให้ดีไหมคะ",btPhon:"B: súue wɛ̌ɛn hâi dii mái khá?"}
+  ];
+
+  // ── TTS ──────────────────────────────────────────────────────
+  let currentBtn = null;
+  function speakThai(text, btn) {
+    if (!('speechSynthesis' in window)) return;
+    window.speechSynthesis.cancel();
+    if (currentBtn && currentBtn !== btn) currentBtn.classList.remove('speaking');
+    const utter = new SpeechSynthesisUtterance(text.replace(/\s*\/\s*/g, ", "));
+    utter.lang  = 'th-TH';
+    utter.rate  = 0.85;
+    utter.pitch = 1;
+    const voices = window.speechSynthesis.getVoices();
+    const thaiVoice = voices.find(v => v.lang === 'th-TH' || v.lang.startsWith('th'));
+    if (thaiVoice) utter.voice = thaiVoice;
+    btn.classList.add('speaking');
+    currentBtn = btn;
+    utter.onend = utter.onerror = () => { btn.classList.remove('speaking'); currentBtn = null; };
+    window.speechSynthesis.speak(utter);
+  }
+  if ('speechSynthesis' in window) {
+    window.speechSynthesis.onvoiceschanged = () => window.speechSynthesis.getVoices();
+    window.speechSynthesis.getVoices();
+  }
+
+  function speakerSVG() {
+    return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">' +
+      '<path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/>' +
+      '<path d="M14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>' +
+      '</svg>';
+  }
+  function makeSpeakBtn(text) {
+    const btn = document.createElement('button');
+    btn.className = 'speak-btn';
+    btn.title = 'Play: ' + text;
+    btn.innerHTML = speakerSVG();
+    btn.addEventListener('click', () => speakThai(text, btn));
+    return btn;
+  }
+
+  // ── Render vocab ─────────────────────────────────────────────
+  function renderVocab() {
+    const tbody = document.getElementById('tbody-vocab');
+    tbody.innerHTML = '';
+    VOCAB.forEach((v, i) => {
+      const tr = document.createElement('tr');
+      const tdNum  = document.createElement('td'); tdNum.className = 'num'; tdNum.textContent = i + 1;
+      const tdThai = document.createElement('td'); tdThai.className = 'thai';
+      const wrap = document.createElement('span'); wrap.className = 'thai-wrap';
+      const txt  = document.createElement('span'); txt.textContent = v.thai;
+      wrap.appendChild(txt); wrap.appendChild(makeSpeakBtn(v.thai));
+      tdThai.appendChild(wrap);
+      const tdPron = document.createElement('td'); tdPron.className = 'pron'; tdPron.textContent = v.phon;
+      const tdTrans = document.createElement('td'); tdTrans.className = 'trans'; tdTrans.textContent = v.trans;
+      tr.appendChild(tdNum); tr.appendChild(tdThai); tr.appendChild(tdPron); tr.appendChild(tdTrans);
+      tbody.appendChild(tr);
+    });
+  }
+
+  // ── Render example cards ─────────────────────────────────────
+  function renderExamples() {
+    const wrap = document.getElementById('examples-wrap');
+    wrap.innerHTML = '';
+    EXAMPLES.forEach(ex => {
+      const card = document.createElement('div'); card.className = 'ex-card';
+      const thaiLine = document.createElement('div'); thaiLine.className = 'ex-thai';
+      const icon = document.createElement('span'); icon.className = 'ex-icon'; icon.textContent = ex.icon;
+      const t = document.createElement('span'); t.textContent = ex.thai;
+      thaiLine.appendChild(icon); thaiLine.appendChild(t); thaiLine.appendChild(makeSpeakBtn(ex.thai));
+      const phon = document.createElement('div'); phon.className = 'ex-phon'; phon.textContent = ex.phon;
+      const trans = document.createElement('div'); trans.className = 'ex-trans'; trans.textContent = ex.trans;
+      card.appendChild(thaiLine); card.appendChild(phon); card.appendChild(trans);
+      wrap.appendChild(card);
+    });
+  }
+
+  // ── Render exercises ─────────────────────────────────────────
+  function renderExercises() {
+    const wrap = document.getElementById('exercise-wrap');
+    wrap.innerHTML = '';
+    EXERCISES.forEach(ex => {
+      const item = document.createElement('div'); item.className = 'ex-item';
+      const q = document.createElement('div'); q.className = 'ex-q';
+      const qThai = document.createElement('div'); qThai.className = 'q-thai';
+      const t = document.createElement('span'); t.textContent = ex.thai;
+      qThai.appendChild(t); qThai.appendChild(makeSpeakBtn(ex.thai));
+      const qPhon = document.createElement('div'); qPhon.className = 'q-phon'; qPhon.textContent = ex.phon;
+      q.appendChild(qThai); q.appendChild(qPhon);
+      if (ex.btThai) {
+        const ansThai = document.createElement('div'); ansThai.className = 'q-ans-thai';
+        const at = document.createElement('span'); at.textContent = ex.btThai;
+        ansThai.appendChild(at); ansThai.appendChild(makeSpeakBtn(ex.btThai.replace(/^B:\s*/, '')));
+        const ansPhon = document.createElement('div'); ansPhon.className = 'q-ans-phon'; ansPhon.textContent = ex.btPhon;
+        q.appendChild(ansThai); q.appendChild(ansPhon);
+      }
+      item.appendChild(q);
+      wrap.appendChild(item);
+    });
+  }
+
+  renderVocab();
+  renderExamples();
+  renderExercises();
+</script>
+
+
+<div style="text-align:center;padding:24px;font-size:0.85rem;letter-spacing:0.04em;background:#1a1a1a;color:#888;margin-top:1rem;">
+  <a href="lessons.html" style="color:#d4a012;text-decoration:none;font-weight:600;">← Back to lessons</a>
+</div>
+
+</body>
+</html>

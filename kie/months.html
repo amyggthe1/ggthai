@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Months of the Year – Thai</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Playfair+Display:wght@400;700&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --red: #c0392b;
+      --dark: #1a1a1a;
+      --gold: #d4a012;
+      --cream: #fdf6ec;
+      --slate: #2c3e50;
+      --light-gray: #f0ede8;
+      --thai-teal: #1a7a6e;
+      --highlight: #f9e04b;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Source Sans 3', sans-serif;
+      background: var(--cream);
+      color: var(--dark);
+      line-height: 1.6;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      background: var(--dark);
+      padding: 40px 60px;
+      border-bottom: 5px solid var(--gold);
+    }
+    .hero-text h1 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(3rem, 8vw, 5rem);
+      color: #fff;
+      letter-spacing: 4px;
+      line-height: 1;
+    }
+    .hero-text h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.1rem, 2.5vw, 1.6rem);
+      color: var(--gold);
+      font-weight: 400;
+      margin-top: 6px;
+    }
+
+    /* ── TABLE WRAPPER ── */
+    .table-wrap {
+      padding: 40px 40px 60px;
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #fff;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    }
+
+    /* header row */
+    thead tr {
+      background: var(--slate);
+    }
+    thead th {
+      padding: 14px 20px;
+      text-align: left;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--highlight);
+    }
+    thead th:first-child { border-radius: 10px 0 0 0; }
+    thead th:last-child  { border-radius: 0 10px 0 0; }
+
+    /* body rows */
+    tbody tr {
+      border-bottom: 1px solid var(--light-gray);
+      transition: background 0.15s;
+    }
+    tbody tr:last-child { border-bottom: none; }
+    tbody tr:hover { background: #fef9ee; }
+
+    td {
+      padding: 14px 20px;
+      vertical-align: middle;
+    }
+
+    /* column 1 – Thai */
+    .col-thai {
+      font-size: 1.25rem;
+      color: var(--thai-teal);
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    /* column 2 – Abbrev */
+    .col-abbrev {
+      font-size: 0.95rem;
+      color: #888;
+      font-style: italic;
+      white-space: nowrap;
+    }
+
+    /* column 3 – Phonemic */
+    .col-phonemic {
+      font-size: 0.92rem;
+      color: #555;
+      font-style: italic;
+    }
+
+    /* column 4 – English */
+    .col-english {
+      font-weight: 700;
+      color: var(--red);
+      font-size: 0.98rem;
+    }
+
+    /* ── SPEAKER ROW ── */
+    .thai-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .speak-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px;
+      border-radius: 50%;
+      color: var(--thai-teal);
+      opacity: 0.4;
+      transition: opacity 0.2s, transform 0.15s;
+      flex-shrink: 0;
+    }
+    .speak-btn:hover { opacity: 1; transform: scale(1.2); }
+    .speak-btn.speaking {
+      opacity: 1;
+      animation: pulse-speak 0.55s ease-in-out infinite alternate;
+    }
+    @keyframes pulse-speak {
+      from { transform: scale(1); }
+      to   { transform: scale(1.3); }
+    }
+
+    /* row number badge */
+    .row-num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: var(--gold);
+      color: #fff;
+      font-size: 0.72rem;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--dark);
+      color: #888;
+      text-align: center;
+      padding: 24px;
+      font-size: 0.8rem;
+      letter-spacing: 1px;
+    }
+    footer span { color: var(--gold); }
+
+    /* ── QUIZ CTA ── */
+    .quiz-cta {
+      display: inline-block;
+      background: linear-gradient(135deg, var(--gold) 0%, var(--red) 100%);
+      color: #fff;
+      text-decoration: none;
+      padding: 10px 22px;
+      border-radius: 24px;
+      font-family: 'Playfair Display', serif;
+      font-size: 0.9rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      margin-top: 1.2rem;
+      box-shadow: 0 4px 14px rgba(212,160,18,0.35);
+      transition: transform .15s, box-shadow .15s;
+    }
+    .quiz-cta:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(212,160,18,0.5);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-text">
+      <h1>Months of the Year</h1>
+      <h2>เดือน <span style="font-size:0.75em; opacity:0.7; font-style:italic;">(duuean)</span></h2>
+      <a href="index.html?source=Months" class="quiz-cta">🎯 Take the quiz of this lesson →</a>
+    </div>
+  </section>
+
+  <!-- TABLE -->
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Thai (ภาษาไทย)</th>
+          <th>Abbrev.</th>
+          <th>Phonemic</th>
+          <th>English</th>
+        </tr>
+      </thead>
+      <tbody id="month-tbody">
+        <!-- rows injected by JS -->
+      </tbody>
+    </table>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <span>Months of the Year</span> &nbsp;·&nbsp; Thai Language Cheat Sheet
+   &nbsp;·&nbsp; <a href="lessons.html" style="color:inherit;text-decoration:underline;opacity:0.8;">← Back to lessons</a></footer>
+
+  <script>
+    // ── Data ────────────────────────────────────────────────────────────
+    const months = [
+      { thai: "มกราคม",   abbrev: "ม.ค.",  phonemic: "mók-ga-raa-khom",    english: "January"   },
+      { thai: "กุมภาพันธ์", abbrev: "ก.พ.",  phonemic: "gum-phaa-phan",      english: "February"  },
+      { thai: "มีนาคม",   abbrev: "มี.ค.",  phonemic: "mii-naa-khom",       english: "March"     },
+      { thai: "เมษายน",   abbrev: "เม.ย.",  phonemic: "mee-sǎa-yon",        english: "April"     },
+      { thai: "พฤษภาคม",  abbrev: "พ.ค.",   phonemic: "phrúet-sà-phaa-khom", english: "May"       },
+      { thai: "มิถุนายน",  abbrev: "มิ.ย.",  phonemic: "mí-thù-naa-yon",     english: "June"      },
+      { thai: "กรกฎาคม",  abbrev: "ก.ค.",   phonemic: "gà-rák-ga-daa-khom", english: "July"      },
+      { thai: "สิงหาคม",  abbrev: "ส.ค.",   phonemic: "sǐng-hǎa-khom",      english: "August"    },
+      { thai: "กันยายน",  abbrev: "ก.ย.",   phonemic: "gan-yaa-yon",        english: "September" },
+      { thai: "ตุลาคม",   abbrev: "ต.ค.",   phonemic: "dtù-laa-khom",       english: "October"   },
+      { thai: "พฤศจิกายน", abbrev: "พ.ย.",  phonemic: "phrúet-sà-jì-gaa-yon", english: "November" },
+      { thai: "ธันวาคม",  abbrev: "ธ.ค.",   phonemic: "than-waa-khom",      english: "December"  },
+    ];
+
+    // ── TTS ─────────────────────────────────────────────────────────────
+    const synth = window.speechSynthesis;
+    let currentBtn = null;
+
+    function speakThai(text, btn) {
+      synth.cancel();
+      if (currentBtn && currentBtn !== btn) currentBtn.classList.remove('speaking');
+
+      const utter = new SpeechSynthesisUtterance(text.replace(/\s*\/\s*/g, ", "));
+      utter.lang  = 'th-TH';
+      utter.rate  = 0.85;
+      utter.pitch = 1;
+
+      const voices   = synth.getVoices();
+      const thaiVoice = voices.find(v => v.lang === 'th-TH' || v.lang.startsWith('th'));
+      if (thaiVoice) utter.voice = thaiVoice;
+
+      btn.classList.add('speaking');
+      currentBtn = btn;
+      utter.onend  = () => { btn.classList.remove('speaking'); currentBtn = null; };
+      utter.onerror = () => { btn.classList.remove('speaking'); currentBtn = null; };
+      synth.speak(utter);
+    }
+
+    function speakerSVG(size = 18) {
+      return `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/>
+        <path d="M14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
+      </svg>`;
+    }
+
+    // ── Render rows ──────────────────────────────────────────────────────
+    function renderRows() {
+      const tbody = document.getElementById('month-tbody');
+      months.forEach((m, i) => {
+        const tr = document.createElement('tr');
+
+        // Col 1: Thai + speaker
+        const tdThai = document.createElement('td');
+        tdThai.className = 'col-thai';
+        const row = document.createElement('div');
+        row.className = 'thai-row';
+
+        const badge = document.createElement('span');
+        badge.className = 'row-num';
+        badge.textContent = i + 1;
+
+        const thaiSpan = document.createElement('span');
+        thaiSpan.textContent = m.thai;
+
+        const btn = document.createElement('button');
+        btn.className = 'speak-btn';
+        btn.title = `Play: ${m.thai}`;
+        btn.setAttribute('aria-label', `Play Thai pronunciation of ${m.english}`);
+        btn.innerHTML = speakerSVG();
+        btn.addEventListener('click', () => speakThai(m.thai, btn));
+
+        row.appendChild(badge);
+        row.appendChild(thaiSpan);
+        row.appendChild(btn);
+        tdThai.appendChild(row);
+
+        // Col 2: Abbrev
+        const tdAbbrev = document.createElement('td');
+        tdAbbrev.className = 'col-abbrev';
+        tdAbbrev.textContent = m.abbrev;
+
+        // Col 3: Phonemic
+        const tdPhonemic = document.createElement('td');
+        tdPhonemic.className = 'col-phonemic';
+        tdPhonemic.textContent = m.phonemic;
+
+        // Col 4: English
+        const tdEng = document.createElement('td');
+        tdEng.className = 'col-english';
+        tdEng.textContent = m.english;
+
+        tr.appendChild(tdThai);
+        tr.appendChild(tdAbbrev);
+        tr.appendChild(tdPhonemic);
+        tr.appendChild(tdEng);
+        tbody.appendChild(tr);
+      });
+    }
+
+    // Voices may load async
+    if (synth.onvoiceschanged !== undefined) synth.onvoiceschanged = renderRows;
+    renderRows();
+  </script>
+
+</body>
+</html>

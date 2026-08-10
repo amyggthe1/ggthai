@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Leçon 4 – Ma famille</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Playfair+Display:wght@400;700&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --red:    #c0392b;
+      --dark:   #1a1a1a;
+      --gold:   #d4a012;
+      --cream:  #fdf6ec;
+      --slate:  #2c3e50;
+      --lgray:  #f0ede8;
+      --teal:   #1a7a6e;
+      --yellow: #f9e04b;
+      --blue:   #2a5fa5;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Source Sans 3', sans-serif;
+      background: var(--cream);
+      color: var(--dark);
+      line-height: 1.6;
+    }
+
+    /* HERO */
+    .hero {
+      background: var(--dark);
+      padding: 40px 60px;
+      border-bottom: 5px solid var(--gold);
+    }
+    .hero h1 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(2.4rem, 6vw, 4.5rem);
+      color: #fff;
+      letter-spacing: 4px;
+      line-height: 1;
+    }
+    .hero h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1rem, 2vw, 1.4rem);
+      color: var(--gold);
+      font-weight: 400;
+      margin-top: 6px;
+      font-style: italic;
+    }
+
+    /* SECTION TITLE */
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.25rem;
+      color: var(--slate);
+      padding: 28px 0 12px;
+      letter-spacing: 1px;
+      border-bottom: 2px solid var(--gold);
+      margin: 0 40px;
+    }
+
+    /* TABLE */
+    .table-wrap { padding: 20px 40px 40px; overflow-x: auto; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #fff;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    }
+    thead tr { background: var(--slate); }
+    thead th {
+      padding: 13px 18px;
+      text-align: left;
+      font-size: 0.76rem;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--yellow);
+    }
+    tbody tr {
+      border-bottom: 1px solid var(--lgray);
+      transition: background 0.15s;
+    }
+    tbody tr:last-child { border-bottom: none; }
+    tbody tr:hover { background: #fef9ee; }
+    td { padding: 12px 18px; vertical-align: middle; }
+
+    .col-thai     { font-size: 1.05rem; font-weight: 600; color: var(--red); white-space: nowrap; }
+    .col-phonetic { font-size: 0.88rem; color: #555; font-style: italic; }
+    .col-fr       { font-size: 0.93rem; font-weight: 600; color: var(--blue); }
+
+    /* SPEAKER */
+    .thai-row { display: flex; align-items: center; gap: 7px; }
+    .speak-btn {
+      display: inline-flex; align-items: center; justify-content: center;
+      background: none; border: none; cursor: pointer; padding: 3px;
+      border-radius: 50%; color: var(--teal); opacity: 0.38;
+      transition: opacity 0.2s, transform 0.15s; flex-shrink: 0;
+    }
+    .speak-btn:hover { opacity: 1; transform: scale(1.2); }
+    .speak-btn.speaking { opacity: 1; animation: pulse 0.55s ease-in-out infinite alternate; }
+    @keyframes pulse { from { transform: scale(1); } to { transform: scale(1.3); } }
+
+    hr { border: none; border-top: 2px solid var(--gold); margin: 6px 40px 24px; }
+
+    footer {
+      background: var(--dark); color: #888; text-align: center;
+      padding: 24px; font-size: 0.8rem; letter-spacing: 1px;
+    }
+    footer span { color: var(--gold); }
+
+    /* ── QUIZ CTA ── */
+    .quiz-cta {
+      display: inline-block;
+      background: linear-gradient(135deg, var(--gold) 0%, var(--red) 100%);
+      color: #fff;
+      text-decoration: none;
+      padding: 10px 22px;
+      border-radius: 24px;
+      font-family: 'Playfair Display', serif;
+      font-size: 0.9rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      margin-top: 1.2rem;
+      box-shadow: 0 4px 14px rgba(212,160,18,0.35);
+      transition: transform .15s, box-shadow .15s;
+    }
+    .quiz-cta:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(212,160,18,0.5);
+    }
+  </style>
+</head>
+<body>
+
+<!-- HERO -->
+<section class="hero">
+  <h1>Leçon 4 : Ma famille / Lesson 4: My family</h1>
+  <h2>bòt tîi sìi &nbsp;·&nbsp; krɔ̂ɔb kruuaa kɔ̌ɔng pǒm</h2>
+  <a href="index.html?source=Family" class="quiz-cta">🎯 Take the quiz of this lesson →</a>
+</section>
+
+<!-- VOCABULARY -->
+<h3 class="section-title">Vocabulaire / Vocabulary – La famille / Family · kam sàp</h3>
+<div class="table-wrap">
+  <table>
+    <thead>
+      <tr>
+        <th>ภาษาไทย</th>
+        <th>Pronunciation</th>
+        <th>Français / English</th>
+      </tr>
+    </thead>
+    <tbody id="tbody-family"></tbody>
+  </table>
+</div>
+
+<footer>
+  <span>Leçon 4</span> &nbsp;·&nbsp; Ma famille / My family – Thai Language
+ &nbsp;·&nbsp; <a href="lessons.html" style="color:inherit;text-decoration:underline;opacity:0.8;">← Back to lessons</a></footer>
+
+<script>
+  // ── DATA ────────────────────────────────────────────────────────────
+  const family = [
+    { thai: "ครอบครัว",            phonemic: "(krɔ̂ɔb kruuaa) krɔ̂ːp.kruːa",       fr: "la famille / family" },
+    { thai: "พ่อ",                 phonemic: "(pɔ̂ɔ) pɔ̂ː",                          fr: "le père / father" },
+    { thai: "แม่",                 phonemic: "(mɛ̂ɛ) mɛ̂ː",                          fr: "la mère / mother" },
+    { thai: "ลูก",                 phonemic: "(lûuk) lûːk",                         fr: "l'enfant / les enfants / child / children" },
+    { thai: "ลูกสาว",              phonemic: "(lûuk sǎaw) lûːk.sǎːw",              fr: "la fille / daughter" },
+    { thai: "ลูกชาย",              phonemic: "(lûuk chaay) lûːk.tɕʰaːj",           fr: "le fils / son" },
+    { thai: "สามี",                phonemic: "(sǎamii) sǎː.miː",                   fr: "le mari / husband" },
+    { thai: "ภรรยา",               phonemic: "(pan rayaa) pʰan.ra.jaː",            fr: "la femme / wife" },
+    { thai: "พี่ชาย / น้องชาย",     phonemic: "(pîi chaay / nɔ́ɔng chaay) pʰîː.tɕʰaːj / nɔ́ːŋ.tɕʰaːj", fr: "le frère (aîné / cadet) / brother (older / younger)" },
+    { thai: "พี่สาว / น้องสาว",     phonemic: "(pîi sǎaw / nɔ́ɔng sǎaw) pʰîː.sǎːw / nɔ́ːŋ.sǎːw",       fr: "la sœur (aînée / cadette) / sister (older / younger)" },
+    { thai: "ปู่ / ตา",             phonemic: "(bpùu / dtaa) pùː / taː",             fr: "le grand-père (paternel / maternel) / grandfather (paternal / maternal)" },
+    { thai: "ย่า / ยาย",            phonemic: "(yâa / yaay) jâː / jaːj",             fr: "la grand-mère (paternelle / maternelle) / grandmother (paternal / maternal)" },
+    { thai: "ลุง / อา",             phonemic: "(lung / aa) luŋ / ʔaː",               fr: "l'oncle (aîné / cadet) / uncle (older / younger)" },
+    { thai: "ป้า / น้า",            phonemic: "(bpâa / nâa) pâː / náː",              fr: "la tante (aînée / cadette) / aunt (older / younger)" },
+    { thai: "ชื่อ",                phonemic: "(chɯ̂ɯ) tɕʰɯ̂ː",                       fr: "s'appeler / to be called" },
+    { thai: "ของ",                 phonemic: "(kɔ̌ɔng) kɔ̌ːŋ",                       fr: "de (marque de la possession) / of (possession marker)" },
+    { thai: "อะไร",                phonemic: "(àrai) ʔa.raj",                       fr: "que / quoi / what" },
+    { thai: "ใคร",                 phonemic: "(krai) kʰraj",                        fr: "qui / who" },
+    { thai: "แต่งงาน",             phonemic: "(dtὲɛng ngaan) tɛ̀ŋ.ŋaːn",            fr: "marié / married" },
+  ];
+
+  // ── TTS ─────────────────────────────────────────────────────────────
+  const synth = window.speechSynthesis;
+  let currentBtn = null;
+
+  function speakText(text, btn) {
+    synth.cancel();
+    if (currentBtn && currentBtn !== btn) currentBtn.classList.remove('speaking');
+    const utter = new SpeechSynthesisUtterance(text.replace(/\s*\/\s*/g, ", "));
+    utter.lang = 'th-TH'; utter.rate = 0.85;
+    const v = synth.getVoices().find(v => v.lang === 'th-TH' || v.lang.startsWith('th'));
+    if (v) utter.voice = v;
+    btn.classList.add('speaking'); currentBtn = btn;
+    utter.onend = utter.onerror = () => { btn.classList.remove('speaking'); currentBtn = null; };
+    synth.speak(utter);
+  }
+
+  function speakerSVG() {
+    return `<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/>
+      <path d="M14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
+    </svg>`;
+  }
+
+  function makeBtn(text) {
+    const btn = document.createElement('button');
+    btn.className = 'speak-btn'; btn.title = 'Play pronunciation';
+    btn.innerHTML = speakerSVG();
+    btn.addEventListener('click', e => { e.stopPropagation(); speakText(text, btn); });
+    return btn;
+  }
+
+  // ── Render vocab table ──────────────────────────────────────────────
+  function renderTable(tbodyId, data) {
+    const tbody = document.getElementById(tbodyId);
+    data.forEach(row => {
+      const tr = document.createElement('tr');
+
+      const tdThai = document.createElement('td');
+      tdThai.className = 'col-thai';
+      const tRow = document.createElement('div');
+      tRow.className = 'thai-row';
+      const s = document.createElement('span'); s.textContent = row.thai;
+      tRow.appendChild(s); tRow.appendChild(makeBtn(row.thai));
+      tdThai.appendChild(tRow);
+
+      const tdPhon = document.createElement('td');
+      tdPhon.className = 'col-phonetic';
+      const match = row.phonemic.match(/^(\(.*?\))\s*(.*)$/);
+      if (match) {
+        const ipaSpan = document.createElement('span');
+        ipaSpan.textContent = match[2];
+        const romSpan = document.createElement('span');
+        romSpan.style.cssText = 'color:#999; font-style:normal; margin-left:8px;';
+        romSpan.textContent = match[1];
+        tdPhon.appendChild(ipaSpan);
+        tdPhon.appendChild(romSpan);
+      } else {
+        tdPhon.textContent = row.phonemic;
+      }
+
+      const tdFr = document.createElement('td');
+      tdFr.className = 'col-fr'; tdFr.textContent = row.fr;
+
+      tr.appendChild(tdThai); tr.appendChild(tdPhon); tr.appendChild(tdFr);
+      tbody.appendChild(tr);
+    });
+  }
+
+  function init() {
+    renderTable('tbody-family', family);
+  }
+
+  if (synth.onvoiceschanged !== undefined) synth.onvoiceschanged = init;
+  init();
+</script>
+</body>
+</html>

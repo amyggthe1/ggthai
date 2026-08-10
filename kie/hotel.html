@@ -1,0 +1,1362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>โรงแรม – Thai Hotel Vocabulary & Cheat Sheet</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Playfair+Display:wght@400;700&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet"/>
+  <style>
+
+    :root {
+      --red:    #c0392b;
+      --dark:   #1a1a1a;
+      --gold:   #d4a012;
+      --cream:  #fdf6ec;
+      --slate:  #2c3e50;
+      --lgray:  #f0ede8;
+      --teal:   #1a7a6e;
+      --yellow: #f9e04b;
+      --blue:   #2a5fa5;
+      --orange: #e67e22;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Source Sans 3', sans-serif; background: var(--cream); color: var(--dark); line-height: 1.6; }
+
+    /* HERO */
+    .hero { background: var(--dark); padding: 40px 60px; border-bottom: 5px solid var(--gold); }
+    .hero h1 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(2.4rem, 6vw, 4.5rem); color: #fff; letter-spacing: 4px; line-height: 1; }
+    .hero h2 { font-family: 'Playfair Display', serif; font-size: clamp(1rem, 2vw, 1.4rem); color: var(--gold); font-weight: 400; margin-top: 6px; font-style: italic; }
+
+    /* SECTION TITLE */
+    .section-title { font-family: 'Playfair Display', serif; font-size: 1.25rem; color: var(--slate); padding: 28px 0 12px; letter-spacing: 1px; border-bottom: 2px solid var(--gold); margin: 0 40px; }
+
+    /* TABLE */
+    .table-wrap { padding: 20px 40px 40px; overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; background: #fff; border-radius: 10px; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
+    thead tr { background: var(--slate); }
+    thead th { padding: 13px 18px; text-align: left; font-size: 0.76rem; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--yellow); }
+    tbody tr { border-bottom: 1px solid var(--lgray); transition: background 0.15s; }
+    tbody tr:last-child { border-bottom: none; }
+    tbody tr:hover { background: #fef9ee; }
+    td { padding: 12px 18px; vertical-align: middle; }
+    .col-thai  { font-size: 1.1rem; font-weight: 600; color: var(--teal); white-space: nowrap; }
+    .col-pron  { font-size: 0.88rem; color: #555; font-style: italic; }
+    .col-trans { font-size: 0.93rem; font-weight: 600; color: var(--blue); }
+
+    /* SPEAKER */
+    .thai-row { display: flex; align-items: center; gap: 7px; }
+    .speak-btn { display: inline-flex; align-items: center; justify-content: center; background: none; border: none; cursor: pointer; padding: 3px; border-radius: 50%; color: var(--teal); opacity: 0.38; transition: opacity 0.2s, transform 0.15s; flex-shrink: 0; }
+    .speak-btn:hover { opacity: 1; transform: scale(1.2); }
+    .speak-btn.speaking { opacity: 1; animation: pulse 0.55s ease-in-out infinite alternate; }
+    @keyframes pulse { from { transform: scale(1); } to { transform: scale(1.3); } }
+
+    /* EXERCISE */
+    .exercise-wrap { padding: 20px 40px 40px; }
+    .exercise-title { font-weight: 700; color: var(--orange); font-size: 1rem; margin-bottom: 18px; }
+    .ex-item { margin-bottom: 16px; padding-left: 16px; border-left: 3px solid var(--gold); }
+    .ex-num { font-weight: 700; color: var(--slate); font-size: 0.85rem; margin-bottom: 4px; }
+    .ex-thai { font-size: 1rem; font-weight: 600; color: var(--teal); }
+    .ex-pron { font-size: 0.85rem; color: #777; font-style: italic; }
+    .ex-fr   { font-size: 0.88rem; color: var(--blue); }
+
+    /* FILL-IN BLANKS */
+    .fill-wrap { padding: 0 40px 10px; }
+    .word-bank { background: #fff8e8; border: 1px dashed var(--gold); border-radius: 8px; padding: 14px 20px; margin-bottom: 20px; font-size: 0.9rem; color: var(--slate); }
+    .word-bank strong { color: var(--red); }
+    .fill-item { margin-bottom: 12px; padding-left: 16px; border-left: 3px solid var(--lgray); }
+    .fill-item .fill-num { font-weight: 700; color: var(--slate); font-size: 0.85rem; }
+    .fill-item .fill-thai { font-size: 1rem; color: var(--teal); font-weight: 600; }
+    .fill-item .fill-answer { display: inline-block; border-bottom: 2px solid var(--gold); min-width: 160px; color: var(--red); font-weight: 700; padding: 0 6px; }
+
+    /* CONVERSATION */
+    .conv-wrap { padding: 10px 40px 10px; }
+    .situation-box { background: var(--slate); color: #fff; border-radius: 8px; padding: 14px 20px; margin-bottom: 20px; }
+    .situation-box h4 { font-family: 'Playfair Display', serif; font-size: 1rem; color: var(--yellow); margin-bottom: 6px; }
+    .situation-box p  { font-size: 0.88rem; color: #ccc; line-height: 1.7; }
+    .conv-block { margin-bottom: 20px; }
+    .conv-speaker { font-weight: 700; font-size: 0.88rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
+    .conv-speaker.staff    { color: var(--red); }
+    .conv-speaker.customer { color: var(--blue); }
+    .conv-thai { font-size: 1.05rem; font-weight: 600; color: var(--teal); }
+    .conv-pron { font-size: 0.85rem; color: #777; font-style: italic; margin-top: 2px; margin-left: 2px; }
+
+    hr { border: none; border-top: 2px solid var(--gold); margin: 6px 40px 24px; }
+
+    footer { background: var(--dark); color: #888; text-align: center; padding: 24px; font-size: 0.8rem; letter-spacing: 1px; margin-top: 20px; }
+    footer span { color: var(--gold); }
+  
+  </style>
+  <style>
+
+    :root {
+      --red: #c0392b;
+      --dark: #1a1a1a;
+      --gold: #d4a012;
+      --cream: #fdf6ec;
+      --slate: #2c3e50;
+      --light-gray: #f0ede8;
+      --thai-teal: #1a7a6e;
+      --highlight: #f9e04b;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Source Sans 3', sans-serif;
+      background: var(--cream);
+      color: var(--dark);
+      line-height: 1.6;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      background: var(--dark);
+      padding: 40px 60px;
+      border-bottom: 5px solid var(--gold);
+    }
+    .hero-text h1 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(3rem, 8vw, 6rem);
+      color: #fff;
+      letter-spacing: 4px;
+      line-height: 1;
+    }
+    .hero-text h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.2rem, 3vw, 2rem);
+      color: var(--gold);
+      font-weight: 400;
+      margin-top: 6px;
+    }
+    /* ── SECTION TITLE ── */
+    .section-title {
+      text-align: center;
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      color: var(--slate);
+      padding: 28px 0 12px;
+      letter-spacing: 1px;
+      border-bottom: 2px solid var(--gold);
+      margin: 0 40px;
+    }
+
+    /* ── PHRASE CALLOUT ── */
+    .phrase-callouts {
+      display: flex;
+      gap: 24px;
+      justify-content: center;
+      padding: 30px 40px;
+      flex-wrap: wrap;
+    }
+    .phrase-box {
+      border: 2px solid var(--gold);
+      border-radius: 10px;
+      padding: 18px 26px;
+      background: #fff;
+      max-width: 280px;
+      min-width: 220px;
+    }
+    .phrase-box.dark {
+      background: var(--slate);
+      color: #fff;
+      border-color: var(--slate);
+    }
+    .phrase-box .phrase-en { font-weight: 700; font-size: 1rem; margin-bottom: 4px; color: var(--red); }
+    .phrase-box.dark .phrase-en { color: var(--highlight); }
+    .phrase-box .phrase-th { font-size: 0.85rem; color: #555; }
+    .phrase-box.dark .phrase-th { color: #ccc; }
+    .phrase-box .phrase-rom { font-size: 0.8rem; color: #888; font-style: italic; }
+    .phrase-box.dark .phrase-rom { color: #aaa; }
+
+    /* ── VOCABULARY GRID ── */
+    .vocab-section {
+      padding: 10px 40px 40px;
+    }
+    .vocab-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 16px;
+      margin-top: 20px;
+    }
+    .vocab-card {
+      background: #fff;
+      border-left: 4px solid var(--red);
+      border-radius: 6px;
+      padding: 14px 18px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+    .vocab-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 18px rgba(0,0,0,0.1);
+    }
+    .vocab-card .num {
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--red);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .vocab-card .en { font-weight: 700; font-size: 1rem; color: var(--dark); }
+    .vocab-card .rom { font-size: 0.82rem; color: #777; font-style: italic; margin-top: 2px; }
+    .vocab-card .thai { font-size: 1rem; color: var(--thai-teal); margin-top: 4px; }
+
+    /* ── ACCOMMODATION TYPES ── */
+    .accom-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 16px;
+      margin-top: 20px;
+    }
+    .accom-card {
+      background: var(--slate);
+      color: #fff;
+      border-radius: 8px;
+      padding: 16px 20px;
+      border-top: 4px solid var(--gold);
+    }
+    .accom-card .accom-en { font-weight: 700; font-size: 1rem; color: var(--highlight); }
+    .accom-card .accom-rom { font-size: 0.82rem; color: #aaa; font-style: italic; margin-top: 2px; }
+    .accom-card .accom-thai { font-size: 1rem; color: #ddd; margin-top: 4px; }
+
+    /* ── SENTENCES ── */
+    .sentences-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 20px;
+      margin-top: 20px;
+    }
+    .sentence-card {
+      background: #fff;
+      border-radius: 8px;
+      padding: 20px 22px;
+      border-top: 3px solid var(--thai-teal);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+    .sentence-card .s-en { font-weight: 700; color: var(--thai-teal); font-size: 0.98rem; }
+    .sentence-card .s-rom { font-size: 0.82rem; color: #888; font-style: italic; margin-top: 4px; }
+    .sentence-card .s-thai { font-size: 1rem; color: var(--dark); margin-top: 6px; }
+
+    /* ── MUST-KNOW VOCAB ── */
+    .mustknow-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+      gap: 14px;
+      margin-top: 20px;
+    }
+    .mk-card {
+      background: var(--light-gray);
+      border-radius: 6px;
+      padding: 12px 16px;
+      border-bottom: 3px solid var(--gold);
+    }
+    .mk-card .mk-en { font-weight: 700; color: var(--red); font-size: 0.95rem; }
+    .mk-card .mk-rom { font-size: 0.78rem; color: #888; font-style: italic; margin-top: 2px; }
+    .mk-card .mk-thai { font-size: 0.95rem; color: var(--slate); margin-top: 4px; }
+
+    /* ── COMPLAINTS ── */
+    .complaints-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 16px;
+      margin-top: 20px;
+    }
+    .complaint-card {
+      background: #fff2f2;
+      border-left: 4px solid var(--red);
+      border-radius: 6px;
+      padding: 16px 20px;
+    }
+    .complaint-card .c-en { font-weight: 700; color: var(--red); font-size: 0.95rem; }
+    .complaint-card .c-rom { font-size: 0.8rem; color: #888; font-style: italic; margin-top: 3px; }
+    .complaint-card .c-thai { font-size: 0.95rem; color: var(--dark); margin-top: 5px; }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--dark);
+      color: #888;
+      text-align: center;
+      padding: 24px;
+      font-size: 0.8rem;
+      margin-top: 50px;
+      letter-spacing: 1px;
+    }
+    footer span { color: var(--gold); }
+
+    /* ── SPEAKER BUTTON ── */
+    .thai-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .speak-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 3px;
+      border-radius: 50%;
+      color: inherit;
+      opacity: 0.45;
+      transition: opacity 0.2s, transform 0.15s, background 0.2s;
+      flex-shrink: 0;
+      line-height: 1;
+    }
+    .speak-btn:hover { opacity: 1; transform: scale(1.18); }
+    .speak-btn.speaking {
+      opacity: 1;
+      animation: pulse-speak 0.6s ease-in-out infinite alternate;
+    }
+    @keyframes pulse-speak {
+      from { transform: scale(1); }
+      to   { transform: scale(1.28); }
+    }
+    /* tint the icon to match card context */
+    .vocab-card   .speak-btn { color: var(--thai-teal); }
+    .phrase-box   .speak-btn { color: var(--red); }
+    .phrase-box.dark .speak-btn { color: var(--highlight); }
+    .accom-card   .speak-btn { color: var(--highlight); }
+    .sentence-card .speak-btn { color: var(--thai-teal); }
+    .mk-card      .speak-btn { color: var(--slate); }
+    .complaint-card .speak-btn { color: var(--red); }
+
+    /* ── QUIZ CTA ── */
+    .quiz-cta {
+      display: inline-block;
+      background: linear-gradient(135deg, var(--gold) 0%, var(--red) 100%);
+      color: #fff;
+      text-decoration: none;
+      padding: 10px 22px;
+      border-radius: 24px;
+      font-family: 'Playfair Display', serif;
+      font-size: 0.9rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      margin-top: 1.2rem;
+      box-shadow: 0 4px 14px rgba(212,160,18,0.35);
+      transition: transform .15s, box-shadow .15s;
+    }
+    .quiz-cta:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(212,160,18,0.5);
+    }
+  
+  </style>
+</head>
+<body>
+
+<!-- ══════════════ HOTEL 1 ══════════════ -->
+<!-- HERO -->
+<section class="hero">
+  <h1>โรงแรม</h1>
+  <h2>การทำงานในโรงแรม &nbsp;·&nbsp; Hôtel & Vocabulaire</h2>
+  <a href="index.html?source=Hotel" class="quiz-cta">🎯 Take the quiz of this lesson →</a>
+</section>
+
+<!-- ══ VOCAB: DEPARTMENTS ══ -->
+<h3 class="section-title">แผนกในโรงแรม – Départements de l'hôtel / Hotel Departments</h3>
+<div class="table-wrap">
+  <table>
+    <thead><tr><th>Thai (ภาษาไทย)</th><th>Phonétique</th><th>Traduction / English</th></tr></thead>
+    <tbody id="tbody-dept"></tbody>
+  </table>
+</div>
+
+<hr/>
+
+<!-- ══ VOCAB: ROOM & EQUIPMENT ══ -->
+<h3 class="section-title">ห้องและอุปกรณ์ – Chambre & Équipements / Room & Equipment</h3>
+<div class="table-wrap">
+  <table>
+    <thead><tr><th>Thai (ภาษาไทย)</th><th>Phonétique</th><th>Traduction / English</th></tr></thead>
+    <tbody id="tbody-room"></tbody>
+  </table>
+</div>
+
+<hr/>
+
+<!-- ══ VOCAB: VERBS ══ -->
+<h3 class="section-title">คำกริยาที่ใช้บ่อย – Verbes courants / Common Verbs</h3>
+<div class="table-wrap">
+  <table>
+    <thead><tr><th>Thai (ภาษาไทย)</th><th>Phonétique</th><th>Traduction / English</th></tr></thead>
+    <tbody id="tbody-verbs"></tbody>
+  </table>
+</div>
+
+<hr/>
+
+<!-- ══ EXERCISE 1: FILL IN THE BLANKS ══ -->
+<h3 class="section-title">แบบฝึกหัด – เติมคำในช่องว่าง</h3>
+<div class="fill-wrap" style="margin-top:20px;">
+  <div class="word-bank">
+    <strong>คำที่ใช้:</strong> &nbsp;
+    ลิฟต์ (líp) &nbsp;/&nbsp; ห้องพัก (hông-phák) &nbsp;/&nbsp; ทำความสะอาด (tham-khwaam-sà-àat) &nbsp;/&nbsp; แผนกต้อนรับ (phɛ̌ɛn-kòk tôn-ráp)
+  </div>
+  <div id="fill-list"></div>
+</div>
+
+<hr/>
+
+<!-- ══ EXERCISE 2: SENTENCE BUILDING ══ -->
+<h3 class="section-title">แบบฝึกหัด – แต่งประโยค (อ่านออกเสียง)</h3>
+<div class="exercise-wrap">
+  <div id="ex2-list"></div>
+</div>
+
+<hr/>
+
+<!-- ══ ROLE PLAY ══ -->
+<h3 class="section-title">ใบงานบทบาทสมมติ – Role Play : พนักงาน – ลูกค้า</h3>
+
+<!-- Situation 1 -->
+<div class="conv-wrap" style="margin-top:20px;">
+  <div class="situation-box">
+    <h4>สถานการณ์ที่ 1 : การเช็กอิน (Check-in)</h4>
+    <p>
+      <strong>พนักงาน :</strong> ทักทายลูกค้า · ถามชื่อลูกค้า · บอกชั้นและหมายเลขห้อง<br/>
+      <strong>ลูกค้า :</strong> ทักทาย · บอกว่ามีการจอง · บอกชื่อ
+    </p>
+  </div>
+  <div id="conv1"></div>
+</div>
+
+<hr/>
+
+<!-- Situation 2 -->
+<div class="conv-wrap">
+  <div class="situation-box">
+    <h4>สถานการณ์ที่ 2 : ขอความช่วยเหลือ (Demande de service)</h4>
+    <p>
+      <strong>ลูกค้า :</strong> ขอผ้าเช็ดตัวเพิ่ม หรือขอความช่วยเหลือ<br/>
+      <strong>พนักงาน :</strong> ตอบรับอย่างสุภาพ · บอกว่าจะจัดการให้
+    </p>
+  </div>
+  <div id="conv2"></div>
+</div>
+
+<hr/>
+
+<!-- Situation 3 -->
+<div class="conv-wrap">
+  <div class="situation-box">
+    <h4>สถานการณ์ที่ 3 : การถามทางในโรงแรม</h4>
+    <p>
+      <strong>ลูกค้า :</strong> ถามทางไปสถานที่ต่าง ๆ<br/>
+      <strong>พนักงาน :</strong> บอกตำแหน่งสถานที่
+    </p>
+  </div>
+  <div id="conv3"></div>
+</div>
+
+<hr/>
+
+<!-- Situation 4 -->
+<div class="conv-wrap">
+  <div class="situation-box">
+    <h4>สถานการณ์ที่ 4 : การเช็กเอาต์ (Check-out)</h4>
+    <p>
+      <strong>ลูกค้า :</strong> แจ้งว่าจะเช็กเอาต์<br/>
+      <strong>พนักงาน :</strong> ตอบรับ · กล่าวขอบคุณ
+    </p>
+  </div>
+  <div id="conv4"></div>
+</div>
+
+<footer>
+  <span>โรงแรม</span> &nbsp;·&nbsp; การทำงานในโรงแรม – Thai Language
+</footer>
+
+<script>
+(function(){
+
+  // ── DATA ───────────────────────────────────────────────────────────
+  const dept = [
+    { thai: "โรงแรม",            pron: "rohng-rɛɛm",                trans: "Hôtel",                        en: "Hotel" },
+    { thai: "แผนกต้อนรับ",        pron: "pha-nɛɛk-tôn-ráp",          trans: "Réception",                    en: "Reception" },
+    { thai: "แม่บ้าน",            pron: "mâe-bâan",                  trans: "Femme de ménage / Housekeeping", en: "Housekeeper" },
+    { thai: "พนักงานต้อนรับ",     pron: "pha-nák-ngaan tôn-ráp",     trans: "Réceptionniste",               en: "Receptionist" },
+    { thai: "พนักงานยกกระเป๋า",   pron: "pha-nák-ngaan yók grà-pǎo", trans: "Bagagiste",                    en: "Bellboy / Porter" },
+    { thai: "ผู้จัดการ",          pron: "phûu-jàt-gaan",             trans: "Directeur / Manager",          en: "Manager" },
+  ];
+
+  const room = [
+    { thai: "ห้องพัก",     pron: "hông-phák",      trans: "Chambre",           en: "Room" },
+    { thai: "กุญแจ",       pron: "gun-jɛɛ",         trans: "Clé",               en: "Key" },
+    { thai: "บัตรห้อง",    pron: "bàt-hông",        trans: "Carte de chambre",  en: "Room card" },
+    { thai: "ลิฟต์",       pron: "líp",             trans: "Ascenseur",         en: "Elevator" },
+    { thai: "ผ้าเช็ดตัว",  pron: "phâa chét-tua",   trans: "Serviette",         en: "Towel" },
+    { thai: "เตียง",       pron: "tiiang",          trans: "Lit",               en: "Bed" },
+  ];
+
+  const verbs = [
+    { thai: "จอง",            pron: "jɔɔng",               trans: "Réserver",   en: "To reserve / book" },
+    { thai: "เช็กอิน",         pron: "chék-in",             trans: "Check-in",   en: "To check in" },
+    { thai: "เช็กเอาต์",       pron: "chék-àao",            trans: "Check-out",  en: "To check out" },
+    { thai: "ทำความสะอาด",     pron: "tham-khwaam-sà-àat",  trans: "Nettoyer",   en: "To clean" },
+    { thai: "เปลี่ยน",         pron: "plìian",              trans: "Changer",    en: "To change" },
+    { thai: "ช่วย",            pron: "chûai",               trans: "Aider",      en: "To help" },
+  ];
+
+  const fills = [
+    { num: "1", thai: "แม่บ้าน __________ ห้องทุกวัน",        answer: "ทำความสะอาด (tham-khwaam-sà-àat)" },
+    { num: "2", thai: "__________ อยู่ชั้นล่าง",              answer: "แผนกต้อนรับ (phɛ̌ɛn-kòk tôn-ráp)" },
+    { num: "3", thai: "ห้องนี้เป็น __________ สำหรับสองคน",   answer: "ห้องพัก (hông-phák)" },
+    { num: "4", thai: "__________ อยู่ด้านขวามือ",            answer: "ลิฟต์ (líp)" },
+  ];
+
+  const ex2 = [
+    { num: "1", words: "จอง (jɔɔng) / ห้องพัก (hông-phák)" },
+    { num: "2", words: "ขอ (khɔ̌ɔ) / ผ้าเช็ดตัว (phâa chét-tua)" },
+    { num: "3", words: "ห้องอาหาร (hông aa-hǎan) / อยู่ (yùu) / ชั้นไหน (chán nǎi)" },
+  ];
+
+  const conv1 = [
+    { speaker: "พนักงาน", type: "staff",    thai: "สวัสดีค่ะ ยินดีต้อนรับค่ะ",                              pron: "sa-wàt-dii khâ / yin-dii tôn-ráp khâ" },
+    { speaker: "ลูกค้า",  type: "customer", thai: "สวัสดีครับ ผมมีการจองห้องไว้ครับ",                       pron: "sa-wàt-dii khráp / phǒm mii gaan jɔɔng hông wái khráp" },
+    { speaker: "พนักงาน", type: "staff",    thai: "ขอชื่อหน่อยค่ะ",                                        pron: "khɔ̌ɔ chʉ̂ʉ nɔ̀i khâ" },
+    { speaker: "ลูกค้า",  type: "customer", thai: "ชื่อฌองครับ",                                            pron: "chʉ̂ʉ jɔɔng khráp" },
+    { speaker: "พนักงาน", type: "staff",    thai: "ขอบคุณค่ะ ห้องอยู่ชั้นสอง หมายเลข 205 ค่ะ",             pron: "khɔ̀ɔp-khun khâ / hông yùu chán sɔ̌ɔng / mǎai-lêek sɔ̌ɔng-sûun-hâa khâ" },
+  ];
+
+  const conv2 = [
+    { speaker: "ลูกค้า",  type: "customer", thai: "ขอผ้าเช็ดตัวเพิ่มหน่อยได้ไหมครับ",                      pron: "khɔ̌ɔ phâa chét tua pʉ̂ʉm nɔ̀i dâai mái khráp" },
+    { speaker: "พนักงาน", type: "staff",    thai: "ได้ค่ะ ดิฉันจะนำไปให้ที่ห้องนะคะ",                      pron: "dâai khâ / dǐao jàt hâi khâ" },
+  ];
+
+  const conv3 = [
+    { speaker: "ลูกค้า",  type: "customer", thai: "ห้องอาหารอยู่ที่ไหนครับ",                               pron: "hông aa-hǎan yùu thîi nǎi khráp" },
+    { speaker: "พนักงาน", type: "staff",    thai: "อยู่ชั้นหนึ่ง ทางซ้ายมือค่ะ",                           pron: "yùu chán nʉ̀ng / thaang sáai mʉʉ khâ" },
+  ];
+
+  const conv4 = [
+    { speaker: "ลูกค้า",  type: "customer", thai: "ผมขอเช็กเอาต์ครับ",                                     pron: "phǒm khɔ̌ɔ chék-àao khráp" },
+    { speaker: "พนักงาน", type: "staff",    thai: "ได้ค่ะ ขอบคุณที่ใช้บริการนะคะ",                         pron: "dâai khâ / khɔ̀ɔp-khun thîi chái bɔɔ-rí-gaan ná khâ" },
+  ];
+
+  // ── TTS ───────────────────────────────────────────────────────────────
+  const synth = window.speechSynthesis;
+  let currentBtn = null;
+
+  function speakThai(text, btn) {
+    synth.cancel();
+    if (currentBtn && currentBtn !== btn) currentBtn.classList.remove('speaking');
+    const utter = new SpeechSynthesisUtterance(text.replace(/\s*\/\s*/g, ", "));
+    utter.lang = 'th-TH'; utter.rate = 0.85;
+    const v = synth.getVoices().find(v => v.lang === 'th-TH' || v.lang.startsWith('th'));
+    if (v) utter.voice = v;
+    btn.classList.add('speaking'); currentBtn = btn;
+    utter.onend = utter.onerror = () => { btn.classList.remove('speaking'); currentBtn = null; };
+    synth.speak(utter);
+  }
+
+  function speakerSVG() {
+    return `<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/>
+      <path d="M14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
+    </svg>`;
+  }
+
+  function makeBtn(text) {
+    const btn = document.createElement('button');
+    btn.className = 'speak-btn'; btn.title = 'Play pronunciation';
+    btn.innerHTML = speakerSVG();
+    btn.addEventListener('click', e => { e.stopPropagation(); speakThai(text, btn); });
+    return btn;
+  }
+
+  function thaiRow(text) {
+    const row = document.createElement('div'); row.className = 'thai-row';
+    const s = document.createElement('span'); s.textContent = text;
+    row.appendChild(s); row.appendChild(makeBtn(text));
+    return row;
+  }
+
+  // ── Render vocab tables ───────────────────────────────────────────────
+  function renderVocab(tbodyId, data) {
+    const tbody = document.getElementById(tbodyId);
+    data.forEach(row => {
+      const tr = document.createElement('tr');
+      const tdThai = document.createElement('td'); tdThai.className = 'col-thai'; tdThai.appendChild(thaiRow(row.thai));
+      const tdPron = document.createElement('td'); tdPron.className = 'col-pron'; tdPron.textContent = row.pron;
+      const tdTrans = document.createElement('td'); tdTrans.className = 'col-trans';
+      tdTrans.innerHTML = `${row.trans} <span style="color:#999; font-weight:400;">/ ${row.en}</span>`;
+      tr.appendChild(tdThai); tr.appendChild(tdPron); tr.appendChild(tdTrans);
+      tbody.appendChild(tr);
+    });
+  }
+
+  // ── Render fill-in blanks ─────────────────────────────────────────────
+  function renderFills() {
+    const wrap = document.getElementById('fill-list');
+    fills.forEach(item => {
+      const div = document.createElement('div'); div.className = 'fill-item';
+      const num = document.createElement('div'); num.className = 'fill-num'; num.textContent = item.num + '.';
+      const parts = item.thai.split('__________');
+      const line = document.createElement('div'); line.className = 'fill-thai';
+      line.appendChild(document.createTextNode(parts[0]));
+      const ans = document.createElement('span'); ans.className = 'fill-answer'; ans.textContent = item.answer;
+      line.appendChild(ans);
+      if (parts[1]) line.appendChild(document.createTextNode(parts[1]));
+      div.appendChild(num); div.appendChild(line);
+      wrap.appendChild(div);
+    });
+  }
+
+  // ── Render exercise 2 ─────────────────────────────────────────────────
+  function renderEx2() {
+    const wrap = document.getElementById('ex2-list');
+    ex2.forEach(item => {
+      const div = document.createElement('div'); div.className = 'ex-item';
+      const num = document.createElement('div'); num.className = 'ex-num'; num.textContent = item.num + '.';
+      const words = document.createElement('div'); words.className = 'ex-pron'; words.textContent = item.words;
+      div.appendChild(num); div.appendChild(words);
+      wrap.appendChild(div);
+    });
+  }
+
+  // ── Render conversations ──────────────────────────────────────────────
+  function renderConv(containerId, lines) {
+    const wrap = document.getElementById(containerId);
+    lines.forEach(line => {
+      const div = document.createElement('div'); div.className = 'conv-block';
+      const spk = document.createElement('div');
+      spk.className = `conv-speaker ${line.type}`; spk.textContent = line.speaker;
+      const tRow = thaiRow(line.thai); tRow.classList.add('conv-thai');
+      // style the span inside
+      tRow.querySelector('span').classList.add('conv-thai');
+      const pron = document.createElement('div'); pron.className = 'conv-pron'; pron.textContent = line.pron;
+      div.appendChild(spk); div.appendChild(tRow); div.appendChild(pron);
+      wrap.appendChild(div);
+    });
+  }
+
+  function init() {
+    renderVocab('tbody-dept',  dept);
+    renderVocab('tbody-room',  room);
+    renderVocab('tbody-verbs', verbs);
+    renderFills();
+    renderEx2();
+    renderConv('conv1', conv1);
+    renderConv('conv2', conv2);
+    renderConv('conv3', conv3);
+    renderConv('conv4', conv4);
+  }
+
+  if (synth.onvoiceschanged !== undefined) synth.onvoiceschanged = init;
+  init();
+
+})();
+</script>
+
+<!-- ══════════════ DIVIDER ══════════════ -->
+<div style="border-top: 6px solid #d4a012; margin: 40px 0;"></div>
+
+<!-- ══════════════ HOTEL 2 ══════════════ -->
+<!-- HERO -->
+  <section class="hero">
+    <div class="hero-text">
+      <h1>Checking In A Hotel</h1>
+      <h2>Conversation Cheat Sheet</h2>
+      <a href="index.html?source=Hotel" class="quiz-cta">🎯 Take the quiz of this lesson →</a>
+    </div>
+  </section>
+
+  <!-- ── PAGE 1: HOTEL VOCABULARY ── -->
+
+  <h3 class="section-title">Checking in a Hotel – Key Vocabulary</h3>
+
+  <!-- Phrase callouts -->
+  <div class="phrase-callouts">
+    <div class="phrase-box">
+      <div class="phrase-en">Is there a ~ in this hotel?</div>
+      <div class="phrase-rom">mii ~ nai roong-raaem níi mái</div>
+      <div class="phrase-th">มี ~ ในโรงแรมนี้มั๊ย</div>
+    </div>
+    <div class="phrase-box dark">
+      <div class="phrase-en">There is a ~.</div>
+      <div class="phrase-rom">mii ~</div>
+      <div class="phrase-th">มี ~</div>
+    </div>
+  </div>
+
+  <!-- Numbered vocabulary -->
+  <div class="vocab-section">
+    <div class="vocab-grid">
+
+      <div class="vocab-card">
+        <div class="num">1</div>
+        <div class="en">room service cart</div>
+        <div class="rom">rót khěn baaw-rí-gaan sòng thûeng hâawng</div>
+        <div class="thai">รถเข็นบริการส่งถึงห้อง</div>
+      </div>
+
+      <div class="vocab-card">
+        <div class="num">2</div>
+        <div class="en">twin-sized bed</div>
+        <div class="rom">dtiiang khûu</div>
+        <div class="thai">เตียงคู่</div>
+      </div>
+
+      <div class="vocab-card">
+        <div class="num">3</div>
+        <div class="en">TV</div>
+        <div class="rom">thii-wii</div>
+        <div class="thai">ทีวี</div>
+      </div>
+
+      <div class="vocab-card">
+        <div class="num">4</div>
+        <div class="en">double-sized bed</div>
+        <div class="rom">dtiiang diiao sǎm-ràp naawn saawng khon</div>
+        <div class="thai">เตียงเดี่ยวสำหรับนอนสองคน</div>
+      </div>
+
+      <div class="vocab-card">
+        <div class="num">5</div>
+        <div class="en">corridor</div>
+        <div class="rom">thaang dooen</div>
+        <div class="thai">ทางเดิน</div>
+      </div>
+
+      <div class="vocab-card">
+        <div class="num">6</div>
+        <div class="en">elevator</div>
+        <div class="rom">líp</div>
+        <div class="thai">ลิฟต์</div>
+      </div>
+
+      <div class="vocab-card">
+        <div class="num">7</div>
+        <div class="en">vending machine</div>
+        <div class="rom">dtuu gòt nám</div>
+        <div class="thai">ตู้กดน้ำ</div>
+      </div>
+
+      <div class="vocab-card">
+        <div class="num">8</div>
+        <div class="en">king-sized bed</div>
+        <div class="rom">dtiiang dìiao khà-nàat khing sái</div>
+        <div class="thai">เตียงเดี่ยวขนาดคิงไซส์</div>
+      </div>
+
+      <div class="vocab-card">
+        <div class="num">9</div>
+        <div class="en">shower</div>
+        <div class="rom">fàk buua</div>
+        <div class="thai">ฝักบัว</div>
+      </div>
+
+      <div class="vocab-card">
+        <div class="num">10</div>
+        <div class="en">bathtub</div>
+        <div class="rom">àang àap nám</div>
+        <div class="thai">อ่างอาบน้ำ</div>
+      </div>
+
+      <div class="vocab-card">
+        <div class="num">11</div>
+        <div class="en">sink</div>
+        <div class="rom">àang láang nâa</div>
+        <div class="thai">อ่างล้างหน้า</div>
+      </div>
+
+      <div class="vocab-card">
+        <div class="num">12</div>
+        <div class="en">front desk</div>
+        <div class="rom">phà-nàaek dtaawn-ráp sùuan nâa</div>
+        <div class="thai">แผนกต้อนรับส่วนหน้า</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── PAGE 2: TYPES OF ACCOMMODATION ── -->
+
+  <h3 class="section-title">Types of Accommodation</h3>
+
+  <div class="vocab-section">
+    <div class="accom-grid">
+
+      <div class="accom-card">
+        <div class="accom-en">hotel</div>
+        <div class="accom-rom">roong-raaem</div>
+        <div class="accom-thai">โรงแรม</div>
+      </div>
+
+      <div class="accom-card">
+        <div class="accom-en">resort</div>
+        <div class="accom-rom">rii-sàawt</div>
+        <div class="accom-thai">รีสอร์ท</div>
+      </div>
+
+      <div class="accom-card">
+        <div class="accom-en">bed &amp; breakfast</div>
+        <div class="accom-rom">thii phák phráawm aa-hǎan cháo</div>
+        <div class="accom-thai">ที่พักพร้อมอาหารเช้า</div>
+      </div>
+
+      <div class="accom-card">
+        <div class="accom-en">inn</div>
+        <div class="accom-rom">roong-raaem khà-nàat lék</div>
+        <div class="accom-thai">โรงแรมขนาดเล็ก</div>
+      </div>
+
+      <div class="accom-card">
+        <div class="accom-en">hostel</div>
+        <div class="accom-rom">hóot-theo</div>
+        <div class="accom-thai">โฮสเทล</div>
+      </div>
+
+      <div class="accom-card">
+        <div class="accom-en">campground</div>
+        <div class="accom-rom">thii dtâng khaaem</div>
+        <div class="accom-thai">ที่ตั้งแคมป์</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── SENTENCES ── -->
+
+  <h3 class="section-title">Sentences You'll Use In A Hotel</h3>
+
+  <div class="vocab-section">
+    <div class="sentences-grid">
+
+      <div class="sentence-card">
+        <div class="s-en">I'd like to check in.</div>
+        <div class="s-rom">chǎn dtâawng gaan chék-in</div>
+        <div class="s-thai">ฉันต้องการเช็คอิน</div>
+      </div>
+
+      <div class="sentence-card">
+        <div class="s-en">What time is check out?</div>
+        <div class="s-rom">wee-laa chék-áo gìi moong</div>
+        <div class="s-thai">เวลาเช็คเอาท์กี่โมง</div>
+      </div>
+
+      <div class="sentence-card">
+        <div class="s-en">Is breakfast included?</div>
+        <div class="s-rom">ruuam aa-hǎan cháo dûuai rǔue bplào</div>
+        <div class="s-thai">รวมอาหารเช้าด้วยหรือเปล่า</div>
+      </div>
+
+      <div class="sentence-card">
+        <div class="s-en">Could you please recommend a good restaurant around here?</div>
+        <div class="s-rom">khun chûuai náe-nam ráan aa-hǎan dii dii thǎaeo níi hâi nàauy dâi mái</div>
+        <div class="s-thai">คุณช่วยแนะนำร้านอาหารดีๆแถวนี้ให้หน่อยได้มั๊ย</div>
+      </div>
+
+      <div class="sentence-card">
+        <div class="s-en">Could you please call me a taxi?</div>
+        <div class="s-rom">khun chûuai rîiak tháek-sîi hâi nàauy dâi mái</div>
+        <div class="s-thai">คุณช่วยเรียกแท็กซี่ให้หน่อยได้มั๊ย</div>
+      </div>
+
+      <div class="sentence-card">
+        <div class="s-en">Do you have a city guide?</div>
+        <div class="s-rom">khun mii khûu-muue náe-nam muueang mái</div>
+        <div class="s-thai">คุณมีคู่มือแนะนำเมืองมั๊ย</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── MUST-KNOW VOCABULARY ── -->
+
+  <h3 class="section-title">Must-Know Hotel Vocabulary</h3>
+
+  <div class="vocab-section">
+    <div class="mustknow-grid">
+
+      <div class="mk-card">
+        <div class="mk-en">cable TV</div>
+        <div class="mk-rom">khee-bôen thii-wii</div>
+        <div class="mk-thai">เคเบิ้ลทีวี</div>
+      </div>
+
+      <div class="mk-card">
+        <div class="mk-en">air conditioning</div>
+        <div class="mk-rom">aae</div>
+        <div class="mk-thai">แอร์</div>
+      </div>
+
+      <div class="mk-card">
+        <div class="mk-en">heater</div>
+        <div class="mk-rom">híit dtôoe</div>
+        <div class="mk-thai">ฮีทเตอร์</div>
+      </div>
+
+      <div class="mk-card">
+        <div class="mk-en">soap</div>
+        <div class="mk-rom">sà-bùu</div>
+        <div class="mk-thai">สบู่</div>
+      </div>
+
+      <div class="mk-card">
+        <div class="mk-en">shampoo</div>
+        <div class="mk-rom">chaaem-phuu</div>
+        <div class="mk-thai">แชมพู</div>
+      </div>
+
+      <div class="mk-card">
+        <div class="mk-en">toothbrush</div>
+        <div class="mk-rom">bpraaeng sǐi fan</div>
+        <div class="mk-thai">แปรงสีฟัน</div>
+      </div>
+
+      <div class="mk-card">
+        <div class="mk-en">WI-FI</div>
+        <div class="mk-rom">wai-fai</div>
+        <div class="mk-thai">ไวไฟ</div>
+      </div>
+
+      <div class="mk-card">
+        <div class="mk-en">swimming pool</div>
+        <div class="mk-rom">sà-wâai-nám</div>
+        <div class="mk-thai">สระว่ายน้ำ</div>
+      </div>
+
+      <div class="mk-card">
+        <div class="mk-en">gym</div>
+        <div class="mk-rom">fít-nèet</div>
+        <div class="mk-thai">ฟิตเนส</div>
+      </div>
+
+      <div class="mk-card">
+        <div class="mk-en">ocean view</div>
+        <div class="mk-rom">wiu thá-lee</div>
+        <div class="mk-thai">วิวทะเล</div>
+      </div>
+
+      <div class="mk-card">
+        <div class="mk-en">mountain view</div>
+        <div class="mk-rom">wiu phuu-kháo</div>
+        <div class="mk-thai">วิวภูเขา</div>
+      </div>
+
+      <div class="mk-card">
+        <div class="mk-en">all inclusive</div>
+        <div class="mk-rom">ruuam thúk-yàang</div>
+        <div class="mk-thai">รวมทุกอย่าง</div>
+      </div>
+
+      <div class="mk-card">
+        <div class="mk-en">room number</div>
+        <div class="mk-rom">mǎai lêek hâawng</div>
+        <div class="mk-thai">หมายเลขห้อง</div>
+      </div>
+
+      <div class="mk-card">
+        <div class="mk-en">key</div>
+        <div class="mk-rom">gun-jaae</div>
+        <div class="mk-thai">กุญแจ</div>
+      </div>
+
+      <div class="mk-card">
+        <div class="mk-en">check in</div>
+        <div class="mk-rom">chék-in</div>
+        <div class="mk-thai">เช็คอิน</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── COMPLAINING ── -->
+
+  <h3 class="section-title">Complaining At the Hotel</h3>
+
+  <div class="vocab-section">
+    <div class="complaints-grid">
+
+      <div class="complaint-card">
+        <div class="c-en">The WI-FI is not working.</div>
+        <div class="c-rom">wai-fai mâi tham ngaan</div>
+        <div class="c-thai">ไวไฟไม่ทำงาน</div>
+      </div>
+
+      <div class="complaint-card">
+        <div class="c-en">The bathwater is cold.</div>
+        <div class="c-rom">nám nai àang yen</div>
+        <div class="c-thai">น้ำในอ่างเย็น</div>
+      </div>
+
+      <div class="complaint-card">
+        <div class="c-en">There are no towels.</div>
+        <div class="c-rom">mâi mii phâa chét dtuua</div>
+        <div class="c-thai">ไม่มีผ้าเช็ดตัว</div>
+      </div>
+
+      <div class="complaint-card">
+        <div class="c-en">It's too noisy.</div>
+        <div class="c-rom">sǐiang dang mâak</div>
+        <div class="c-thai">เสียงดังมาก</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <span>ThaiPod101.com</span> &nbsp;·&nbsp; Checking In A Hotel – Conversation Cheat Sheet
+   &nbsp;·&nbsp; <a href="lessons.html" style="color:inherit;text-decoration:underline;opacity:0.8;">← Back to lessons</a></footer>
+
+  <script>
+(function(){
+
+    // ── Thai TTS via Web Speech API ──────────────────────────────────────
+    const synth = window.speechSynthesis;
+    let currentBtn = null;
+
+    function speakThai(text, btn) {
+      synth.cancel();
+      if (currentBtn && currentBtn !== btn) {
+        currentBtn.classList.remove('speaking');
+      }
+      const utter = new SpeechSynthesisUtterance(text.replace(/\s*\/\s*/g, ", "));
+      utter.lang = 'th-TH';
+      utter.rate = 0.85;
+      utter.pitch = 1;
+
+      // Try to pick a Thai voice if available
+      const voices = synth.getVoices();
+      const thaiVoice = voices.find(v => v.lang === 'th-TH' || v.lang.startsWith('th'));
+      if (thaiVoice) utter.voice = thaiVoice;
+
+      btn.classList.add('speaking');
+      currentBtn = btn;
+
+      utter.onend = () => { btn.classList.remove('speaking'); currentBtn = null; };
+      utter.onerror = () => { btn.classList.remove('speaking'); currentBtn = null; };
+
+      synth.speak(utter);
+    }
+
+    // SVG speaker icon
+    function speakerSVG() {
+      return `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/>
+        <path d="M14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
+      </svg>`;
+    }
+
+    // Inject speak buttons next to every Thai text element
+    function injectSpeakButtons() {
+      // All selectors that hold Thai text
+      const selectors = [
+        '.thai', '.phrase-th', '.accom-thai', '.s-thai',
+        '.mk-thai', '.c-thai'
+      ];
+
+      selectors.forEach(sel => {
+        document.querySelectorAll(sel).forEach(el => {
+          const text = el.textContent.trim();
+          if (!text) return;
+
+          // Wrap in a row div (avoid double-wrapping)
+          if (el.parentElement.classList.contains('thai-row')) return;
+
+          const row = document.createElement('div');
+          row.className = 'thai-row';
+          el.parentNode.insertBefore(row, el);
+          row.appendChild(el);
+
+          const btn = document.createElement('button');
+          btn.className = 'speak-btn';
+          btn.title = 'Play pronunciation';
+          btn.setAttribute('aria-label', 'Play Thai pronunciation');
+          btn.innerHTML = speakerSVG();
+          btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            speakThai(text, btn);
+          });
+          row.appendChild(btn);
+        });
+      });
+    }
+
+    // Voices load async in some browsers
+    if (synth.onvoiceschanged !== undefined) {
+      synth.onvoiceschanged = injectSpeakButtons;
+    }
+    // Also run immediately in case voices are already loaded
+    injectSpeakButtons();
+  
+})();
+</script>
+
+<script>
+(function(){
+
+
+  // ── DATA ───────────────────────────────────────────────────────────
+  const dept = [
+    { thai: "โรงแรม",            pron: "rohng-rɛɛm",                trans: "Hôtel",                        en: "Hotel" },
+    { thai: "แผนกต้อนรับ",        pron: "pha-nɛɛk-tôn-ráp",          trans: "Réception",                    en: "Reception" },
+    { thai: "แม่บ้าน",            pron: "mâe-bâan",                  trans: "Femme de ménage / Housekeeping", en: "Housekeeper" },
+    { thai: "พนักงานต้อนรับ",     pron: "pha-nák-ngaan tôn-ráp",     trans: "Réceptionniste",               en: "Receptionist" },
+    { thai: "พนักงานยกกระเป๋า",   pron: "pha-nák-ngaan yók grà-pǎo", trans: "Bagagiste",                    en: "Bellboy / Porter" },
+    { thai: "ผู้จัดการ",          pron: "phûu-jàt-gaan",             trans: "Directeur / Manager",          en: "Manager" },
+  ];
+
+  const room = [
+    { thai: "ห้องพัก",     pron: "hông-phák",      trans: "Chambre",           en: "Room" },
+    { thai: "กุญแจ",       pron: "gun-jɛɛ",         trans: "Clé",               en: "Key" },
+    { thai: "บัตรห้อง",    pron: "bàt-hông",        trans: "Carte de chambre",  en: "Room card" },
+    { thai: "ลิฟต์",       pron: "líp",             trans: "Ascenseur",         en: "Elevator" },
+    { thai: "ผ้าเช็ดตัว",  pron: "phâa chét-tua",   trans: "Serviette",         en: "Towel" },
+    { thai: "เตียง",       pron: "tiiang",          trans: "Lit",               en: "Bed" },
+  ];
+
+  const verbs = [
+    { thai: "จอง",            pron: "jɔɔng",               trans: "Réserver",   en: "To reserve / book" },
+    { thai: "เช็กอิน",         pron: "chék-in",             trans: "Check-in",   en: "To check in" },
+    { thai: "เช็กเอาต์",       pron: "chék-àao",            trans: "Check-out",  en: "To check out" },
+    { thai: "ทำความสะอาด",     pron: "tham-khwaam-sà-àat",  trans: "Nettoyer",   en: "To clean" },
+    { thai: "เปลี่ยน",         pron: "plìian",              trans: "Changer",    en: "To change" },
+    { thai: "ช่วย",            pron: "chûai",               trans: "Aider",      en: "To help" },
+  ];
+
+  const fills = [
+    { num: "1", thai: "แม่บ้าน __________ ห้องทุกวัน",        answer: "ทำความสะอาด (tham-khwaam-sà-àat)" },
+    { num: "2", thai: "__________ อยู่ชั้นล่าง",              answer: "แผนกต้อนรับ (phɛ̌ɛn-kòk tôn-ráp)" },
+    { num: "3", thai: "ห้องนี้เป็น __________ สำหรับสองคน",   answer: "ห้องพัก (hông-phák)" },
+    { num: "4", thai: "__________ อยู่ด้านขวามือ",            answer: "ลิฟต์ (líp)" },
+  ];
+
+  const ex2 = [
+    { num: "1", words: "จอง (jɔɔng) / ห้องพัก (hông-phák)" },
+    { num: "2", words: "ขอ (khɔ̌ɔ) / ผ้าเช็ดตัว (phâa chét-tua)" },
+    { num: "3", words: "ห้องอาหาร (hông aa-hǎan) / อยู่ (yùu) / ชั้นไหน (chán nǎi)" },
+  ];
+
+  const conv1 = [
+    { speaker: "พนักงาน", type: "staff",    thai: "สวัสดีค่ะ ยินดีต้อนรับค่ะ",                              pron: "sa-wàt-dii khâ / yin-dii tôn-ráp khâ" },
+    { speaker: "ลูกค้า",  type: "customer", thai: "สวัสดีครับ ผมมีการจองห้องไว้ครับ",                       pron: "sa-wàt-dii khráp / phǒm mii gaan jɔɔng hông wái khráp" },
+    { speaker: "พนักงาน", type: "staff",    thai: "ขอชื่อหน่อยค่ะ",                                        pron: "khɔ̌ɔ chʉ̂ʉ nɔ̀i khâ" },
+    { speaker: "ลูกค้า",  type: "customer", thai: "ชื่อฌองครับ",                                            pron: "chʉ̂ʉ jɔɔng khráp" },
+    { speaker: "พนักงาน", type: "staff",    thai: "ขอบคุณค่ะ ห้องอยู่ชั้นสอง หมายเลข 205 ค่ะ",             pron: "khɔ̀ɔp-khun khâ / hông yùu chán sɔ̌ɔng / mǎai-lêek sɔ̌ɔng-sûun-hâa khâ" },
+  ];
+
+  const conv2 = [
+    { speaker: "ลูกค้า",  type: "customer", thai: "ขอผ้าเช็ดตัวเพิ่มหน่อยได้ไหมครับ",                      pron: "khɔ̌ɔ phâa chét tua pʉ̂ʉm nɔ̀i dâai mái khráp" },
+    { speaker: "พนักงาน", type: "staff",    thai: "ได้ค่ะ ดิฉันจะนำไปให้ที่ห้องนะคะ",                      pron: "dâai khâ / dǐao jàt hâi khâ" },
+  ];
+
+  const conv3 = [
+    { speaker: "ลูกค้า",  type: "customer", thai: "ห้องอาหารอยู่ที่ไหนครับ",                               pron: "hông aa-hǎan yùu thîi nǎi khráp" },
+    { speaker: "พนักงาน", type: "staff",    thai: "อยู่ชั้นหนึ่ง ทางซ้ายมือค่ะ",                           pron: "yùu chán nʉ̀ng / thaang sáai mʉʉ khâ" },
+  ];
+
+  const conv4 = [
+    { speaker: "ลูกค้า",  type: "customer", thai: "ผมขอเช็กเอาต์ครับ",                                     pron: "phǒm khɔ̌ɔ chék-àao khráp" },
+    { speaker: "พนักงาน", type: "staff",    thai: "ได้ค่ะ ขอบคุณที่ใช้บริการนะคะ",                         pron: "dâai khâ / khɔ̀ɔp-khun thîi chái bɔɔ-rí-gaan ná khâ" },
+  ];
+
+  // ── TTS ───────────────────────────────────────────────────────────────
+  const synth = window.speechSynthesis;
+  let currentBtn = null;
+
+  function speakThai(text, btn) {
+    synth.cancel();
+    if (currentBtn && currentBtn !== btn) currentBtn.classList.remove('speaking');
+    const utter = new SpeechSynthesisUtterance(text.replace(/\s*\/\s*/g, ", "));
+    utter.lang = 'th-TH'; utter.rate = 0.85;
+    const v = synth.getVoices().find(v => v.lang === 'th-TH' || v.lang.startsWith('th'));
+    if (v) utter.voice = v;
+    btn.classList.add('speaking'); currentBtn = btn;
+    utter.onend = utter.onerror = () => { btn.classList.remove('speaking'); currentBtn = null; };
+    synth.speak(utter);
+  }
+
+  function speakerSVG() {
+    return `<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/>
+      <path d="M14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
+    </svg>`;
+  }
+
+  function makeBtn(text) {
+    const btn = document.createElement('button');
+    btn.className = 'speak-btn'; btn.title = 'Play pronunciation';
+    btn.innerHTML = speakerSVG();
+    btn.addEventListener('click', e => { e.stopPropagation(); speakThai(text, btn); });
+    return btn;
+  }
+
+  function thaiRow(text) {
+    const row = document.createElement('div'); row.className = 'thai-row';
+    const s = document.createElement('span'); s.textContent = text;
+    row.appendChild(s); row.appendChild(makeBtn(text));
+    return row;
+  }
+
+  // ── Render vocab tables ───────────────────────────────────────────────
+  function renderVocab(tbodyId, data) {
+    const tbody = document.getElementById(tbodyId);
+    data.forEach(row => {
+      const tr = document.createElement('tr');
+      const tdThai = document.createElement('td'); tdThai.className = 'col-thai'; tdThai.appendChild(thaiRow(row.thai));
+      const tdPron = document.createElement('td'); tdPron.className = 'col-pron'; tdPron.textContent = row.pron;
+      const tdTrans = document.createElement('td'); tdTrans.className = 'col-trans';
+      tdTrans.innerHTML = `${row.trans} <span style="color:#999; font-weight:400;">/ ${row.en}</span>`;
+      tr.appendChild(tdThai); tr.appendChild(tdPron); tr.appendChild(tdTrans);
+      tbody.appendChild(tr);
+    });
+  }
+
+  // ── Render fill-in blanks ─────────────────────────────────────────────
+  function renderFills() {
+    const wrap = document.getElementById('fill-list');
+    fills.forEach(item => {
+      const div = document.createElement('div'); div.className = 'fill-item';
+      const num = document.createElement('div'); num.className = 'fill-num'; num.textContent = item.num + '.';
+      const parts = item.thai.split('__________');
+      const line = document.createElement('div'); line.className = 'fill-thai';
+      line.appendChild(document.createTextNode(parts[0]));
+      const ans = document.createElement('span'); ans.className = 'fill-answer'; ans.textContent = item.answer;
+      line.appendChild(ans);
+      if (parts[1]) line.appendChild(document.createTextNode(parts[1]));
+      div.appendChild(num); div.appendChild(line);
+      wrap.appendChild(div);
+    });
+  }
+
+  // ── Render exercise 2 ─────────────────────────────────────────────────
+  function renderEx2() {
+    const wrap = document.getElementById('ex2-list');
+    ex2.forEach(item => {
+      const div = document.createElement('div'); div.className = 'ex-item';
+      const num = document.createElement('div'); num.className = 'ex-num'; num.textContent = item.num + '.';
+      const words = document.createElement('div'); words.className = 'ex-pron'; words.textContent = item.words;
+      div.appendChild(num); div.appendChild(words);
+      wrap.appendChild(div);
+    });
+  }
+
+  // ── Render conversations ──────────────────────────────────────────────
+  function renderConv(containerId, lines) {
+    const wrap = document.getElementById(containerId);
+    lines.forEach(line => {
+      const div = document.createElement('div'); div.className = 'conv-block';
+      const spk = document.createElement('div');
+      spk.className = `conv-speaker ${line.type}`; spk.textContent = line.speaker;
+      const tRow = thaiRow(line.thai); tRow.classList.add('conv-thai');
+      // style the span inside
+      tRow.querySelector('span').classList.add('conv-thai');
+      const pron = document.createElement('div'); pron.className = 'conv-pron'; pron.textContent = line.pron;
+      div.appendChild(spk); div.appendChild(tRow); div.appendChild(pron);
+      wrap.appendChild(div);
+    });
+  }
+
+  function init() {
+    renderVocab('tbody-dept',  dept);
+    renderVocab('tbody-room',  room);
+    renderVocab('tbody-verbs', verbs);
+    renderFills();
+    renderEx2();
+    renderConv('conv1', conv1);
+    renderConv('conv2', conv2);
+    renderConv('conv3', conv3);
+    renderConv('conv4', conv4);
+  }
+
+  if (synth.onvoiceschanged !== undefined) synth.onvoiceschanged = init;
+  init();
+
+
+})();
+</script>
+<script>
+(function(){
+
+
+    // ── Thai TTS via Web Speech API ──────────────────────────────────────
+    const synth = window.speechSynthesis;
+    let currentBtn = null;
+
+    function speakThai(text, btn) {
+      synth.cancel();
+      if (currentBtn && currentBtn !== btn) {
+        currentBtn.classList.remove('speaking');
+      }
+      const utter = new SpeechSynthesisUtterance(text.replace(/\s*\/\s*/g, ", "));
+      utter.lang = 'th-TH';
+      utter.rate = 0.85;
+      utter.pitch = 1;
+
+      // Try to pick a Thai voice if available
+      const voices = synth.getVoices();
+      const thaiVoice = voices.find(v => v.lang === 'th-TH' || v.lang.startsWith('th'));
+      if (thaiVoice) utter.voice = thaiVoice;
+
+      btn.classList.add('speaking');
+      currentBtn = btn;
+
+      utter.onend = () => { btn.classList.remove('speaking'); currentBtn = null; };
+      utter.onerror = () => { btn.classList.remove('speaking'); currentBtn = null; };
+
+      synth.speak(utter);
+    }
+
+    // SVG speaker icon
+    function speakerSVG() {
+      return `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/>
+        <path d="M14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
+      </svg>`;
+    }
+
+    // Inject speak buttons next to every Thai text element
+    function injectSpeakButtons() {
+      // All selectors that hold Thai text
+      const selectors = [
+        '.thai', '.phrase-th', '.accom-thai', '.s-thai',
+        '.mk-thai', '.c-thai'
+      ];
+
+      selectors.forEach(sel => {
+        document.querySelectorAll(sel).forEach(el => {
+          const text = el.textContent.trim();
+          if (!text) return;
+
+          // Wrap in a row div (avoid double-wrapping)
+          if (el.parentElement.classList.contains('thai-row')) return;
+
+          const row = document.createElement('div');
+          row.className = 'thai-row';
+          el.parentNode.insertBefore(row, el);
+          row.appendChild(el);
+
+          const btn = document.createElement('button');
+          btn.className = 'speak-btn';
+          btn.title = 'Play pronunciation';
+          btn.setAttribute('aria-label', 'Play Thai pronunciation');
+          btn.innerHTML = speakerSVG();
+          btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            speakThai(text, btn);
+          });
+          row.appendChild(btn);
+        });
+      });
+    }
+
+    // Voices load async in some browsers
+    if (synth.onvoiceschanged !== undefined) {
+      synth.onvoiceschanged = injectSpeakButtons;
+    }
+    // Also run immediately in case voices are already loaded
+    injectSpeakButtons();
+  
+
+})();
+</script>
+
+</body>
+</html>

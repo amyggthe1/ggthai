@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Thai Lesson – Household Vocabulary</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Playfair+Display:wght@400;700&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --red:    #c0392b;
+      --dark:   #1a1a1a;
+      --gold:   #d4a012;
+      --cream:  #fdf6ec;
+      --slate:  #2c3e50;
+      --lgray:  #f0ede8;
+      --teal:   #1a7a6e;
+      --yellow: #f9e04b;
+      --blue:   #2a5fa5;
+      --orange: #e67e22;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Source Sans 3', sans-serif; background: var(--cream); color: var(--dark); line-height: 1.6; }
+
+    /* HERO */
+    .hero { background: var(--dark); padding: 40px 60px; border-bottom: 5px solid var(--gold); }
+    .hero h1 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(2.4rem, 6vw, 4.5rem); color: #fff; letter-spacing: 4px; line-height: 1; }
+    .hero h2 { font-family: 'Playfair Display', serif; font-size: clamp(1rem, 2vw, 1.4rem); color: var(--gold); font-weight: 400; margin-top: 6px; font-style: italic; }
+
+    /* CALLOUT BOX */
+    .callout {
+      margin: 30px 40px 0;
+      background: #fff8e8; border-left: 5px solid var(--gold);
+      border-radius: 8px; padding: 16px 22px;
+      font-size: 0.97rem; color: var(--slate);
+    }
+    .callout .thai { font-size: 1rem; color: var(--teal); font-weight: 600; margin-top: 4px; }
+    .callout .rom  { font-size: 0.85rem; color: #777; font-style: italic; }
+
+    /* SECTION TITLE */
+    .section-title {
+      font-family: 'Playfair Display', serif; font-size: 1.25rem; color: var(--slate);
+      padding: 28px 0 12px; letter-spacing: 1px;
+      border-bottom: 2px solid var(--gold); margin: 0 40px;
+    }
+
+    /* TABLE */
+    .table-wrap { padding: 20px 40px 40px; overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; background: #fff; border-radius: 10px; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
+    thead tr { background: var(--slate); }
+    thead th { padding: 13px 18px; text-align: left; font-size: 0.76rem; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--yellow); }
+    tbody tr { border-bottom: 1px solid var(--lgray); transition: background 0.15s; }
+    tbody tr:last-child { border-bottom: none; }
+    tbody tr:hover { background: #fef9ee; }
+    td { padding: 12px 18px; vertical-align: middle; }
+    .col-num    { color: #aaa; font-size: 0.85rem; width: 40px; }
+    .col-thai   { font-size: 1.1rem; font-weight: 600; color: var(--teal); white-space: nowrap; }
+    .col-pron   { font-size: 0.88rem; color: #555; font-style: italic; }
+    .col-trans  { font-size: 0.93rem; font-weight: 600; color: var(--blue); }
+
+    /* SPEAKER */
+    .thai-row { display: flex; align-items: center; gap: 7px; }
+    .speak-btn {
+      display: inline-flex; align-items: center; justify-content: center;
+      background: none; border: none; cursor: pointer; padding: 3px;
+      border-radius: 50%; color: var(--teal); opacity: 0.38;
+      transition: opacity 0.2s, transform 0.15s; flex-shrink: 0;
+    }
+    .speak-btn:hover { opacity: 1; transform: scale(1.2); }
+    .speak-btn.speaking { opacity: 1; animation: pulse 0.55s ease-in-out infinite alternate; }
+    @keyframes pulse { from { transform: scale(1); } to { transform: scale(1.3); } }
+
+    /* GRAMMAR STRUCTURE */
+    .grammar-wrap { padding: 20px 40px 10px; }
+    .structure-title { font-weight: 700; font-size: 1rem; color: var(--slate); margin-bottom: 14px; font-style: italic; }
+    .struct-table {
+      width: 100%; border-collapse: collapse; margin-bottom: 28px;
+      background: #fff; border-radius: 8px; overflow: hidden;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.07);
+    }
+    .struct-table th {
+      background: var(--lgray); padding: 10px 14px; text-align: center;
+      font-weight: 700; border: 1px solid #d8cfc4; font-size: 0.78rem;
+      letter-spacing: 1px; text-transform: uppercase; color: var(--slate);
+    }
+    .struct-table td { padding: 10px 14px; text-align: center; border: 1px solid #e3ddd5; }
+    .struct-table .row-thai td { font-weight: 700; color: var(--teal); font-size: 1.05rem; }
+    .struct-table .row-rom  td { color: #777; font-style: italic; font-size: 0.88rem; }
+    .struct-table .thai-row { justify-content: center; }
+
+    /* EXAMPLE SENTENCES */
+    .examples-wrap { padding: 0 40px 30px; }
+    .example-block {
+      background: #eef4fb; border-left: 4px solid #4a90d9;
+      border-radius: 6px; padding: 16px 22px; margin-bottom: 14px;
+    }
+    .ex-label { font-size: 0.75rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--blue); margin-bottom: 6px; }
+    .ex-thai  { font-size: 1.05rem; font-weight: 700; color: var(--teal); }
+    .ex-rom   { font-size: 0.87rem; color: #666; font-style: italic; margin-top: 2px; }
+    .ex-en    { font-size: 0.9rem; color: var(--blue); margin-top: 4px; }
+
+    /* CONVERSATION */
+    .conv-wrap { padding: 10px 40px 40px; }
+    .conv-block { margin-bottom: 28px; }
+    .conv-speaker { font-weight: 700; color: var(--red); font-size: 0.95rem; margin-bottom: 6px; }
+    .conv-thai { font-size: 1rem; font-weight: 600; color: var(--teal); }
+    .conv-rom  { font-size: 0.87rem; color: #666; font-style: italic; margin-top: 2px; margin-left: 16px; }
+    .conv-en   { font-size: 0.88rem; color: var(--blue); margin-top: 2px; margin-left: 16px; }
+
+    /* EXERCISE */
+    .exercise-wrap { padding: 10px 40px 40px; }
+    .exercise-title { font-weight: 700; color: var(--orange); font-size: 1rem; margin-bottom: 18px; font-style: italic; }
+    .ex-item { margin-bottom: 18px; padding-left: 16px; border-left: 3px solid var(--gold); }
+    .ex-item .ex-num { font-weight: 700; color: var(--slate); font-size: 0.85rem; margin-bottom: 4px; }
+    .ex-item .ex-thai { font-size: 1rem; font-weight: 600; color: var(--teal); }
+    .ex-item .ex-rom { font-size: 0.85rem; color: #777; font-style: italic; }
+    .ex-item .ex-en  { font-size: 0.88rem; color: var(--blue); }
+
+    hr { border: none; border-top: 2px solid var(--gold); margin: 6px 40px 24px; }
+    footer { background: var(--dark); color: #888; text-align: center; padding: 24px; font-size: 0.8rem; letter-spacing: 1px; margin-top: 20px; }
+    footer span { color: var(--gold); }
+  /* QUIZ CTA */
+  .quiz-cta {
+    display: inline-block;
+    background: linear-gradient(135deg, var(--gold) 0%, var(--red) 100%);
+    color: #fff; text-decoration: none;
+    padding: 10px 22px; border-radius: 24px;
+    font-family: 'Playfair Display', serif;
+    font-size: 0.9rem; font-weight: 700;
+    letter-spacing: 0.05em; margin-top: 1.2rem;
+    box-shadow: 0 4px 14px rgba(212,160,18,0.35);
+    transition: transform .15s, box-shadow .15s;
+  }
+  .quiz-cta:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(212,160,18,0.5);
+  }
+  </style>
+</head>
+<body>
+
+<!-- HERO -->
+<section class="hero">
+  <h1>Household Vocabulary</h1>
+  <h2>Thais eat with spoon and fork &nbsp;·&nbsp; คนไทยกินข้าวด้วยช้อนและส้อม</h2>
+  <a href="index.html?source=Household" class="quiz-cta">🎯 Take the quiz of this lesson →</a>
+</section>
+
+<!-- ══ VOCAB PART 1 ══ -->
+<h3 class="section-title">Vocabulary Part 1 – Household Items</h3>
+<div class="table-wrap">
+  <table>
+    <thead><tr><th>#</th><th>Thai (ภาษาไทย)</th><th>Pronunciation</th><th>Translation</th></tr></thead>
+    <tbody id="tbody-vocab1"></tbody>
+  </table>
+</div>
+
+<hr/>
+
+<!-- ══ VOCAB PART 2 ══ -->
+<h3 class="section-title">Vocabulary Part 2 – Cleaning Actions</h3>
+<div class="table-wrap">
+  <table>
+    <thead><tr><th>#</th><th>Thai (ภาษาไทย)</th><th>Pronunciation</th><th>Translation</th></tr></thead>
+    <tbody id="tbody-vocab2"></tbody>
+  </table>
+</div>
+
+<hr/>
+
+<!-- ══ GRAMMAR STRUCTURES ══ -->
+<h3 class="section-title">Grammar Structures</h3>
+<div class="grammar-wrap">
+
+  <p class="structure-title">Structure 1 : I clean the house with a vacuum.</p>
+  <table class="struct-table">
+    <thead><tr><th>Subject</th><th>Verb</th><th>Object</th><th>Preposition</th><th>Noun</th></tr></thead>
+    <tbody>
+      <tr class="row-thai">
+        <td><div class="thai-row" style="justify-content:center"><span>ฉัน</span></div></td>
+        <td><div class="thai-row" style="justify-content:center"><span>ทำความสะอาด</span></div></td>
+        <td><div class="thai-row" style="justify-content:center"><span>บ้าน</span></div></td>
+        <td><div class="thai-row" style="justify-content:center"><span>ด้วย/โดย</span></div></td>
+        <td><div class="thai-row" style="justify-content:center"><span>เครื่องดูดฝุ่น</span></div></td>
+      </tr>
+      <tr class="row-rom">
+        <td>chǎn</td><td>tham khwaam-sà-àat</td><td>bâan</td><td>dûay/dooy</td><td>khrûang dùut fùn</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p class="structure-title">Structure 2 : I use a vacuum to clean the house.</p>
+  <table class="struct-table">
+    <thead><tr><th>Subject</th><th>Verb 1</th><th>Noun</th><th>Verb 2</th><th>Object</th></tr></thead>
+    <tbody>
+      <tr class="row-thai">
+        <td><div class="thai-row" style="justify-content:center"><span>ฉัน</span></div></td>
+        <td><div class="thai-row" style="justify-content:center"><span>ใช้</span></div></td>
+        <td><div class="thai-row" style="justify-content:center"><span>เครื่องดูดฝุ่น</span></div></td>
+        <td><div class="thai-row" style="justify-content:center"><span>ทำความสะอาด</span></div></td>
+        <td><div class="thai-row" style="justify-content:center"><span>บ้าน</span></div></td>
+      </tr>
+      <tr class="row-rom">
+        <td>chǎn</td><td>cháai</td><td>khrûang dùut fùn</td><td>tham khwaam-sà-àat</td><td>bâan</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<footer style="background:var(--dark); color:#888; text-align:center; padding:24px; font-size:0.8rem; letter-spacing:1px; margin-top:40px;">
+  <span style="color:var(--gold);">Household Vocabulary</span> &nbsp;·&nbsp; Thai Language Cheat Sheet
+ &nbsp;·&nbsp; <a href="lessons.html" style="color:inherit;text-decoration:underline;opacity:0.8;">← Back to lessons</a></footer>
+
+<script>
+  // ── DATA ────────────────────────────────────────────────────────────
+  const vocab1 = [
+    { thai: "เครื่องซักผ้า",    pron: "khrûang sák phâa",      trans: "Washing machine" },
+    { thai: "เครื่องดูดฝุ่น",   pron: "khrûang dùut fùn",      trans: "Vacuum cleaner"  },
+    { thai: "เครื่องฟอกอากาศ", pron: "khrûang fɔ̂ɔk aa-gàat", trans: "Air purifier"    },
+    { thai: "ไมโครเวฟ",         pron: "mai-khroo-wép",         trans: "Microwave"       },
+    { thai: "เตาแก๊ส",          pron: "dtao gáet",             trans: "Gas stove"       },
+    { thai: "เตาอบ",            pron: "dtao òp",               trans: "Oven"            },
+    { thai: "พัดลม",            pron: "phát-lom",              trans: "Fan"             },
+    { thai: "มีด",              pron: "mîit",                  trans: "Knife"           },
+    { thai: "ช้อน",             pron: "chɔ́ɔn",                 trans: "Spoon"           },
+    { thai: "ส้อม",             pron: "sɔ̂ɔm",                  trans: "Fork"            },
+    { thai: "บ้าน",             pron: "bâan",                  trans: "House"           },
+  ];
+
+  const vocab2 = [
+    { thai: "ใช้",              pron: "cháai",                 trans: "To use"          },
+    { thai: "ทำความสะอาด",     pron: "tham khwaam-sà-àat",    trans: "To clean"        },
+    { thai: "ด้วย",             pron: "dûay",                  trans: "With"            },
+    { thai: "โดย",              pron: "dooy",                  trans: "By"              },
+    { thai: "ไม้กวาด",          pron: "máai gwàat",            trans: "Broomstick"      },
+    { thai: "ไม้ถูพื้น",        pron: "máai thǔu phúuen",      trans: "Mop"             },
+    { thai: "ผ้า",              pron: "phâa",                  trans: "Cloth / Rag"     },
+  ];
+
+  // ── TTS ─────────────────────────────────────────────────────────────
+  const synth = window.speechSynthesis;
+  let currentBtn = null;
+
+  function speakThai(text, btn) {
+    if (!synth) return;
+    synth.cancel();
+    if (currentBtn && currentBtn !== btn) currentBtn.classList.remove('speaking');
+    const utter = new SpeechSynthesisUtterance(text.replace(/\s*\/\s*/g, ", "));
+    utter.lang = 'th-TH';
+    utter.rate = 0.85;
+    utter.pitch = 1;
+    const voices = synth.getVoices();
+    const thaiVoice = voices.find(v => v.lang === 'th-TH' || v.lang.startsWith('th'));
+    if (thaiVoice) utter.voice = thaiVoice;
+    btn.classList.add('speaking');
+    currentBtn = btn;
+    utter.onend = utter.onerror = () => { btn.classList.remove('speaking'); currentBtn = null; };
+    synth.speak(utter);
+  }
+
+  function speakerSVG() {
+    return '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">' +
+      '<path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/>' +
+      '<path d="M14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>' +
+      '</svg>';
+  }
+
+  // ── RENDER ──────────────────────────────────────────────────────────
+  function renderTbody(tbodyId, list) {
+    const tbody = document.getElementById(tbodyId);
+    if (!tbody) return;
+    tbody.innerHTML = '';
+    list.forEach((v, i) => {
+      const tr = document.createElement('tr');
+
+      const tdNum  = document.createElement('td'); tdNum.textContent = i + 1; tdNum.style.color = '#888'; tdNum.style.fontSize = '0.85rem';
+      const tdThai = document.createElement('td');
+      const tdPron = document.createElement('td'); tdPron.textContent = v.pron; tdPron.style.color = '#555'; tdPron.style.fontStyle = 'italic';
+      const tdTrans = document.createElement('td'); tdTrans.textContent = v.trans; tdTrans.style.fontWeight = '700'; tdTrans.style.color = 'var(--red)';
+
+      const row = document.createElement('div');
+      row.className = 'thai-row';
+      row.style.display = 'flex';
+      row.style.alignItems = 'center';
+      row.style.gap = '8px';
+      const span = document.createElement('span');
+      span.textContent = v.thai;
+      span.style.color = 'var(--teal)';
+      span.style.fontWeight = '600';
+      span.style.fontSize = '1.1rem';
+      const btn = document.createElement('button');
+      btn.className = 'speak-btn';
+      btn.title = 'Play: ' + v.thai;
+      btn.innerHTML = speakerSVG();
+      btn.addEventListener('click', () => speakThai(v.thai, btn));
+
+      row.appendChild(span);
+      row.appendChild(btn);
+      tdThai.appendChild(row);
+
+      tr.appendChild(tdNum);
+      tr.appendChild(tdThai);
+      tr.appendChild(tdPron);
+      tr.appendChild(tdTrans);
+      tbody.appendChild(tr);
+    });
+  }
+
+  function renderAll() {
+    renderTbody('tbody-vocab1', vocab1);
+    renderTbody('tbody-vocab2', vocab2);
+  }
+  if (synth && synth.onvoiceschanged !== undefined) synth.onvoiceschanged = renderAll;
+  renderAll();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Leçon 6 – Directions</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Playfair+Display:wght@400;700&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --red:#c0392b; --dark:#1a1a1a; --gold:#d4a012; --cream:#fdf6ec;
+      --slate:#2c3e50; --lgray:#f0ede8; --teal:#1a7a6e; --yellow:#f9e04b; --blue:#2a5fa5;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Source Sans 3', sans-serif; background: var(--cream); color: var(--dark); line-height: 1.6; }
+    .hero { background: var(--dark); padding: 40px 60px; border-bottom: 5px solid var(--gold); }
+    .hero h1 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(2.4rem, 6vw, 4.5rem); color: #fff; letter-spacing: 4px; line-height: 1; }
+    .hero h2 { font-family: 'Playfair Display', serif; font-size: clamp(1rem, 2vw, 1.4rem); color: var(--gold); font-weight: 400; margin-top: 6px; font-style: italic; }
+    .section-title { font-family: 'Playfair Display', serif; font-size: 1.25rem; color: var(--slate); padding: 28px 0 12px; letter-spacing: 1px; border-bottom: 2px solid var(--gold); margin: 0 40px; }
+    .table-wrap { padding: 20px 40px 40px; overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; background: #fff; border-radius: 10px; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
+    thead tr { background: var(--slate); }
+    thead th { padding: 13px 18px; text-align: left; font-size: 0.76rem; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--yellow); }
+    tbody tr { border-bottom: 1px solid var(--lgray); transition: background 0.15s; }
+    tbody tr:last-child { border-bottom: none; }
+    tbody tr:hover { background: #fef9ee; }
+    td { padding: 12px 18px; vertical-align: middle; }
+    .col-thai { font-size: 1.05rem; font-weight: 600; color: var(--red); white-space: nowrap; }
+    .col-phonetic { font-size: 0.88rem; color: #555; font-style: italic; }
+    .col-fr { font-size: 0.93rem; font-weight: 600; color: var(--blue); }
+    .thai-row { display: flex; align-items: center; gap: 7px; }
+    .speak-btn { display: inline-flex; align-items: center; justify-content: center; background: none; border: none; cursor: pointer; padding: 3px; border-radius: 50%; color: var(--teal); opacity: 0.38; transition: opacity 0.2s, transform 0.15s; flex-shrink: 0; }
+    .speak-btn:hover { opacity: 1; transform: scale(1.2); }
+    .speak-btn.speaking { opacity: 1; animation: pulse 0.55s ease-in-out infinite alternate; }
+    @keyframes pulse { from { transform: scale(1); } to { transform: scale(1.3); } }
+    .grammar-wrap { padding: 20px 40px 40px; }
+    .grammar-note { background:#fffbeb; border-left:4px solid var(--gold); border-radius:6px; padding:14px 20px; margin-bottom:16px; font-size:0.93rem; }
+    .grammar-note strong { color: var(--slate); }
+    .ordinal-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:16px; }
+    .ordinal-grid > div { background:#fff; border-radius:8px; padding:12px 16px; box-shadow:0 2px 8px rgba(0,0,0,0.05); font-size:0.92rem; }
+    .ordinal-grid .lbl { font-family:'Playfair Display',serif; color:var(--slate); font-size:0.78rem; letter-spacing:1px; text-transform:uppercase; margin-bottom:4px; }
+    .ordinal-grid .val { color: var(--red); font-weight:600; font-size:1.05rem; }
+    .ordinal-grid .val small { color:#888; font-style:italic; font-weight:400; margin-left:6px; }
+    .grammar-table { width: 100%; border-collapse: collapse; margin-bottom: 18px; font-size: 0.93rem; background: #fff; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.06); }
+    .grammar-table th { background: var(--lgray); padding: 10px 14px; text-align: center; font-weight: 700; border: 1px solid #d8cfc4; font-size: 0.78rem; letter-spacing: 1px; text-transform: uppercase; color: var(--slate); }
+    .grammar-table td { padding: 10px 14px; text-align: center; border: 1px solid #e3ddd5; }
+    .grammar-table .row-thai td { font-weight: 600; color: var(--red); }
+    .grammar-table .row-fr td { color: var(--blue); font-style: italic; }
+    .grammar-table .thai-row { justify-content: center; }
+    .example { background: #eef4fb; border-left: 4px solid #4a90d9; border-radius: 6px; padding: 14px 20px; margin-bottom: 14px; font-size: 0.93rem; }
+    .example .ex-thai { font-weight: 600; color: var(--red); }
+    .example .ex-fr { color: var(--blue); margin-top: 3px; font-style: italic; }
+    .exercises-wrap { padding: 4px 40px 40px; }
+    .ex-intro { background:#fff; border-left:4px solid var(--gold); border-radius:6px; padding:12px 18px; margin-bottom:16px; font-size:0.93rem; color:var(--slate); }
+    .ex-intro .thai-row { display:inline-flex; }
+    .exercise-list { list-style: none; counter-reset: ex; padding: 0; }
+    .exercise-list li { counter-increment: ex; background: #fff; border-left: 4px solid var(--gold); border-radius: 6px; padding: 14px 20px 14px 56px; margin-bottom: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); position: relative; font-size: 0.95rem; }
+    .exercise-list li::before { content: counter(ex, decimal-leading-zero); position: absolute; left: 16px; top: 14px; font-family: 'Playfair Display', serif; font-weight: 700; color: var(--gold); font-size: 1rem; letter-spacing: 1px; }
+    .exercise-list .ex-thai { font-weight: 600; color: var(--red); display: flex; align-items: center; gap: 7px; flex-wrap:wrap; }
+    .exercise-list .ex-fr { color: #555; font-style: italic; font-size: 0.85rem; margin-top: 4px; }
+    .exercise-list .ex-blank { display: block; margin-top: 8px; border-bottom: 1px dashed var(--lgray); min-height: 1.4em; }
+    .tf-buttons { margin-top:8px; display:flex; gap:8px; }
+    .tf-btn { font-family:'Playfair Display',serif; font-size:0.78rem; letter-spacing:1px; text-transform:uppercase; padding:6px 14px; border-radius:14px; border:1.5px solid var(--lgray); background:#fff; color:var(--slate); cursor:pointer; }
+    .tf-btn:hover { border-color: var(--gold); color: var(--gold); }
+    hr { border: none; border-top: 2px solid var(--gold); margin: 6px 40px 24px; }
+    footer { background: var(--dark); color: #888; text-align: center; padding: 24px; font-size: 0.8rem; letter-spacing: 1px; }
+    footer span { color: var(--gold); }
+    .quiz-cta { display: inline-block; background: linear-gradient(135deg, var(--gold) 0%, var(--red) 100%); color: #fff; text-decoration: none; padding: 10px 22px; border-radius: 24px; font-family: 'Playfair Display', serif; font-size: 0.9rem; font-weight: 700; letter-spacing: 0.05em; margin-top: 1.2rem; box-shadow: 0 4px 14px rgba(212,160,18,0.35); transition: transform .15s, box-shadow .15s; }
+    .quiz-cta:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(212,160,18,0.5); }
+  </style>
+</head>
+<body>
+
+<section class="hero">
+  <h1>Leçon 6 : Comment va-t-on à la poste ? / Lesson 6: How do we get to the post office?</h1>
+  <h2>bòt tîi hòk &nbsp;·&nbsp; bprai sà nii bpai taang nǎi</h2>
+  <a href="index.html?source=Directions" class="quiz-cta">🎯 Take the quiz of this lesson →</a>
+</section>
+
+<h3 class="section-title">Vocabulaire / Vocabulary – kam sàp &nbsp;<small style="font-size:0.75em;opacity:0.6;">(p. 24)</small></h3>
+<div class="table-wrap">
+  <table>
+    <thead><tr><th>ภาษาไทย</th><th>Pronunciation</th><th>Français / English</th></tr></thead>
+    <tbody id="tbody-vocab"></tbody>
+  </table>
+</div>
+<hr/>
+
+<h3 class="section-title">Grammaire / Grammar – wai yaa gon &nbsp;<small style="font-size:0.75em;opacity:0.6;">(p. 24-25)</small></h3>
+<div class="grammar-wrap">
+
+  <div class="grammar-note">
+    <strong>Nombres ordinaux / Ordinal numbers.</strong> En thaï on forme l'ordinal en plaçant <em>tîi</em> (ที่) devant le nombre cardinal.<br>
+    <em>In Thai, ordinals are formed by placing</em> tîi (ที่) <em>before the cardinal number.</em>
+  </div>
+
+  <div class="ordinal-grid">
+    <div><div class="lbl">Cardinal</div><div class="val">หนึ่ง <small>(nɯ̀ng / nὼng) — un / one</small></div></div>
+    <div><div class="lbl">Ordinal · 1<sup>er</sup> / 1<sup>st</sup></div><div class="val">ที่หนึ่ง <small>(tîi nɯ̀ng) — also: แรก (rέεk)</small></div></div>
+    <div><div class="lbl">Cardinal</div><div class="val">สอง <small>(sɔ̌ɔng) — deux / two</small></div></div>
+    <div><div class="lbl">Ordinal · 2<sup>e</sup> / 2<sup>nd</sup></div><div class="val">ที่สอง <small>(tîi sɔ̌ɔng) — deuxième / second</small></div></div>
+  </div>
+
+  <table class="grammar-table">
+    <thead><tr><th>Nom</th><th>Ordinal</th><th>(direction)</th><th>Côté</th></tr></thead>
+    <tbody>
+      <tr class="row-thai"><td>ถนน</td><td>ที่สอง</td><td>(ทาง)</td><td>ขวามือ</td></tr>
+      <tr class="row-fr"><td>tanǒn</td><td>tîi sɔ̌ɔng</td><td>(taang)</td><td>kwǎa mɯɯ</td></tr>
+      <tr class="row-fr"><td>la rue</td><td>deuxième</td><td>(direction)</td><td>à droite</td></tr>
+    </tbody>
+  </table>
+
+  <div class="example">
+    <div class="ex-thai" data-speak="ถนนที่สองทางขวามือ">tanǒn tîi sɔ̌ɔng (taang) kwǎa mɯɯ</div>
+    <div class="ex-fr">la deuxième rue à droite / the second street on the right</div>
+  </div>
+
+  <div class="grammar-note">
+    Le mot <strong>taang</strong> (ทาง) précise qu'on parle d'une direction.<br>
+    <em>The word</em> taang <em>specifies that we're referring to a direction.</em>
+  </div>
+
+  <table class="grammar-table">
+    <thead><tr><th>Lieu</th><th>Verbe</th><th>Direction</th><th>Question</th></tr></thead>
+    <tbody>
+      <tr class="row-thai"><td>โรงเรียน</td><td>ไป</td><td>ทาง</td><td>ไหน</td></tr>
+      <tr class="row-fr"><td>roong riian</td><td>bpai</td><td>taang</td><td>nǎi</td></tr>
+      <tr class="row-fr"><td>l'école</td><td>aller</td><td>chemin</td><td>où</td></tr>
+    </tbody>
+  </table>
+
+  <div class="example">
+    <div class="ex-thai" data-speak="โรงเรียนไปทางไหน">roong riian bpai taang nǎi</div>
+    <div class="ex-fr">Comment faire pour aller à l'école ? / How do I get to the school?</div>
+  </div>
+
+  <div class="example">
+    <div class="ex-thai" data-speak="ตรงไปแล้วเลี้ยวขวาในถนนที่สาม">dtrong bpai lέεw líiaáw kwǎa nay tanǒn tîi sǎam</div>
+    <div class="ex-fr">Allez tout droit puis tournez à droite dans la troisième rue. / Go straight then turn right into the third street.</div>
+  </div>
+</div>
+<hr/>
+
+<h3 class="section-title">Exercices / Exercises – bὲεb fωk hàd &nbsp;<small style="font-size:0.75em;opacity:0.6;">(p. 26)</small></h3>
+<div class="exercises-wrap">
+  <div class="ex-intro">
+    <span class="thai-row" data-speak="คุณอยู่ที่นี่"><span><strong>kun yùu tîi nîi</strong></span></span>
+    &nbsp;·&nbsp; <em>Vous êtes ici / You are here.</em><br>
+    <span style="font-size:0.85rem;color:#666;">N°1-4 : Vrai ou faux ? / True or false? &nbsp;·&nbsp; N°5-10 : Donnez les indications / Give the directions.</span>
+  </div>
+  <ol class="exercise-list" id="exercise-list"></ol>
+</div>
+
+<footer>
+  <span>Leçon 6</span> &nbsp;·&nbsp; Directions / Comment va-t-on à la poste ? – Thai Language
+ &nbsp;·&nbsp; <a href="lessons.html" style="color:inherit;text-decoration:underline;opacity:0.8;">← Back to lessons</a></footer>
+
+<script>
+const vocab = [
+  { thai: "ทาง", phonemic: "(taang) tʰaːŋ", fr: "le chemin / la direction / way / direction" },
+  { thai: "ตรง", phonemic: "(dtrong) troŋ", fr: "(tout) droit / straight" },
+  { thai: "เลี้ยว", phonemic: "(líiaáw) líːaw", fr: "tourner / to turn" },
+  { thai: "ซอย", phonemic: "(sɔɔy) sɔːj", fr: "une petite rue / a small alley" },
+  { thai: "ซ้าย", phonemic: "(sáay) sáːj", fr: "gauche / left" },
+  { thai: "ซ้ายมือ", phonemic: "(sáay mɯɯ) sáːj.mɯː", fr: "sur la gauche / on the left" },
+  { thai: "ขวา", phonemic: "(kwǎa) kʰwǎː", fr: "droite / right" },
+  { thai: "ขวามือ", phonemic: "(kwǎa mɯɯ) kʰwǎː.mɯː", fr: "sur la droite / on the right" },
+  { thai: "แยก", phonemic: "(yεε̂k) jɛ̂ːk", fr: "croisement / intersection" },
+  { thai: "ไฟแดง", phonemic: "(fai dεεng) faj.dɛːŋ", fr: "un feu rouge / a red light" },
+  { thai: "ข้าม", phonemic: "(kâam) kʰâːm", fr: "traverser / to cross" },
+  { thai: "สะพาน", phonemic: "(sàpaan) sa.pʰaːn", fr: "un pont / a bridge" },
+];
+
+const exercises = [
+  { type:"tf", thai:"ไปไปรษณีย์ ตรงไปแล้วเลี้ยวซ้ายในถนนที่สอง ไปรษณีย์อยู่ที่หัวมุมถนนแพร่",
+    phon:"bpai bprai sà nii, dtrong bpai lέεw líiaáw sáay nay tanǒn tîi sɔ̌ɔng. bprai sà nii yùu tîi huǔaa mum tánon Prέε.",
+    fr:"Pour aller à la poste, allez tout droit puis tournez à gauche dans la 2ᵉ rue. La poste est au coin de la rue Prέε. (vrai/faux) / To go to the post office, go straight then turn left into the 2nd street. The post office is at the corner of Prέε Road. (true/false)" },
+  { type:"tf", thai:"ไปสนามกีฬา เลี้ยวซ้ายแล้วเลี้ยวขวาในถนนที่หนึ่ง สนามกีฬาอยู่ที่สามแยก",
+    phon:"bpai sanǎam giilaa, líiaáw sáay lέεw líiaáw kwǎa nay tanǒn tîi nɯ̀ng. sanǎam giilaa yùu tîi sǎam yεε̂k.",
+    fr:"Pour aller au stade, tournez à gauche puis à droite dans la 1ʳᵉ rue. Le stade est au carrefour à trois branches. (vrai/faux) / To go to the stadium, turn left then turn right into the 1st street. The stadium is at the three-way junction. (true/false)" },
+  { type:"tf", thai:"ไปโรงพยาบาล ตรงไปแล้วเลี้ยวขวาในถนนน่าน โรงพยาบาลอยู่ที่หัวมุม",
+    phon:"bpai roong páyaabaan, dtrong bpai lέεw líiaáw kwǎa nay tanǒn Nâan. roong páyaabaan yùu tîi huǔaa mum.",
+    fr:"Pour aller à l'hôpital, allez tout droit puis tournez à droite dans la rue Nâan. L'hôpital est au coin. (vrai/faux) / To go to the hospital, go straight then turn right into Nâan Street. The hospital is at the corner. (true/false)" },
+  { type:"tf", thai:"ไปสวนสาธารณะ เลี้ยวขวาแล้วเลี้ยวซ้ายในถนนที่หนึ่ง สวนสาธารณะอยู่ตรงข้ามโรงเรียน",
+    phon:"bpai suǔaan sǎataaraná, líiaáw kwǎa lέεw líiaáw sáay nay tanǒn tîi nɯ̀ng. suǔaan sǎataaraná yùu dtrong kâam roong riiaan.",
+    fr:"Pour aller au parc, tournez à droite puis à gauche dans la 1ʳᵉ rue. Le parc est en face de l'école. (vrai/faux) / To go to the park, turn right then turn left into the 1st street. The park is across from the school. (true/false)" },
+  { type:"open", thai:"ลานจอดรถไปทางไหน",                phon:"laan jɔ̀ɔd rót bpai taang nǎi",  fr:"Comment va-t-on au parking ? / How do I get to the parking lot?" },
+  { type:"open", thai:"ร้านกาแฟไปทางไหน",                phon:"ráan gaafεε bpai taang nǎi",     fr:"Comment va-t-on au café ? / How do I get to the coffee shop?" },
+  { type:"open", thai:"ปั๊มน้ำมันไปทางไหน",              phon:"bpám nám man bpai taang nǎi",    fr:"Comment va-t-on à la station-service ? / How do I get to the gas station?" },
+  { type:"open", thai:"โรงละครไปทางไหน",                phon:"roong lá kon bpai taang nǎi",    fr:"Comment va-t-on au théâtre ? / How do I get to the theater?" },
+  { type:"open", thai:"ธนาคารไปทางไหน",                 phon:"tánaakaan bpai taang nǎi",       fr:"Comment va-t-on à la banque ? / How do I get to the bank?" },
+  { type:"open", thai:"บ้านของคุณไปทางไหน",             phon:"bâan kɔ̌ɔng kun bpai taang nǎi", fr:"Comment va-t-on chez toi ? / How do I get to your house?" },
+];
+
+const synth = window.speechSynthesis;
+let currentBtn = null;
+function speakText(text, btn) {
+  synth.cancel();
+  if (currentBtn && currentBtn !== btn) currentBtn.classList.remove('speaking');
+  const utter = new SpeechSynthesisUtterance(text.replace(/\s*\/\s*/g, ", "));
+  utter.lang = 'th-TH'; utter.rate = 0.85;
+  const v = synth.getVoices().find(v => v.lang === 'th-TH' || v.lang.startsWith('th'));
+  if (v) utter.voice = v;
+  btn.classList.add('speaking'); currentBtn = btn;
+  utter.onend = utter.onerror = () => { btn.classList.remove('speaking'); currentBtn = null; };
+  synth.speak(utter);
+}
+function speakerSVG() {
+  return '<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/><path d="M14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>';
+}
+function makeBtn(text) {
+  const btn = document.createElement('button');
+  btn.className = 'speak-btn'; btn.title = 'Play pronunciation';
+  btn.innerHTML = speakerSVG();
+  btn.addEventListener('click', e => { e.stopPropagation(); speakText(text, btn); });
+  return btn;
+}
+function renderTable(tbodyId, data) {
+  const tbody = document.getElementById(tbodyId);
+  tbody.innerHTML = '';
+  data.forEach(row => {
+    const tr = document.createElement('tr');
+    const tdThai = document.createElement('td'); tdThai.className = 'col-thai';
+    const tRow = document.createElement('div'); tRow.className = 'thai-row';
+    const s = document.createElement('span'); s.textContent = row.thai;
+    tRow.appendChild(s); tRow.appendChild(makeBtn(row.thai));
+    tdThai.appendChild(tRow);
+    const tdPhon = document.createElement('td'); tdPhon.className = 'col-phonetic';
+    const m = row.phonemic.match(/^(\(.*?\))\s*(.*)$/);
+    if (m) {
+      const ipa = document.createElement('span'); ipa.textContent = m[2];
+      const rom = document.createElement('span');
+      rom.style.cssText = 'color:#999; font-style:normal; margin-left:8px;'; rom.textContent = m[1];
+      tdPhon.appendChild(ipa); tdPhon.appendChild(rom);
+    } else { tdPhon.textContent = row.phonemic; }
+    const tdFr = document.createElement('td'); tdFr.className = 'col-fr'; tdFr.textContent = row.fr;
+    tr.appendChild(tdThai); tr.appendChild(tdPhon); tr.appendChild(tdFr);
+    tbody.appendChild(tr);
+  });
+}
+function renderExercises() {
+  const ol = document.getElementById('exercise-list');
+  ol.innerHTML = '';
+  exercises.forEach(ex => {
+    const li = document.createElement('li');
+    const thaiDiv = document.createElement('div'); thaiDiv.className = 'ex-thai';
+    const span = document.createElement('span'); span.textContent = ex.thai;
+    thaiDiv.appendChild(span); thaiDiv.appendChild(makeBtn(ex.thai));
+    const phonDiv = document.createElement('div'); phonDiv.className = 'ex-fr';
+    phonDiv.textContent = ex.phon + '  —  ' + ex.fr;
+    li.appendChild(thaiDiv); li.appendChild(phonDiv);
+    if (ex.type === 'tf') {
+      const tf = document.createElement('div'); tf.className = 'tf-buttons';
+      const t = document.createElement('button'); t.className = 'tf-btn'; t.textContent = 'Vrai · True';
+      const f = document.createElement('button'); f.className = 'tf-btn'; f.textContent = 'Faux · False';
+      tf.appendChild(t); tf.appendChild(f);
+      li.appendChild(tf);
+    } else {
+      const blank = document.createElement('span'); blank.className = 'ex-blank';
+      li.appendChild(blank);
+    }
+    ol.appendChild(li);
+  });
+}
+function injectStaticButtons() {
+  document.querySelectorAll('.ex-thai[data-speak]').forEach(el => {
+    if (el.parentElement && el.parentElement.classList.contains('thai-row')) return;
+    const row = document.createElement('div'); row.className = 'thai-row';
+    el.parentNode.insertBefore(row, el);
+    row.appendChild(el); row.appendChild(makeBtn(el.dataset.speak));
+  });
+  document.querySelectorAll('.ex-intro .thai-row[data-speak]').forEach(el => {
+    if (el.querySelector('.speak-btn')) return;
+    el.appendChild(makeBtn(el.dataset.speak));
+  });
+  document.querySelectorAll('.grammar-table .row-thai td').forEach(td => {
+    if (td.querySelector('.thai-row')) return;
+    const text = td.textContent.trim();
+    if (!text || text === '—' || text.startsWith('(')) return;
+    const row = document.createElement('span'); row.className = 'thai-row';
+    td.innerHTML = '';
+    const s = document.createElement('span'); s.textContent = text;
+    row.appendChild(s); row.appendChild(makeBtn(text)); td.appendChild(row);
+  });
+}
+function init() {
+  renderTable('tbody-vocab', vocab);
+  renderExercises();
+  injectStaticButtons();
+}
+if (synth.onvoiceschanged !== undefined) synth.onvoiceschanged = init;
+init();
+</script>
+</body>
+</html>

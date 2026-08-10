@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Colors – Thai · สี</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Source+Sans+3:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold: #d4a012;
+    --gold-light: #fdf2d6;
+    --gold-dark: #7a5e1a;
+    --teal: #1a7a6e;
+    --teal-light: #e6f3f1;
+    --bg: #fdf6ec;
+    --surface: #fff;
+    --text: #1a1a1a;
+    --muted: #6b6b6b;
+    --border: #e6dfd5;
+    --radius: 12px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Source Sans 3', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding-bottom: 4rem;
+  }
+  header {
+    background: var(--teal);
+    color: #fff;
+    padding: 2.5rem 2rem 2rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  header::before {
+    content: '';
+    position: absolute;
+    top: -40px; left: -40px; right: -40px; bottom: -40px;
+    background: repeating-linear-gradient(45deg, transparent, transparent 20px, rgba(255,255,255,0.03) 20px, rgba(255,255,255,0.03) 40px);
+    pointer-events: none;
+  }
+  .header-badge {
+    display: inline-block;
+    background: var(--gold);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 4px 14px;
+    border-radius: 20px;
+    margin-bottom: 12px;
+  }
+  header h1 {
+    font-family: 'Bebas Neue', serif;
+    font-size: 2.4rem;
+    font-weight: 400;
+    letter-spacing: 0.02em;
+    line-height: 1.2;
+  }
+  header .subtitle {
+    font-size: 1.1rem;
+    opacity: 0.75;
+    margin-top: 6px;
+    font-weight: 300;
+  }
+
+  .main { max-width: 860px; margin: 0 auto; padding: 2rem 1.5rem; }
+
+  /* SECTION */
+  .section { margin-bottom: 2.5rem; }
+  .section-title {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 1rem;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  /* VOCAB TABLE */
+  .vocab-table { width: 100%; border-collapse: collapse; background: var(--surface); border-radius: var(--radius); overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,0.04); }
+  .vocab-table thead tr { background: var(--teal); color: #fff; }
+  .vocab-table thead th { padding: 12px 14px; font-size: 12px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; text-align: left; }
+  .vocab-table tbody tr { border-bottom: 1px solid var(--border); transition: background 0.15s; }
+  .vocab-table tbody tr:last-child { border-bottom: none; }
+  .vocab-table tbody tr:hover { background: var(--teal-light); }
+  .vocab-table td { padding: 9px 14px; font-size: 15px; vertical-align: middle; }
+  .vocab-table td.num { color: var(--muted); font-size: 13px; width: 36px; }
+  .vocab-table td.thai { font-size: 17px; font-weight: 600; }
+  .vocab-table td.pron { color: var(--teal); font-size: 14px; font-style: italic; }
+  .vocab-table td.trans { color: var(--text); font-size: 14px; }
+
+  /* COLOR SWATCH */
+  .swatch {
+    display: inline-block;
+    width: 16px; height: 16px;
+    border-radius: 4px;
+    margin-right: 8px;
+    border: 1px solid var(--border);
+    vertical-align: middle;
+  }
+
+  /* SPEAKER BUTTON */
+  .speak-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 3px 5px;
+    border-radius: 50%;
+    margin-left: 6px;
+    vertical-align: middle;
+    opacity: 0.55;
+    transition: opacity 0.15s, background 0.15s;
+    flex-shrink: 0;
+  }
+  .speak-btn:hover { opacity: 1; background: var(--teal-light); }
+  .speak-btn.speaking { opacity: 1; animation: pulse 0.8s ease-in-out infinite; }
+  .speak-btn svg { width: 14px; height: 14px; fill: var(--teal); pointer-events: none; }
+  @keyframes pulse { 0%,100% { opacity:1 } 50% { opacity:0.45 } }
+  .thai-wrap { display: inline-flex; align-items: center; }
+
+  .quiz-cta {
+    display: inline-block;
+    background: linear-gradient(135deg, var(--gold) 0%, var(--teal) 100%);
+    color: #fff;
+    text-decoration: none;
+    padding: 10px 22px;
+    border-radius: 24px;
+    font-family: 'Bebas Neue', serif;
+    font-size: 0.95rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    margin-top: 1.2rem;
+    box-shadow: 0 4px 14px rgba(201,168,76,0.35);
+    transition: transform .15s, box-shadow .15s;
+  }
+  .quiz-cta:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(201,168,76,0.5);
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-badge">Colors</div>
+  <h1>Colors in Thai</h1>
+  <p class="subtitle">สี · sǐi</p>
+  <a href="index.html?source=Colors" class="quiz-cta">🎯 Take the quiz of this lesson →</a>
+</header>
+
+<div class="main">
+
+  <!-- BASIC COLORS -->
+  <div class="section">
+    <div class="section-title">Basic colors · สีพื้นฐาน</div>
+    <table class="vocab-table">
+      <thead>
+        <tr><th>#</th><th>Thai</th><th>Pronunciation</th><th>Translation</th></tr>
+      </thead>
+      <tbody id="tbody-basic"></tbody>
+    </table>
+  </div>
+
+  <!-- FREQUENT COLORS -->
+  <div class="section">
+    <div class="section-title">Frequently used colors · สีที่ใช้บ่อย</div>
+    <table class="vocab-table">
+      <thead>
+        <tr><th>#</th><th>Thai</th><th>Pronunciation</th><th>Translation</th></tr>
+      </thead>
+      <tbody id="tbody-frequent"></tbody>
+    </table>
+  </div>
+
+  <!-- COLOR EXPRESSIONS -->
+  <div class="section">
+    <div class="section-title">Expressions about color · สำนวนเกี่ยวกับสี</div>
+    <table class="vocab-table">
+      <thead>
+        <tr><th>#</th><th>Thai</th><th>Pronunciation</th><th>Translation</th></tr>
+      </thead>
+      <tbody id="tbody-expr"></tbody>
+    </table>
+  </div>
+
+</div>
+
+<script>
+  const VOCAB_BASIC = [
+      {thai:"สี",phon:"sǐi",trans:"color"},
+      {thai:"สีดำ",phon:"sǐi dam",trans:"black"},
+      {thai:"สีขาว",phon:"sǐi kʰǎaw",trans:"white"},
+      {thai:"สีแดง",phon:"sǐi dɛɛŋ",trans:"red"},
+      {thai:"สีน้ำเงิน",phon:"sǐi nám ŋən",trans:"blue"},
+      {thai:"สีเหลือง",phon:"sǐi lɯ̌aŋ",trans:"yellow"},
+      {thai:"สีเขียว",phon:"sǐi kʰǐaw",trans:"green"},
+      {thai:"สีม่วง",phon:"sǐi mûaŋ",trans:"purple"},
+      {thai:"สีทอง",phon:"sǐi tʰɔɔŋ",trans:"gold"},
+      {thai:"สีเงิน",phon:"sǐi ŋən",trans:"silver"}
+  ];
+  const VOCAB_FREQUENT = [
+      {thai:"สีชมพู",phon:"sǐi cʰom pʰuu",trans:"pink"},
+      {thai:"สีส้ม",phon:"sǐi sôm",trans:"orange"},
+      {thai:"สีน้ำตาล",phon:"sǐi nám taan",trans:"brown"},
+      {thai:"สีฟ้า",phon:"sǐi fáa",trans:"sky blue"},
+      {thai:"สีไข่ไก่",phon:"sǐi kʰài kài",trans:"beige"},
+      {thai:"สีเทา",phon:"sǐi tʰao",trans:"gray"},
+      {thai:"สีกากี",phon:"sǐi kaakii",trans:"khaki"}
+  ];
+  const VOCAB_EXPR = [
+      {thai:"แม่สี",phon:"mɛ̂ɛ sǐi",trans:"primary color"},
+      {thai:"สีสว่าง",phon:"sǐi sa wàaŋ",trans:"bright color"},
+      {thai:"สีแสบตา",phon:"sǐi sɛ̀ɛp taa",trans:"glaring color"},
+      {thai:"สีมืด",phon:"sǐi mɯ̂ɯt",trans:"dark color"},
+      {thai:"สีชัด",phon:"sǐi cʰát",trans:"bold color"},
+      {thai:"สีสด",phon:"sǐi sòt",trans:"vivid color"},
+      {thai:"สีเข้ม",phon:"sǐi kʰêm",trans:"deep color"},
+      {thai:"สีอ่อน",phon:"sǐi ɔ̀ɔn",trans:"pale color"}
+  ];
+
+  // English-name -> CSS color (for the small color swatch)
+  const SWATCH = {
+    "color":   "linear-gradient(45deg, red, orange, yellow, green, blue, purple)",
+    "black":   "#000",
+    "white":   "#fff",
+    "red":     "#c0392b",
+    "blue":    "#1d3a8a",
+    "yellow":  "#f4d03f",
+    "green":   "#2d6a3f",
+    "purple":  "#7d3c98",
+    "gold":    "#d4ac0d",
+    "silver":  "#bdc3c7",
+    "pink":    "#f8b6c4",
+    "orange":  "#e67e22",
+    "brown":   "#8b5a2b",
+    "sky blue":"#87ceeb",
+    "beige":   "#f5deb3",
+    "gray":    "#7f8c8d",
+    "khaki":   "#bdb76b",
+  };
+
+  // ── TTS ──────────────────────────────────────────────────────
+  let currentBtn = null;
+  function speakThai(text, btn) {
+    if (!('speechSynthesis' in window)) return;
+    window.speechSynthesis.cancel();
+    if (currentBtn && currentBtn !== btn) currentBtn.classList.remove('speaking');
+    const utter = new SpeechSynthesisUtterance(text.replace(/\s*\/\s*/g, ", "));
+    utter.lang  = 'th-TH';
+    utter.rate  = 0.85;
+    utter.pitch = 1;
+    const voices = window.speechSynthesis.getVoices();
+    const thaiVoice = voices.find(v => v.lang === 'th-TH' || v.lang.startsWith('th'));
+    if (thaiVoice) utter.voice = thaiVoice;
+    btn.classList.add('speaking');
+    currentBtn = btn;
+    utter.onend = utter.onerror = () => { btn.classList.remove('speaking'); currentBtn = null; };
+    window.speechSynthesis.speak(utter);
+  }
+  if ('speechSynthesis' in window) {
+    window.speechSynthesis.onvoiceschanged = () => window.speechSynthesis.getVoices();
+    window.speechSynthesis.getVoices();
+  }
+
+  // ── Speaker SVG ──────────────────────────────────────────────
+  function speakerSVG() {
+    return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">' +
+      '<path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/>' +
+      '<path d="M14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>' +
+      '</svg>';
+  }
+
+  // ── Render a section ─────────────────────────────────────────
+  function renderSection(tbodyId, list, withSwatch) {
+    const tbody = document.getElementById(tbodyId);
+    tbody.innerHTML = '';
+    list.forEach((v, i) => {
+      const tr = document.createElement('tr');
+
+      const tdNum = document.createElement('td');
+      tdNum.className = 'num';
+      tdNum.textContent = i + 1;
+
+      const tdThai = document.createElement('td');
+      tdThai.className = 'thai';
+      const wrap = document.createElement('span');
+      wrap.className = 'thai-wrap';
+      const thaiText = document.createElement('span');
+      thaiText.textContent = v.thai;
+      const btn = document.createElement('button');
+      btn.className = 'speak-btn';
+      btn.title = 'Play: ' + v.thai;
+      btn.innerHTML = speakerSVG();
+      btn.addEventListener('click', () => speakThai(v.thai, btn));
+      wrap.appendChild(thaiText);
+      wrap.appendChild(btn);
+      tdThai.appendChild(wrap);
+
+      const tdPron = document.createElement('td');
+      tdPron.className = 'pron';
+      tdPron.textContent = v.phon;
+
+      const tdTrans = document.createElement('td');
+      tdTrans.className = 'trans';
+      if (withSwatch && SWATCH[v.trans]) {
+        const sw = document.createElement('span');
+        sw.className = 'swatch';
+        const fill = SWATCH[v.trans];
+        if (fill.startsWith('linear-gradient')) sw.style.background = fill;
+        else sw.style.background = fill;
+        tdTrans.appendChild(sw);
+      }
+      tdTrans.appendChild(document.createTextNode(v.trans));
+
+      tr.appendChild(tdNum);
+      tr.appendChild(tdThai);
+      tr.appendChild(tdPron);
+      tr.appendChild(tdTrans);
+      tbody.appendChild(tr);
+    });
+  }
+
+  function renderAll() {
+    renderSection('tbody-basic', VOCAB_BASIC, true);
+    renderSection('tbody-frequent', VOCAB_FREQUENT, true);
+    renderSection('tbody-expr', VOCAB_EXPR, false);
+  }
+  renderAll();
+</script>
+
+
+<div style="text-align:center;padding:24px;font-size:0.85rem;letter-spacing:0.04em;background:#1a1a1a;color:#888;margin-top:1rem;">
+  <a href="lessons.html" style="color:#d4a012;text-decoration:none;font-weight:600;">← Back to lessons</a>
+</div>
+
+</body>
+</html>

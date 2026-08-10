@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Adverbs of Frequency – การบอกความถี่</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Source+Sans+3:wght@300;400;600;700&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --red:#c0392b; --dark:#1a1a1a; --gold:#d4a012; --cream:#fdf6ec;
+      --slate:#2c3e50; --lgray:#f0ede8; --teal:#1a7a6e; --yellow:#f9e04b; --blue:#2a5fa5;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Source Sans 3', sans-serif; background: var(--cream); color: var(--dark); line-height: 1.6; }
+    .hero { background: var(--dark); padding: 40px 60px; border-bottom: 5px solid var(--gold); }
+    .hero h1 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(2.4rem, 6vw, 4.5rem); color: #fff; letter-spacing: 4px; line-height: 1; }
+    .hero h2 { font-family: 'Playfair Display', serif; font-size: clamp(1rem, 2vw, 1.4rem); color: var(--gold); font-weight: 400; margin-top: 6px; font-style: italic; }
+    .section-title { font-family: 'Playfair Display', serif; font-size: 1.25rem; color: var(--slate); padding: 28px 0 12px; letter-spacing: 1px; border-bottom: 2px solid var(--gold); margin: 0 40px; }
+    .table-wrap { padding: 20px 40px 40px; overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; background: #fff; border-radius: 10px; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
+    thead tr { background: var(--slate); }
+    thead th { padding: 13px 18px; text-align: left; font-size: 0.76rem; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--yellow); }
+    tbody tr { border-bottom: 1px solid var(--lgray); transition: background 0.15s; }
+    tbody tr:last-child { border-bottom: none; }
+    tbody tr:hover { background: #fef9ee; }
+    td { padding: 12px 18px; vertical-align: middle; }
+    .col-thai { font-size: 1.05rem; font-weight: 600; color: var(--red); white-space: nowrap; }
+    .col-phonetic { font-size: 0.88rem; color: #555; font-style: italic; }
+    .col-fr { font-size: 0.93rem; font-weight: 600; color: var(--blue); }
+    .col-freq { font-family: 'Playfair Display', serif; font-weight: 700; color: var(--teal); white-space: nowrap; }
+    .thai-row { display: flex; align-items: center; gap: 7px; }
+    .speak-btn { display: inline-flex; align-items: center; justify-content: center; background: none; border: none; cursor: pointer; padding: 3px; border-radius: 50%; color: var(--teal); opacity: 0.38; transition: opacity 0.2s, transform 0.15s; flex-shrink: 0; }
+    .speak-btn:hover { opacity: 1; transform: scale(1.2); }
+    .speak-btn.speaking { opacity: 1; animation: pulse 0.55s ease-in-out infinite alternate; }
+    @keyframes pulse { from { transform: scale(1); } to { transform: scale(1.3); } }
+    .grammar-wrap { padding: 20px 40px 40px; }
+    .grammar-note { background:#fffbeb; border-left:4px solid var(--gold); border-radius:6px; padding:14px 20px; margin-bottom:16px; font-size:0.93rem; }
+    .grammar-note strong { color: var(--slate); }
+    .grammar-table { width: 100%; border-collapse: collapse; margin-bottom: 18px; font-size: 0.93rem; background: #fff; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.06); }
+    .grammar-table th { background: var(--lgray); padding: 10px 14px; text-align: center; font-weight: 700; border: 1px solid #d8cfc4; font-size: 0.78rem; letter-spacing: 1px; text-transform: uppercase; color: var(--slate); }
+    .grammar-table td { padding: 10px 14px; text-align: center; border: 1px solid #e3ddd5; }
+    .grammar-table .row-thai td { font-weight: 600; color: var(--red); }
+    .grammar-table .row-fr td { color: var(--blue); font-style: italic; }
+    .grammar-table .thai-row { justify-content: center; }
+    .example { background:#eef4fb; border-left:4px solid #4a90d9; border-radius:6px; padding:14px 20px; margin-bottom:14px; font-size:0.93rem; }
+    .example .ex-thai { font-weight: 600; color: var(--red); }
+    .example .ex-fr { color: var(--blue); margin-top: 3px; font-style: italic; }
+    .convo { background:#fff; border-radius:10px; padding:18px 22px; margin:0 40px 24px; box-shadow:0 4px 20px rgba(0,0,0,0.06); }
+    .convo .turn { display:flex; gap:12px; padding:8px 0; border-bottom:1px dashed var(--lgray); }
+    .convo .turn:last-child { border-bottom: none; }
+    .convo .speaker { font-family:'Playfair Display', serif; color:var(--gold); font-weight:700; font-size:0.78rem; letter-spacing:1.5px; text-transform:uppercase; min-width:90px; padding-top:2px; }
+    .convo .line { flex:1; }
+    .convo .line .thai { color:var(--red); font-weight:600; display:flex; align-items:center; gap:7px; flex-wrap:wrap; }
+    .convo .line .phon { color:#555; font-style:italic; font-size:0.85rem; margin-top:2px; }
+    .convo .line .en   { color:var(--blue); font-style:italic; font-size:0.88rem; margin-top:3px; }
+    .exercises-wrap { padding: 4px 40px 40px; }
+    .exercise-list { list-style: none; counter-reset: ex; padding: 0; }
+    .exercise-list li { counter-increment: ex; background: #fff; border-left: 4px solid var(--gold); border-radius: 6px; padding: 14px 20px 14px 56px; margin-bottom: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); position: relative; font-size: 0.95rem; }
+    .exercise-list li::before { content: counter(ex, decimal-leading-zero); position: absolute; left: 16px; top: 14px; font-family: 'Playfair Display', serif; font-weight: 700; color: var(--gold); font-size: 1rem; letter-spacing: 1px; }
+    .exercise-list .prompt { color: var(--dark); font-weight:600; }
+    .exercise-list .prompt .th { color: var(--red); }
+    .exercise-list .prompt .rom { color:#555; font-style:italic; font-weight:400; }
+    .exercise-list .ex-blank { display: block; margin-top: 8px; border-bottom: 1px dashed var(--lgray); min-height: 1.4em; }
+    hr { border: none; border-top: 2px solid var(--gold); margin: 6px 40px 24px; }
+    footer { background: var(--dark); color: #888; text-align: center; padding: 24px; font-size: 0.8rem; letter-spacing: 1px; }
+    footer span { color: var(--gold); }
+    footer a { color: var(--gold); text-decoration: none; font-weight: 600; }
+    .quiz-cta { display: inline-block; background: linear-gradient(135deg, var(--gold) 0%, var(--red) 100%); color: #fff; text-decoration: none; padding: 10px 22px; border-radius: 24px; font-family: 'Playfair Display', serif; font-size: 0.9rem; font-weight: 700; letter-spacing: 0.05em; margin-top: 1.2rem; box-shadow: 0 4px 14px rgba(212,160,18,0.35); transition: transform .15s, box-shadow .15s; }
+    .quiz-cta:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(212,160,18,0.5); }
+  </style>
+</head>
+<body>
+
+<section class="hero">
+  <h1>Adverbs of Frequency / การบอกความถี่</h1>
+  <h2>gaan bɔ̀ɔk kwaam-thìi &nbsp;·&nbsp; Lesson 3 &nbsp;·&nbsp; how often do you…?</h2>
+  <a href="index.html?source=Frequency" class="quiz-cta">🎯 Take the quiz of this lesson →</a>
+</section>
+
+<h3 class="section-title">Frequency scale / ความถี่ &nbsp;<small style="font-size:0.75em;opacity:0.6;">(p. 1)</small></h3>
+<div class="table-wrap">
+  <table>
+    <thead><tr><th>Frequency</th><th>ภาษาไทย</th><th>Pronunciation</th><th>Translation</th></tr></thead>
+    <tbody id="tbody-freq"></tbody>
+  </table>
+</div>
+<hr/>
+
+<h3 class="section-title">Structure 1 / How often do you …? &nbsp;<small style="font-size:0.75em;opacity:0.6;">(p. 2)</small></h3>
+<div class="grammar-wrap">
+  <table class="grammar-table">
+    <thead><tr><th>Subject</th><th>Activity</th><th>How often</th></tr></thead>
+    <tbody>
+      <tr class="row-thai"><td>คุณ</td><td>………………</td><td>บ่อยแค่ไหน</td></tr>
+      <tr class="row-fr"><td>khun</td><td>(verb phrase)</td><td>bɔ̀ɔy khɛ̂ɛ-nǎi</td></tr>
+      <tr class="row-fr"><td>you</td><td>do …</td><td>how often?</td></tr>
+    </tbody>
+  </table>
+  <div class="grammar-note">
+    Put the activity in the middle: <strong>คุณ + activity + บ่อยแค่ไหน</strong> — "How often do you …?".
+    Answer with the frequency word from the table above.
+  </div>
+</div>
+
+<h3 class="section-title">Example Sentences / ตัวอย่าง &nbsp;<small style="font-size:0.75em;opacity:0.6;">(p. 2)</small></h3>
+<div style="height:14px"></div>
+<div class="convo" id="ex-struct1"></div>
+<hr/>
+
+<h3 class="section-title">Exercise 1 / Make a sentence from each word &nbsp;<small style="font-size:0.75em;opacity:0.6;">(p. 3)</small></h3>
+<div class="exercises-wrap">
+  <ol class="exercise-list">
+    <li><span class="prompt"><span class="th">ตลอด/เสมอ</span> <span class="rom">(dtà-lɔ̀ɔt / sà-mə̌ə)</span> — always</span><span class="ex-blank"></span></li>
+    <li><span class="prompt"><span class="th">มักจะ/เป็นประจำ</span> <span class="rom">(mák-jà / bpen bprà-jam)</span> — usually / regularly</span><span class="ex-blank"></span></li>
+    <li><span class="prompt"><span class="th">บ่อย</span> <span class="rom">(bɔ̀ɔy)</span> — often</span><span class="ex-blank"></span></li>
+    <li><span class="prompt"><span class="th">บางครั้ง</span> <span class="rom">(baang khráng)</span> — sometimes</span><span class="ex-blank"></span></li>
+    <li><span class="prompt"><span class="th">เป็นบางโอกาส</span> <span class="rom">(bpen baang oo-gàat)</span> — occasionally</span><span class="ex-blank"></span></li>
+    <li><span class="prompt"><span class="th">ไม่ค่อย</span> <span class="rom">(mâi khɔ̂ɔy)</span> — seldom</span><span class="ex-blank"></span></li>
+    <li><span class="prompt"><span class="th">แทบจะไม่</span> <span class="rom">(thɛ̂ɛp-jà-mâi)</span> — hardly ever / rarely</span><span class="ex-blank"></span></li>
+    <li><span class="prompt"><span class="th">ไม่เคย</span> <span class="rom">(mâi khəəy)</span> — never</span><span class="ex-blank"></span></li>
+  </ol>
+</div>
+<hr/>
+
+<h3 class="section-title">Conversation 2 / บทสนทนา &nbsp;<small style="font-size:0.75em;opacity:0.6;">(p. 4)</small></h3>
+<div class="convo" id="convo2"></div>
+<hr/>
+
+<h3 class="section-title">Exercise 2 / Complete the conversations &nbsp;<small style="font-size:0.75em;opacity:0.6;">(p. 5)</small></h3>
+<div class="grammar-wrap" style="padding-bottom:0;">
+  <div class="grammar-note">
+    Pattern — <strong>A:</strong> How often do you ……? &nbsp;·&nbsp; <strong>B:</strong> ……… (answer with a frequency word)
+  </div>
+</div>
+<div class="exercises-wrap">
+  <ol class="exercise-list">
+    <li><span class="prompt">To go fishing</span><span class="ex-blank">A :</span><span class="ex-blank">B :</span></li>
+    <li><span class="prompt">To meditate</span><span class="ex-blank">A :</span><span class="ex-blank">B :</span></li>
+    <li><span class="prompt">To eat / have a meal</span><span class="ex-blank">A :</span><span class="ex-blank">B :</span></li>
+    <li><span class="prompt">To take photos</span><span class="ex-blank">A :</span><span class="ex-blank">B :</span></li>
+    <li><span class="prompt">To ride a bicycle</span><span class="ex-blank">A :</span><span class="ex-blank">B :</span></li>
+    <li><span class="prompt">To sing</span><span class="ex-blank">A :</span><span class="ex-blank">B :</span></li>
+  </ol>
+</div>
+<hr/>
+
+<h3 class="section-title">Structure 2 / I clean the house 3 days a week &nbsp;<small style="font-size:0.75em;opacity:0.6;">(p. 6)</small></h3>
+<div class="grammar-wrap">
+  <table class="grammar-table">
+    <thead><tr><th>Subject</th><th>Verb</th><th>Object</th><th>Time Phrase</th><th>Preposition</th><th>Number</th><th>Classifier</th></tr></thead>
+    <tbody>
+      <tr class="row-thai"><td>ฉัน</td><td>ทำความสะอาด</td><td>บ้าน</td><td>อาทิตย์</td><td>ละ</td><td>3</td><td>วัน</td></tr>
+      <tr class="row-fr"><td>chǎn</td><td>tham kwaam sà-àat</td><td>bâan</td><td>aa-thít</td><td>lá</td><td>sǎam</td><td>wan</td></tr>
+      <tr class="row-fr"><td>I</td><td>clean</td><td>house</td><td>week</td><td>per</td><td>3</td><td>day</td></tr>
+    </tbody>
+  </table>
+  <div class="grammar-note">
+    <strong>ละ (lá)</strong> = "per": <em>aa-thít lá 3 wan</em> = 3 days per week; <em>dɯan lá 2 khráng</em> = twice per month.
+  </div>
+</div>
+
+<h3 class="section-title">Structure 3 / How many days per week do you clean the house? &nbsp;<small style="font-size:0.75em;opacity:0.6;">(p. 6)</small></h3>
+<div class="grammar-wrap">
+  <table class="grammar-table">
+    <thead><tr><th>Subject</th><th>Verb</th><th>Object</th><th>Time Phrase</th><th>Preposition</th><th>Question Word</th><th>Classifier</th></tr></thead>
+    <tbody>
+      <tr class="row-thai"><td>คุณ</td><td>ทำความสะอาด</td><td>บ้าน</td><td>อาทิตย์</td><td>ละ</td><td>กี่</td><td>วัน</td></tr>
+      <tr class="row-fr"><td>khun</td><td>tham kwaam sà-àat</td><td>bâan</td><td>aa-thít</td><td>lá</td><td>gìi</td><td>wan</td></tr>
+      <tr class="row-fr"><td>you</td><td>clean</td><td>house</td><td>week</td><td>per</td><td>how many</td><td>day</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<h3 class="section-title">Example Sentences / ตัวอย่าง &nbsp;<small style="font-size:0.75em;opacity:0.6;">(p. 6–7)</small></h3>
+<div style="height:14px"></div>
+<div class="convo" id="ex-struct23"></div>
+<hr/>
+
+<h3 class="section-title">Household chores / งานบ้าน — useful verbs for Exercise 3</h3>
+<div class="table-wrap">
+  <table>
+    <thead><tr><th>ภาษาไทย</th><th>Pronunciation</th><th>Translation</th></tr></thead>
+    <tbody id="tbody-chores"></tbody>
+  </table>
+</div>
+<hr/>
+
+<h3 class="section-title">Exercise 3 / Complete the conversation &nbsp;<small style="font-size:0.75em;opacity:0.6;">(p. 7–8)</small></h3>
+<div class="grammar-wrap" style="padding-bottom:0;">
+  <div class="grammar-note">
+    Example — <strong>A:</strong> How many times per week do you ……? &nbsp;·&nbsp; <strong>B:</strong> I ……… 4 times per week.
+  </div>
+</div>
+<div class="exercises-wrap">
+  <ol class="exercise-list">
+    <li><span class="prompt">To clean the floor with a broom</span><span class="ex-blank">A :</span><span class="ex-blank">B :</span></li>
+    <li><span class="prompt">To clean the floor with a vacuum</span><span class="ex-blank">A :</span><span class="ex-blank">B :</span></li>
+    <li><span class="prompt">To wash clothes with a washing machine</span><span class="ex-blank">A :</span><span class="ex-blank">B :</span></li>
+    <li><span class="prompt">To wash (the) car</span><span class="ex-blank">A :</span><span class="ex-blank">B :</span></li>
+    <li><span class="prompt">To clean the bathroom</span><span class="ex-blank">A :</span><span class="ex-blank">B :</span></li>
+    <li><span class="prompt">To cook in the kitchen</span><span class="ex-blank">A :</span><span class="ex-blank">B :</span></li>
+    <li><span class="prompt">To wipe the desk</span><span class="ex-blank">A :</span><span class="ex-blank">B :</span></li>
+    <li><span class="prompt">To use the computer</span><span class="ex-blank">A :</span><span class="ex-blank">B :</span></li>
+    <li><span class="prompt">To wash the bed sheets and blanket</span><span class="ex-blank">A :</span><span class="ex-blank">B :</span></li>
+  </ol>
+</div>
+
+<footer>
+  <span>Lesson 3 · Adverbs of Frequency</span> &nbsp;·&nbsp; การบอกความถี่ &nbsp;·&nbsp; <a href="lessons.html">← Back to lessons</a>
+</footer>
+
+<script>
+const freq = [
+  { pct:"100%", thai:"ตลอด / เสมอ", phonemic:"dtà-lɔ̀ɔt / sà-mə̌ə", fr:"always" },
+  { pct:"90–80%", thai:"มักจะ / เป็นประจำ", phonemic:"mák-jà / bpen bprà-jam", fr:"usually / regularly" },
+  { pct:"70%", thai:"บ่อย", phonemic:"bɔ̀ɔy", fr:"often / frequently" },
+  { pct:"50%", thai:"บางครั้ง", phonemic:"baang khráng", fr:"sometimes" },
+  { pct:"30%", thai:"เป็นบางโอกาส", phonemic:"bpen baang oo-gàat", fr:"occasionally" },
+  { pct:"10%", thai:"ไม่ค่อย", phonemic:"mâi khɔ̂ɔy", fr:"seldom" },
+  { pct:"5%", thai:"แทบจะไม่", phonemic:"thɛ̂ɛp-jà-mâi", fr:"hardly ever / rarely" },
+  { pct:"0%", thai:"ไม่เคย", phonemic:"mâi khəəy", fr:"never" },
+];
+const chores = [
+  { thai:"ทำความสะอาด", phonemic:"tham kwaam sà-àat", fr:"to clean" },
+  { thai:"กวาดพื้น", phonemic:"gwàat phɯ́ɯn", fr:"to sweep the floor (broom)" },
+  { thai:"ดูดฝุ่น", phonemic:"dùut fùn", fr:"to vacuum" },
+  { thai:"ถูพื้น", phonemic:"thǔu phɯ́ɯn", fr:"to mop the floor" },
+  { thai:"ซักผ้า", phonemic:"sák phâa", fr:"to wash clothes / do laundry" },
+  { thai:"ล้างรถ", phonemic:"láang rót", fr:"to wash the car" },
+  { thai:"ล้างห้องน้ำ", phonemic:"láang hɔ̂ng-náam", fr:"to clean the bathroom" },
+  { thai:"ทำอาหาร", phonemic:"tham aa-hǎan", fr:"to cook" },
+  { thai:"เช็ดโต๊ะ", phonemic:"chét dtó", fr:"to wipe the desk / table" },
+  { thai:"ใช้คอมพิวเตอร์", phonemic:"chái khɔm-phíw-dtəə", fr:"to use the computer" },
+  { thai:"ผ้าปูที่นอน", phonemic:"phâa-bpuu-thîi-nɔɔn", fr:"bed sheet" },
+  { thai:"ผ้าห่ม", phonemic:"phâa hòm", fr:"blanket" },
+  { thai:"จัดบ้าน", phonemic:"jàt bâan", fr:"to tidy the house" },
+  { thai:"ขี้เกียจ", phonemic:"khîi-gìat", fr:"lazy" },
+];
+const exStruct1 = [
+  { spk:"A", thai:"คุณทำสมาธิบ่อยแค่ไหน", phon:"khun tham sà-maa-thí bɔ̀ɔy khɛ̂ɛ-nǎi", en:"How often do you meditate?" },
+  { spk:"B", thai:"ฉันทำสมาธิเป็นประจำ", phon:"chǎn tham sà-maa-thí bpen-bprà-jam", en:"I meditate regularly." },
+  { spk:"A", thai:"คุณไปเดินป่าบ่อยแค่ไหน", phon:"khun bpai dəən bpàa bɔ̀ɔy khɛ̂ɛ-nǎi", en:"How often do you go hiking?" },
+  { spk:"B", thai:"ผมไปเดินป่ากับครอบครัวบ่อย ก็เลยมีรองเท้าเดินป่าหลายคู่", phon:"phǒm bpai dəən-bpàa gàp khrɔ̂ɔp-khrua bɔ̀ɔy gɔ̂ɔ-ləəy mii rɔɔng-tháaw-dəən-bpàa lǎay khûu", en:"I often go hiking with my family, so I have several pairs of hiking shoes." },
+  { spk:"A", thai:"คุณแม่ของคุณทำสวนบ่อยแค่ไหน", phon:"khun mɛ̂ɛ khɔ̌ɔng khun tham sǔan bɔ̀ɔy khɛ̂ɛ-nǎi", en:"How often does your mum do gardening?" },
+  { spk:"B", thai:"คุณแม่ของฉันทำสวนตลอด เพราะเขาเกษียณแล้วและมีเวลาเยอะ", phon:"khun mɛ̂ɛ khɔ̌ɔng chǎn tham sǔan dtà-lɔ̀ɔt phrɔ́ khǎw gà-sǐan lɛ́ɛw lɛ́ mii wee-laa yɘ́", en:"My mum gardens all the time, because she's retired and has lots of time." },
+  { spk:"A", thai:"คุณจัดบ้านบ่อยแค่ไหน", phon:"khun jàt bâan bɔ̀ɔy khɛ̂ɛ-nǎi", en:"How often do you tidy the house?" },
+  { spk:"B", thai:"ผมแทบจะไม่จัดบ้าน(เลย)เพราะว่าผมขี้เกียจมาก", phon:"phǒm thɛ̂ɛp-jà-mâi jàt bâan ləəy phrɔ́-wâa phǒm khîi-gìat mâak", en:"I hardly ever tidy the house, because I'm very lazy." },
+];
+const convo2 = [
+  { spk:"Maa-lii",  thai:"คุณชอบทำอะไรบ้างในเวลาว่าง", phon:"khun chɔ̂ɔp tham àrai bâang nai wee-laa wâang", en:"What do you like to do in your free time?" },
+  { spk:"Chá-baa",  thai:"ฉันชอบทำขนมแล้วคุณล่ะ", phon:"chǎn chɔ̂ɔp tham khà-nǒm lɛ́ɛw khun lâ", en:"I like baking. And you?" },
+  { spk:"Maa-lii",  thai:"ฉันก็ชอบทำขนมเหมือนกันค่ะ", phon:"chǎn gɔ̂ɔ chɔ̂ɔp tham khà-nǒm mɯ̌an-gan khâ", en:"I like baking too." },
+  { spk:"Chá-baa",  thai:"ปกติคุณทำขนมบ่อยแค่ไหนคะ", phon:"bpòk-gà-dtì khun tham khà-nǒm bɔ̀ɔy khɛ̂ɛ-nǎi khá", en:"How often do you usually bake?" },
+  { spk:"Maa-lii",  thai:"บ่อยค่ะ ประมาณอาทิตย์ละ 2-3 วันค่ะ", phon:"bɔ̀ɔy khâ bprà-maan aa-thít lá 2-3 wan khâ", en:"Often — about 2–3 days a week." },
+  { spk:"Chá-baa",  thai:"คุณสนใจ(เรื่อง)การทำขนมมานานเท่าไหร่แล้วคะ", phon:"khun sǒn-jai rûang gaan tham khà-nǒm maa naan thâw-rài lɛ́ɛw khá", en:"How long have you been interested in baking?" },
+  { spk:"Maa-lii",  thai:"ฉันคิดว่าประมาณ 3 ปีแล้วค่ะ คุณล่ะคะ สนใจการทำขนมตั้งแต่เมื่อไหร่", phon:"chǎn khít-wâa bprà-maan 3 bpii lɛ́ɛw khâ khun lâ khá sǒn-jai gaan tham khà-nǒm dtâng-dtɛ̀ɛ mɯ̂a-rài", en:"I think about 3 years. And you — since when have you been interested in baking?" },
+  { spk:"Chá-baa",  thai:"ตั้งแต่ปีที่แล้วค่ะ", phon:"dtâng-dtɛ̀ɛ bpii thîi-lɛ́ɛw khâ", en:"Since last year." },
+  { spk:"Maa-lii",  thai:"ถ้าคุณมีเวลาว่าง อยากทำขนมด้วยกันไหมคะ", phon:"thâa khun mii wee-laa wâang yàak tham khà-nǒm dûay-gan mǎi khá", en:"If you have free time, would you like to bake together?" },
+  { spk:"Chá-baa",  thai:"แน่นอนค่ะ ขอบคุณมากนะคะ", phon:"nɛ̂ɛ-nɔɔn khâ khɔ̀ɔp-khun mâak ná khá", en:"Of course! Thank you very much." },
+];
+const exStruct23 = [
+  { spk:"A", thai:"คุณถูพื้นอาทิตย์ละกี่วันคะ", phon:"khun thǔu phɯ́ɯn aa-thít lá gìi wan khá", en:"How many days per week do you mop the floor?" },
+  { spk:"B", thai:"ฉันถูพื้นอาทิตย์ละ 3-4 วันค่ะ", phon:"chǎn thǔu phɯ́ɯn aa-thít lá sǎam thɯ̌ng sìi wan khâ", en:"I mop the floor 3–4 days a week." },
+  { spk:"A", thai:"คุณซักผ้าปูที่นอนเดือนละกี่ครั้งคะ", phon:"khun sák phâa-bpuu-thîi-nɔɔn dɯan lá gìi khráng khá", en:"How many times per month do you wash your bed sheets?" },
+  { spk:"B", thai:"ฉันซักผ้าปูที่นอนเดือนละ 2 ครั้งค่ะ", phon:"chǎn sák phâa-bpuu-thîi-nɔɔn dɯan lá sɔ̌ɔng khráng khâ", en:"I wash my bed sheets twice a month." },
+];
+
+const synth = window.speechSynthesis;
+let currentBtn = null;
+function speakText(text, btn) {
+  synth.cancel();
+  if (currentBtn && currentBtn !== btn) currentBtn.classList.remove('speaking');
+  const utter = new SpeechSynthesisUtterance(text.replace(/\s*\/\s*/g, ", "));
+  utter.lang = 'th-TH'; utter.rate = 0.85;
+  const v = synth.getVoices().find(v => v.lang === 'th-TH' || v.lang.startsWith('th'));
+  if (v) utter.voice = v;
+  btn.classList.add('speaking'); currentBtn = btn;
+  utter.onend = utter.onerror = () => { btn.classList.remove('speaking'); currentBtn = null; };
+  synth.speak(utter);
+}
+function speakerSVG() {
+  return '<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/><path d="M14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>';
+}
+function makeBtn(text) {
+  const btn = document.createElement('button');
+  btn.className = 'speak-btn'; btn.title = 'Play pronunciation';
+  btn.innerHTML = speakerSVG();
+  btn.addEventListener('click', e => { e.stopPropagation(); speakText(text, btn); });
+  return btn;
+}
+function renderTable(tbodyId, data, withFreq) {
+  const tbody = document.getElementById(tbodyId);
+  tbody.innerHTML = '';
+  data.forEach(row => {
+    const tr = document.createElement('tr');
+    if (withFreq) {
+      const tdPct = document.createElement('td'); tdPct.className = 'col-freq'; tdPct.textContent = row.pct;
+      tr.appendChild(tdPct);
+    }
+    const tdThai = document.createElement('td'); tdThai.className = 'col-thai';
+    const tRow = document.createElement('div'); tRow.className = 'thai-row';
+    const s = document.createElement('span'); s.textContent = row.thai;
+    tRow.appendChild(s); tRow.appendChild(makeBtn(row.thai));
+    tdThai.appendChild(tRow);
+    const tdPhon = document.createElement('td'); tdPhon.className = 'col-phonetic'; tdPhon.textContent = row.phonemic;
+    const tdFr = document.createElement('td'); tdFr.className = 'col-fr'; tdFr.textContent = row.fr;
+    tr.appendChild(tdThai); tr.appendChild(tdPhon); tr.appendChild(tdFr);
+    tbody.appendChild(tr);
+  });
+}
+function renderConvo(boxId, data) {
+  const box = document.getElementById(boxId);
+  data.forEach(turn => {
+    const t = document.createElement('div'); t.className = 'turn';
+    const sp = document.createElement('div'); sp.className = 'speaker'; sp.textContent = turn.spk + ' ·';
+    const ln = document.createElement('div'); ln.className = 'line';
+    const th = document.createElement('div'); th.className = 'thai';
+    const span = document.createElement('span'); span.textContent = turn.thai;
+    th.appendChild(span); th.appendChild(makeBtn(turn.thai));
+    const ph = document.createElement('div'); ph.className = 'phon'; ph.textContent = turn.phon;
+    const en = document.createElement('div'); en.className = 'en';   en.textContent = turn.en;
+    ln.appendChild(th); ln.appendChild(ph); ln.appendChild(en);
+    t.appendChild(sp); t.appendChild(ln);
+    box.appendChild(t);
+  });
+}
+function injectStaticButtons() {
+  document.querySelectorAll('.grammar-table .row-thai td').forEach(td => {
+    if (td.querySelector('.thai-row')) return;
+    const text = td.textContent.trim();
+    if (!text || text === '—' || text.startsWith('(') || /^[0-9.…]+$/.test(text)) return;
+    const row = document.createElement('span'); row.className = 'thai-row';
+    td.innerHTML = '';
+    const s = document.createElement('span'); s.textContent = text;
+    row.appendChild(s); row.appendChild(makeBtn(text)); td.appendChild(row);
+  });
+}
+function init() {
+  renderTable('tbody-freq', freq, true);
+  renderTable('tbody-chores', chores, false);
+  document.getElementById('ex-struct1').innerHTML = '';
+  document.getElementById('convo2').innerHTML = '';
+  document.getElementById('ex-struct23').innerHTML = '';
+  renderConvo('ex-struct1', exStruct1);
+  renderConvo('convo2', convo2);
+  renderConvo('ex-struct23', exStruct23);
+  injectStaticButtons();
+}
+if (synth.onvoiceschanged !== undefined) synth.onvoiceschanged = init;
+init();
+</script>
+</body>
+</html>

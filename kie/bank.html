@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lesson 6 – Money and Bank / เงิน ธนาคาร</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Source+Sans+3:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold: #d4a012;
+    --gold-light: #fdf2d6;
+    --gold-dark: #7a5e1a;
+    --teal: #1a7a6e;
+    --teal-light: #e6f3f1;
+    --bg: #fdf6ec;
+    --surface: #fff;
+    --text: #1a1a1a;
+    --muted: #6b6b6b;
+    --border: #e6dfd5;
+    --radius: 12px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Source Sans 3', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding-bottom: 4rem;
+  }
+  header {
+    background: var(--teal);
+    color: #fff;
+    padding: 2.5rem 2rem 2rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  header::before {
+    content: '';
+    position: absolute;
+    top: -40px; left: -40px; right: -40px; bottom: -40px;
+    background: repeating-linear-gradient(45deg, transparent, transparent 20px, rgba(255,255,255,0.03) 20px, rgba(255,255,255,0.03) 40px);
+    pointer-events: none;
+  }
+  .header-badge {
+    display: inline-block;
+    background: var(--gold);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 4px 14px;
+    border-radius: 20px;
+    margin-bottom: 12px;
+  }
+  header h1 {
+    font-family: 'Bebas Neue', serif;
+    font-size: 2.4rem;
+    font-weight: 400;
+    letter-spacing: 0.02em;
+    line-height: 1.2;
+  }
+  header .subtitle {
+    font-size: 1.1rem;
+    opacity: 0.75;
+    margin-top: 6px;
+    font-weight: 300;
+  }
+  .tts-notice {
+    background: var(--gold-light);
+    border-left: 3px solid var(--gold);
+    color: var(--gold-dark);
+    font-size: 13px;
+    padding: 10px 16px;
+    margin: 1.5rem 2rem 0;
+    border-radius: 0 8px 8px 0;
+    display: none;
+  }
+  .main { max-width: 860px; margin: 0 auto; padding: 2rem 1.5rem; }
+
+  /* SECTION */
+  .section { margin-bottom: 2.5rem; }
+  .section-title {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 1rem;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  /* VOCAB TABLE */
+  .vocab-table { width: 100%; border-collapse: collapse; }
+  .vocab-table thead tr { background: var(--teal); color: #fff; }
+  .vocab-table thead th { padding: 10px 14px; font-size: 12px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; text-align: left; }
+  .vocab-table tbody tr { border-bottom: 1px solid var(--border); transition: background 0.15s; }
+  .vocab-table tbody tr:hover { background: var(--teal-light); }
+  .vocab-table td { padding: 9px 14px; font-size: 15px; vertical-align: middle; }
+  .vocab-table td:first-child { color: var(--muted); font-size: 13px; width: 36px; }
+  .vocab-table td.thai { font-size: 17px; font-weight: 600; }
+  .vocab-table td.pron { color: var(--teal); font-size: 14px; font-style: italic; }
+  .vocab-table td.trans { color: var(--text); font-size: 14px; }
+
+  /* EXERCISE */
+  .exercise-grid { display: grid; grid-template-columns: 32px 1fr; gap: 10px 16px; align-items: center; }
+  .exercise-num { font-size: 13px; color: var(--muted); font-weight: 600; text-align: right; }
+  .exercise-line {
+    border-bottom: 1.5px dashed var(--border);
+    padding: 6px 4px;
+    font-size: 15px;
+    color: var(--muted);
+    font-style: italic;
+  }
+
+  /* CONVERSATION CARD */
+  .convo-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.25rem 1.5rem;
+    margin-bottom: 1.25rem;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+  }
+  .convo-row { display: flex; gap: 10px; align-items: baseline; margin-bottom: 6px; }
+  .convo-row:last-child { margin-bottom: 0; }
+  .speaker-name {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--teal);
+    min-width: 88px;
+    letter-spacing: 0.3px;
+    flex-shrink: 0;
+    padding-top: 1px;
+  }
+  .convo-text { font-size: 15px; line-height: 1.6; }
+  .convo-text.thai-line { font-size: 16px; font-weight: 600; color: var(--text); }
+  .convo-text.rom-line { font-size: 13px; color: var(--muted); font-style: italic; margin-top: -2px; }
+  .convo-divider { height: 1px; background: var(--border); margin: 10px 0; }
+
+  /* SPEAKER BUTTON */
+  .speak-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 3px 5px;
+    border-radius: 50%;
+    margin-left: 6px;
+    vertical-align: middle;
+    opacity: 0.55;
+    transition: opacity 0.15s, background 0.15s;
+    flex-shrink: 0;
+  }
+  .speak-btn:hover { opacity: 1; background: var(--teal-light); }
+  .speak-btn.speaking { opacity: 1; animation: pulse 0.8s ease-in-out infinite; }
+  .speak-btn svg { width: 16px; height: 16px; fill: var(--teal); pointer-events: none; }
+  @keyframes pulse { 0%,100% { opacity:1 } 50% { opacity:0.45 } }
+
+  /* VOCAB speak btn bigger */
+  .vocab-table .speak-btn svg { width: 14px; height: 14px; }
+
+  /* Inline thai with speaker */
+  .thai-wrap { display: inline-flex; align-items: center; }
+  .quiz-cta {
+    display: inline-block;
+    background: linear-gradient(135deg, var(--gold) 0%, var(--teal) 100%);
+    color: #fff;
+    text-decoration: none;
+    padding: 10px 22px;
+    border-radius: 24px;
+    font-family: 'Bebas Neue', serif;
+    font-size: 0.95rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    margin-top: 1.2rem;
+    box-shadow: 0 4px 14px rgba(201,168,76,0.35);
+    transition: transform .15s, box-shadow .15s;
+  }
+  .quiz-cta:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(201,168,76,0.5);
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-badge">Lesson 6</div>
+  <h1>Money &amp; Bank</h1>
+  <p class="subtitle">เงิน / ธนาคาร</p>
+  <a href="index.html?source=Money%20%26%20Bank" class="quiz-cta">🎯 Take the quiz of this lesson →</a>
+</header>
+
+<div class="tts-notice" id="ttsNotice">
+  Thai speech may use a generic voice on this device. For best results, install a Thai TTS voice in your system settings.
+</div>
+
+<div class="main">
+
+  <!-- VOCABULARY -->
+  <div class="section">
+    <div class="section-title">Vocabulary</div>
+    <table class="vocab-table">
+      <thead>
+        <tr><th>#</th><th>Thai</th><th>Pronunciation</th><th>Translation</th></tr>
+      </thead>
+      <tbody id="vocabBody"></tbody>
+    </table>
+  </div>
+
+  <!-- EXERCISE -->
+  <div class="section">
+    <div class="section-title">Make a sentence using the following pictures</div>
+    <div class="exercise-grid">
+      <div class="exercise-num">1.</div><div class="exercise-line">💵 (money / cash)</div>
+      <div class="exercise-num">2.</div><div class="exercise-line">🏧 (ATM machine)</div>
+      <div class="exercise-num">3.</div><div class="exercise-line">📱💸 (mobile transfer)</div>
+      <div class="exercise-num">4.</div><div class="exercise-line">📲 PAY (pay by phone)</div>
+      <div class="exercise-num">5.</div><div class="exercise-line">🏦 (bank building)</div>
+      <div class="exercise-num">6.</div><div class="exercise-line">🏷️ SALE % (sale tag)</div>
+      <div class="exercise-num">7.</div><div class="exercise-line">🪙🪙🪙 (coins)</div>
+      <div class="exercise-num">8.</div><div class="exercise-line">👩‍💼 (cashier / bank staff)</div>
+      <div class="exercise-num">9.</div><div class="exercise-line">£ ↔ $ (currency exchange)</div>
+    </div>
+  </div>
+
+  <!-- CONVERSATIONS -->
+  <div class="section">
+    <div class="section-title">Conversations</div>
+    <div id="convosContainer"></div>
+  </div>
+
+</div>
+
+<script>
+const SPEAKER_ICON = `<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>`;
+
+const vocab = [
+  ["เงิน","ŋəən","Money"],
+  ["สตางค์","sà-dtaŋ","Money"],
+  ["แลกเงิน","lɛ̂ɛk ŋəən","Exchange money"],
+  ["โอนเงิน","oon-ŋəən","Transfer money"],
+  ["ถอนเงิน","thǒon ŋəən","Withdraw money"],
+  ["ฝากเงิน","fàak ŋəən","Deposit money"],
+  ["ธนาคาร","thá-naa-khaan","Bank"],
+  ["ตู้เอทีเอ็ม","dtûu ATM","ATM"],
+  ["จ่าย","jàay","To pay"],
+  ["ยืม","yuuum","To borrow"],
+  ["คืน","kuuun","To return (something)"],
+  ["บัญชีธนาคาร","ban-chii thá-naa-khaan","Bank account"],
+  ["บัตรเครดิต","bàt kree-dtìt","Credit card"],
+  ["บัตรประชาชน","bàt bprà-chaa-chon","ID card"],
+  ["สมุดบัญชี","sà-mùt ban-chii","Bank book"],
+  ["หาย","hǎay","Lost / was stolen"],
+  ["แนะนำ","nɛ́ɛ-nam","To recommend"],
+  ["เงินสด","ŋəən-sòt","Cash"],
+  ["เงินเหรียญ","ŋəən-rǐan","Coin"],
+  ["ซื้อของ","sɯ́w-khôoŋ","Shopping"],
+];
+
+const conversations = [
+  {
+    lines: [
+      {name:"อัง", thai:"ขอโทษค่ะ ธนาคารอยู่ไหนคะ ฉันอยากแลกเงิน", rom:"khǒo-thôot khâ thá-naa-khaan yùu nǎi khá? chǎn yàak lɛ̂ɛk ŋəən"},
+      {name:"ดาริกา", thai:"ที่ห้างเมย่าค่ะ ที่นั่นมีธนาคารเยอะ", rom:"thîi hâaŋ Maya khâ thîi-nân mii thá-naa-khaan yə́"},
+      {name:"อัง", thai:"ขอบคุณค่ะ", rom:"khòop-khun khâ"},
+    ]
+  },
+  {
+    lines: [
+      {name:"นานา", thai:"กระเป๋าเงินของฉันหาย ฉันไม่มีเงินเลย", rom:"grà-bpǎw ŋəən khǒoŋ chǎn hǎai chǎn mâi mii ŋəən ləəi"},
+      {name:"แจน", thai:"เธอยืมเงินฉันก่อนได้นะ", rom:"thəə yuuum ŋəən chǎn gòon dâi ná"},
+      {name:"นานา", thai:"จริงหรอ ขอบคุณนะ เธอใจดีมากๆ", rom:"jiŋ-rǒo khòop-khun ná thəə jai-dii mâak mâak"},
+      {name:"แจน", thai:"แต่ต้องคืนนะ", rom:"dtɛ̀ɛ dtôoŋ kuuun ná"},
+    ]
+  },
+  {
+    lines: [
+      {name:"อิม", thai:"สวัสดีค่ะแม่ พรุ่งนี้หนูจะไปเที่ยวกับเพื่อน แม่โอนเงินให้หน่อยได้ไหมคะ", rom:"sà-wát-dii khâ mêɛ phrûŋ-níi nǔu jà bpai-thîaw gàp phûan mêɛ oon-ŋəən hâi nòoy dâi-mǎi khá"},
+      {name:"แม่", thai:"ลูกอยากได้เท่าไหร่ พรุ่งนี้แม่จะไปโอนเงินที่ตู้เอทีเอ็ม", rom:"lûuk yàak dâi thâw-rài phrûŋ-níi mêɛ jà bpai oon ŋəən thîi dtûu ATM"},
+      {name:"อิม", thai:"1000 บาทพอค่ะแม่ ขอบคุณค่ะ", rom:"1000 bàat poo khâ mêɛ khòop-khun khâ"},
+      {name:"แม่", thai:"เที่ยวให้สนุกนะ", rom:"thîaw-hâi sà-nùk ná"},
+    ]
+  },
+  {
+    lines: [
+      {name:"วิว", thai:"ขอโทษค่ะ ที่นี่รับบัตรเครดิตไหมคะ", rom:"khǒo-thôot khâ tîi-níi ráp bàt-kree-dìt mǎi khá"},
+      {name:"ยู", thai:"ไม่ค่ะ รับแค่เงินสดค่ะ", rom:"mâi khâ ráp khêɛ ŋəən-sòt khâ"},
+      {name:"วิว", thai:"ฉันไม่มีเงินสดเลย โอนได้ไหม", rom:"chǎn mâi mii ŋəən-sòt ləəy oon-ŋəən dâi-mǎi"},
+      {name:"ยู", thai:"โอนพร้อมเพย์ได้ค่ะ", rom:"oon PromtPay dâi khâ"},
+    ]
+  },
+  {
+    lines: [
+      {name:"จินดี้", thai:"ฉันอยากเปิดบัญชีที่ประเทศไทยฉันต้องทำยังไง", rom:"chǎn yàak bpòot ban-chii tîi bprá-thêet thai chǎn dtôoŋ tham yaŋ-ŋai"},
+      {name:"ปูนา", thai:"คุณต้องมีวีซ่าทำงานหรือวีซ่านักเรียนก่อน", rom:"khun dtôoŋ mii wii-sâa tham-ŋaan rɯ́ɯ wii-sâa nák-rian gòon"},
+      {name:"จินดี้", thai:"วีซ่านักท่องเที่ยวได้มั้ย", rom:"wii-sâa nák-thôoŋ-thîaw dâi-mái"},
+      {name:"ปูนา", thai:"วีซ่านักท่องเที่ยวเปิดบัญชีธนาคารไม่ได้", rom:"wii-sâa nák-thôoŋ-thîaw bpòot ban-chîi thá-naa-khaan mâi-dâi"},
+    ]
+  },
+  {
+    lines: [
+      {name:"ลินดา", thai:"เจนนี่ เดือนที่แล้วเธอยืมเงินฉัน 2000 บาท เมื่อไหร่จะคืน", rom:"Jenny duuan thîi-lɛ́ɛw thəə yuuum ŋəən chǎn 2000 bàat mɯ̂a-rài jà khuuun"},
+      {name:"เจนนี่", thai:"ขอโทษนะ ฉันยังไม่มีเงิน", rom:"khǒo-thôot ná chǎn yaŋ mâi mii ŋəən"},
+      {name:"ลินดา", thai:"โกหก! ฉันเห็นเธอเพิ่งซื้อ iPhone ใหม่", rom:"goo-hòk chǎn hěn thəə phɛ̂əŋ sɯ́ɯ Iphone 14 mài"},
+      {name:"เจนนี่", thai:"ฉันสัญญา อาทิตย์หน้าฉันจะคืนเงิน", rom:"chǎn sǎn-yaa aa-thít nâa chǎn jà kuuun ŋəən"},
+    ]
+  },
+  {
+    lines: [
+      {name:"พนักงาน", thai:"สวัสดีค่ะ คุณสนใจสมัครบัตรเครดิตไหมคะ", rom:"sà-wát-dii khâ khun sǒn-jai sà-màk bàt-khree-dìt mǎi khá"},
+      {name:"แป้ง", thai:"ไม่ค่ะ ฉันมีบัตรเครดิตสองใบแล้ว", rom:"mâi khâ chǎn mii bàt-khree-dìt 2 bai lɛ́ɛw"},
+      {name:"พนักงาน", thai:"มีอีกก็ได้นะคะ ตอนนี้ธนาคารเรามีโปรโมชั่นดีดีเยอะมาก", rom:"mii ìik gǒo-dâi ná khâ dtoon-níi thá-naa-khaan raw mii bproo-moo-chân dii-dii yə́ mâak"},
+      {name:"แป้ง", thai:"ไม่เป็นไรค่ะ ขอบคุณค่ะ", rom:"mâi-bpen-rai khâ khòop-khun khâ"},
+    ]
+  },
+  {
+    lines: [
+      {name:"มิว", thai:"ขอโทษค่ะขอแลกเหรียญได้ไหม", rom:"khǒo-thôot khâ khǒo lɛ̂ɛk rǐan dâi-mǎi"},
+      {name:"มายด์", thai:"เอาเท่าไหร่คะ", rom:"aw thâw-rài khá"},
+      {name:"มิว", thai:"ขอเหรียญสิบ 2 เหรียญค่ะ", rom:"khǒo rǐan-sìp 2 rǐan khâ"},
+      {name:"มายด์", thai:"ได้ค่ะ", rom:"dâi khâ"},
+    ]
+  },
+];
+
+let currentUtterance = null;
+let currentBtn = null;
+
+function speakThai(text, btn) {
+  if (!('speechSynthesis' in window)) {
+    document.getElementById('ttsNotice').style.display = 'block';
+    return;
+  }
+  if (currentUtterance) {
+    window.speechSynthesis.cancel();
+    if (currentBtn) { currentBtn.classList.remove('speaking'); }
+    if (currentBtn === btn) { currentUtterance = null; currentBtn = null; return; }
+  }
+  const utter = new SpeechSynthesisUtterance(text.replace(/\s*\/\s*/g, ", "));
+  utter.lang = 'th-TH';
+  utter.rate = 0.9;
+  const voices = window.speechSynthesis.getVoices();
+  const thaiVoice = voices.find(v => v.lang.startsWith('th'));
+  if (thaiVoice) utter.voice = thaiVoice;
+  utter.onstart = () => { btn.classList.add('speaking'); };
+  utter.onend = () => { btn.classList.remove('speaking'); currentUtterance = null; currentBtn = null; };
+  utter.onerror = () => { btn.classList.remove('speaking'); currentUtterance = null; currentBtn = null; };
+  currentUtterance = utter;
+  currentBtn = btn;
+  window.speechSynthesis.speak(utter);
+}
+
+function makeBtn(text) {
+  const btn = document.createElement('button');
+  btn.className = 'speak-btn';
+  btn.title = 'Play Thai audio';
+  btn.innerHTML = SPEAKER_ICON;
+  btn.addEventListener('click', () => speakThai(text, btn));
+  return btn;
+}
+
+// Build vocab table
+const tbody = document.getElementById('vocabBody');
+vocab.forEach(([thai, pron, trans], i) => {
+  const tr = document.createElement('tr');
+  const tdN = document.createElement('td'); tdN.textContent = i + 1 + '.';
+  const tdTh = document.createElement('td'); tdTh.className = 'thai';
+  const wrap = document.createElement('span'); wrap.className = 'thai-wrap';
+  wrap.appendChild(document.createTextNode(thai));
+  wrap.appendChild(makeBtn(thai));
+  tdTh.appendChild(wrap);
+  const tdPr = document.createElement('td'); tdPr.className = 'pron'; tdPr.textContent = pron;
+  const tdTr = document.createElement('td'); tdTr.className = 'trans'; tdTr.textContent = trans;
+  tr.append(tdN, tdTh, tdPr, tdTr);
+  tbody.appendChild(tr);
+});
+
+// Build conversations
+const container = document.getElementById('convosContainer');
+conversations.forEach((convo) => {
+  const card = document.createElement('div');
+  card.className = 'convo-card';
+  convo.lines.forEach((line, idx) => {
+    if (idx > 0) {
+      const div = document.createElement('div');
+      div.className = 'convo-divider';
+      card.appendChild(div);
+    }
+    const thaiRow = document.createElement('div');
+    thaiRow.className = 'convo-row';
+    const nameEl = document.createElement('span');
+    nameEl.className = 'speaker-name';
+    nameEl.textContent = line.name + ':';
+    thaiRow.appendChild(nameEl);
+    const textWrap = document.createElement('span');
+    textWrap.className = 'convo-text thai-line thai-wrap';
+    textWrap.appendChild(document.createTextNode(line.thai));
+    textWrap.appendChild(makeBtn(line.thai));
+    thaiRow.appendChild(textWrap);
+    card.appendChild(thaiRow);
+    if (line.rom) {
+      const romRow = document.createElement('div');
+      romRow.className = 'convo-row';
+      const spacer = document.createElement('span');
+      spacer.className = 'speaker-name';
+      romRow.appendChild(spacer);
+      const romEl = document.createElement('span');
+      romEl.className = 'convo-text rom-line';
+      romEl.textContent = line.rom;
+      romRow.appendChild(romEl);
+      card.appendChild(romRow);
+    }
+  });
+  container.appendChild(card);
+});
+
+window.speechSynthesis.onvoiceschanged = () => {};
+</script>
+
+<div style="text-align:center;padding:24px;font-size:0.85rem;letter-spacing:0.04em;background:#1a1a1a;color:#888;margin-top:1rem;">
+  <a href="lessons.html" style="color:#d4a012;text-decoration:none;font-weight:600;">← Back to lessons</a>
+</div>
+
+</body>
+</html>

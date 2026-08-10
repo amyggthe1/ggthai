@@ -1,0 +1,11 @@
+{
+  "name": "Thai Language — เรียนภาษาไทย",
+  "short_name": "Thai",
+  "description": "Thai lesson notes, vocabulary quiz and consonant stroke practice.",
+  "start_url": "./home.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#fdf6ec",
+  "theme_color": "#1a1a1a"
+}

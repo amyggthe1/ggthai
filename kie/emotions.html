@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Émotions / Emotions — อารมณ์ความรู้สึก</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Playfair+Display:wght@400;700&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      /* corps.html palette */
+      --red:    #c0392b;
+      --dark:   #1a1a1a;
+      --gold:   #d4a012;
+      --cream:  #fdf6ec;
+      --slate:  #2c3e50;
+      --lgray:  #f0ede8;
+      --teal:   #1a7a6e;
+      --yellow: #f9e04b;
+      --blue:   #2a5fa5;
+
+      /* preserved for Exercises section (unchanged) */
+      --deep-indigo: #1a1a3e;
+      --warm-white:  #fff9f2;
+      --ink:         #2a2a2a;
+      --muted:       #7a7a7a;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Source Sans 3', sans-serif;
+      background: var(--cream);
+      color: var(--dark);
+      line-height: 1.6;
+    }
+
+    /* HERO */
+    .hero {
+      background: var(--dark);
+      padding: 40px 60px;
+      border-bottom: 5px solid var(--gold);
+    }
+    .hero h1 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(2.4rem, 6vw, 4.5rem);
+      color: #fff;
+      letter-spacing: 4px;
+      line-height: 1;
+    }
+    .hero h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1rem, 2vw, 1.4rem);
+      color: var(--gold);
+      font-weight: 400;
+      margin-top: 6px;
+      font-style: italic;
+    }
+
+    /* SECTION TITLE */
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.25rem;
+      color: var(--slate);
+      padding: 28px 0 12px;
+      letter-spacing: 1px;
+      border-bottom: 2px solid var(--gold);
+      margin: 0 40px;
+      display: flex;
+      align-items: baseline;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .section-title .st-num {
+      color: var(--gold);
+      font-weight: 700;
+      font-size: 0.95rem;
+      letter-spacing: 2px;
+    }
+    .section-title .st-thai {
+      color: var(--red);
+      font-weight: 700;
+      font-size: 1.35rem;
+    }
+    .section-title .st-phon {
+      color: var(--teal);
+      font-style: italic;
+      font-size: 0.95rem;
+    }
+    .section-title .st-fr {
+      color: var(--blue);
+      font-style: italic;
+      font-size: 1rem;
+      margin-left: auto;
+    }
+
+    /* TABLE */
+    .table-wrap { padding: 20px 40px 24px; overflow-x: auto; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #fff;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    }
+    thead tr { background: var(--slate); }
+    thead th {
+      padding: 13px 18px;
+      text-align: left;
+      font-size: 0.76rem;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--yellow);
+    }
+    tbody tr {
+      border-bottom: 1px solid var(--lgray);
+      transition: background 0.15s;
+    }
+    tbody tr:last-child { border-bottom: none; }
+    tbody tr:hover { background: #fef9ee; }
+    td { padding: 12px 18px; vertical-align: middle; }
+
+    .col-thai     { font-size: 1.05rem; font-weight: 600; color: var(--red); }
+    .col-phonetic { font-size: 0.88rem; color: #555; font-style: italic; }
+    .col-fr       { font-size: 0.93rem; font-weight: 600; color: var(--blue); }
+
+    /* SPEAKER */
+    .thai-row { display: flex; align-items: center; gap: 7px; }
+    .speak-btn {
+      display: inline-flex; align-items: center; justify-content: center;
+      background: none; border: none; cursor: pointer; padding: 3px;
+      border-radius: 50%; color: var(--teal); opacity: 0.38;
+      transition: opacity 0.2s, transform 0.15s; flex-shrink: 0;
+    }
+    .speak-btn:hover { opacity: 1; transform: scale(1.2); }
+    .speak-btn.speaking { opacity: 1; animation: pulse 0.55s ease-in-out infinite alternate; }
+    @keyframes pulse { from { transform: scale(1); } to { transform: scale(1.3); } }
+
+    hr { border: none; border-top: 2px solid var(--gold); margin: 6px 40px 24px; }
+
+    footer {
+      background: var(--dark); color: #888; text-align: center;
+      padding: 24px; font-size: 0.8rem; letter-spacing: 1px;
+    }
+    footer span { color: var(--gold); }
+
+    /* QUIZ CTA */
+    .quiz-cta {
+      display: inline-block;
+      background: linear-gradient(135deg, var(--gold) 0%, var(--red) 100%);
+      color: #fff;
+      text-decoration: none;
+      padding: 10px 22px;
+      border-radius: 24px;
+      font-family: 'Playfair Display', serif;
+      font-size: 0.9rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      margin-top: 1.2rem;
+      box-shadow: 0 4px 14px rgba(212,160,18,0.35);
+      transition: transform .15s, box-shadow .15s;
+    }
+    .quiz-cta:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(212,160,18,0.5);
+    }
+
+    /* ── EXERCISES (unchanged from original) ─────────────────── */
+    .exercises { margin: 40px 40px 0; }
+
+    .exercises h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      color: var(--deep-indigo);
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+    }
+
+    .exercises h2::before {
+      content: '';
+      display: inline-block;
+      width: 30px;
+      height: 3px;
+      background: var(--gold);
+      border-radius: 2px;
+    }
+
+    .exercise-block {
+      background: var(--warm-white);
+      border-radius: 14px;
+      padding: 1.5rem;
+      margin-bottom: 1.2rem;
+      border-left: 4px solid var(--gold);
+      box-shadow: 0 2px 12px rgba(26,26,62,0.06);
+    }
+
+    .exercise-block h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem;
+      color: var(--deep-indigo);
+      margin-bottom: 1rem;
+      font-style: italic;
+    }
+
+    .exercise-block ol {
+      padding-left: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.45rem;
+    }
+
+    .exercise-block li { font-size: 0.95rem; color: var(--ink); line-height: 1.6; }
+
+    .fill-blank {
+      display: inline-block;
+      width: 100px;
+      border-bottom: 2px solid var(--gold);
+      margin: 0 4px;
+    }
+
+    .choices { font-size: 0.85rem; color: var(--muted); margin-bottom: 0.8rem; font-style: italic; }
+
+    @media (max-width: 640px) {
+      .hero { padding: 30px 24px; }
+      .section-title, .table-wrap, hr, .exercises { margin-left: 16px; margin-right: 16px; padding-left: 0; padding-right: 0; }
+      .table-wrap { padding: 16px 0; }
+      .section-title .st-fr { margin-left: 0; }
+      td { padding: 10px 12px; }
+      .col-thai { font-size: 0.95rem; }
+      .col-phonetic { font-size: 0.78rem; }
+      .col-fr { font-size: 0.85rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- HERO -->
+<section class="hero">
+  <h1>Émotions / Emotions</h1>
+  <h2>อารมณ์ความรู้สึก &nbsp;·&nbsp; aa-rom kwaam-rúu-sʉ̀k</h2>
+  <a href="index.html?source=Emotions" class="quiz-cta">🎯 Take the quiz of this lesson →</a>
+</section>
+
+<!-- Emotion sections rendered by JS -->
+<div id="emotions-container"></div>
+
+<!-- ── EXERCISES (unchanged) ─────────────────────────────────── -->
+<div class="exercises">
+  <h2>Exercices · แบบฝึกหัด</h2>
+
+  <div class="exercise-block">
+    <h3>Exercice 1 — Traduisez les phrases en thaï</h3>
+    <ol>
+      <li>Je suis heureuse.</li>
+      <li>Il est triste.</li>
+      <li>Elle est fâchée.</li>
+      <li>J'ai peur.</li>
+      <li>Je suis stressée.</li>
+      <li>Il s'ennuie.</li>
+      <li>Je suis impressionnée.</li>
+      <li>Je suis fière de toi.</li>
+      <li>Elle est déçue.</li>
+      <li>Je me sens seule.</li>
+    </ol>
+  </div>
+
+  <div class="exercise-block">
+    <h3>Exercice 2 — Traduisez les petites phrases</h3>
+    <ol>
+      <li>Je suis très heureuse.</li>
+      <li>Il a un peu peur.</li>
+      <li>Je suis stressée ce matin.</li>
+      <li>Elle est fière.</li>
+      <li>Je me sens mieux.</li>
+    </ol>
+  </div>
+
+  <div class="exercise-block">
+    <h3>Exercice 3 — Choisissez le bon mot et traduisez</h3>
+    <p class="choices">Choisissez : heureux / triste / en colère / stressé / seul(e)</p>
+    <ol>
+      <li>Je suis <span class="fill-blank"></span> aujourd'hui.</li>
+      <li>Il est <span class="fill-blank"></span> parce que la maison lui manque.</li>
+      <li>Elle est <span class="fill-blank"></span> parce qu'elle a beaucoup de travail.</li>
+      <li>Je me sens <span class="fill-blank"></span> ce soir.</li>
+      <li>L'enfant est <span class="fill-blank"></span> parce qu'il n'a personne pour jouer.</li>
+    </ol>
+  </div>
+</div>
+
+<footer>
+  <span>Émotions / Emotions</span> &nbsp;·&nbsp; Thai Language Cheat Sheet
+ &nbsp;·&nbsp; <a href="lessons.html" style="color:inherit;text-decoration:underline;opacity:0.8;">← Back to lessons</a></footer>
+
+<script>
+  // ── DATA ────────────────────────────────────────────────────────────
+  const emotions = [
+    { num: 1,  thai: "ดีใจ",            phon: "dee jai",            fr: "heureux / heureuse / happy",
+      rows: [
+        { thai: "ฉันดีใจมาก",                       phon: "chǎn dee jai mâak",                                fr: "Je suis très heureuse. / I am very happy." },
+        { thai: "วันนี้ฉันดีใจเพราะอากาศดี",            phon: "wan née chǎn dee jai prór aa-gàat dee",          fr: "Je suis contente aujourd'hui parce qu'il fait beau. / I'm happy today because the weather is nice." },
+        { thai: "ฉันดีใจที่ได้เจอคุณ",                phon: "chǎn dee jai têe dâai joer kun",                  fr: "Je suis heureuse de te voir. / I'm happy to see you." },
+      ]
+    },
+    { num: 2,  thai: "เสียใจ",          phon: "sǐa jai",            fr: "triste / sad",
+      rows: [
+        { thai: "ฉันเสียใจมาก",                     phon: "chǎn sǐa jai mâak",                              fr: "Je suis très triste. / I am very sad." },
+        { thai: "เขาเสียใจเพราะคิดถึงบ้าน",          phon: "kǎo sǐa jai prór kít tʉ̌ng bâan",                 fr: "Il est triste parce que sa maison lui manque. / He is sad because he misses his home." },
+        { thai: "ฉันเสียใจที่ตอบช้า",               phon: "chǎn sǐa jai têe tòp cháa",                      fr: "Je suis désolée d'avoir répondu tard. / I'm sorry for replying late." },
+      ]
+    },
+    { num: 3,  thai: "โกรธ",            phon: "gròht",              fr: "fâché(e) / en colère / angry",
+      rows: [
+        { thai: "ฉันโกรธนิดหน่อย",                  phon: "chǎn gròht nít nòi",                              fr: "Je suis un peu fâchée. / I'm a little angry." },
+        { thai: "เขาโกรธเพราะรถมาช้า",              phon: "kǎo gròht prór rót maa cháa",                    fr: "Il est en colère parce que le bus est en retard. / He is angry because the bus is late." },
+        { thai: "อย่าโกรธนะ",                       phon: "yàa gròht ná",                                    fr: "Ne te fâche pas. / Don't be angry." },
+      ]
+    },
+    { num: 4,  thai: "กลัว",            phon: "glua",               fr: "avoir peur / effrayé(e) / afraid / scared",
+      rows: [
+        { thai: "ฉันกลัวแมงมุม",                    phon: "chǎn glua maeng mum",                            fr: "J'ai peur des araignées. / I'm afraid of spiders." },
+        { thai: "เด็กกลัวเสียงดัง",                 phon: "dèk glua sǐang dang",                            fr: "L'enfant a peur des bruits forts. / The child is afraid of loud noises." },
+        { thai: "ไม่ต้องกลัวนะ",                    phon: "mâi tông glua ná",                               fr: "N'aie pas peur. / Don't be afraid." },
+      ]
+    },
+    { num: 5,  thai: "งง / สับสน",      phon: "ngong / sàp sǒn",    fr: "confus(e) / confused",
+      rows: [
+        { thai: "ฉันงงนิดหน่อย",                    phon: "chǎn ngong nít nòi",                             fr: "Je suis un peu confuse. / I'm a little confused." },
+        { thai: "ฉันงงกับคำนี้",                    phon: "chǎn ngong gàp kam née",                         fr: "Je suis confuse avec ce mot. / I'm confused with this word." },
+        { thai: "เขาสับสนเพราะข้อมูลเยอะ",          phon: "kǎo sàp sǒn prór kôr muun yúh",                  fr: "Il est confus parce qu'il y a trop d'informations. / He is confused because there's too much information." },
+      ]
+    },
+    { num: 6,  thai: "เครียด",          phon: "krîat",              fr: "stressé(e) / stressed",
+      rows: [
+        { thai: "ฉันรู้สึกเครียด",                  phon: "chǎn rúu sʉ̀k krîat",                             fr: "Je me sens stressée. / I feel stressed." },
+        { thai: "วันนี้งานเยอะ ฉันเครียดมาก",       phon: "wan née ngaan yúh, chǎn krîat mâak",            fr: "J'ai beaucoup de travail aujourd'hui, je suis très stressée. / I have a lot of work today, I'm very stressed." },
+        { thai: "อย่าเครียดนะ พักก่อน",             phon: "yàa krîat ná, pák gòn",                         fr: "Ne sois pas stressée, repose-toi. / Don't be stressed, take a break." },
+      ]
+    },
+    { num: 7,  thai: "เบื่อ",            phon: "bʉ̀a",               fr: "ennuyé(e) / en avoir assez / bored / fed up",
+      rows: [
+        { thai: "ฉันเบื่อมาก",                      phon: "chǎn bʉ̀a mâak",                                 fr: "Je m'ennuie beaucoup. / I'm very bored." },
+        { thai: "ฉันเบื่อการรอ",                    phon: "chǎn bʉ̀a gaan ror",                              fr: "J'en ai assez d'attendre. / I'm tired of waiting." },
+        { thai: "เขาบอกว่าเขาเบื่ออยู่บ้าน",         phon: "kǎo bòk wâa kǎo bʉ̀a yùu bâan",                  fr: "Il dit qu'il s'ennuie à la maison. / He says he's bored at home." },
+      ]
+    },
+    { num: 8,  thai: "ประทับใจ",         phon: "prà-táp jai",        fr: "impressionné(e) / touché(e) / impressed / moved",
+      rows: [
+        { thai: "ฉันประทับใจมาก",                   phon: "chǎn prà-táp jai mâak",                          fr: "Je suis très impressionnée. / I'm very impressed." },
+        { thai: "เขาประทับใจกับงานนี้",             phon: "kǎo prà-táp jai gàp ngaan née",                  fr: "Il est impressionné par ce travail. / He is impressed by this work." },
+      ]
+    },
+    { num: 9,  thai: "ภูมิใจ",            phon: "puum jai",           fr: "fier / fière / proud",
+      rows: [
+        { thai: "ฉันภูมิใจในตัวคุณ",                phon: "chǎn puum jai nai tua kun",                      fr: "Je suis fière de toi. / I'm proud of you." },
+        { thai: "เขาภูมิใจในงานของตัวเอง",          phon: "kǎo puum jai nai ngaan kǒng tua eeng",          fr: "Il est fier de son travail. / He is proud of his work." },
+        { thai: "ฉันภูมิใจมากที่ทำสำเร็จ",          phon: "chǎn puum jai mâak têe tam sǎm rèt",            fr: "Je suis très fière d'avoir réussi. / I'm very proud to have succeeded." },
+      ]
+    },
+    { num: 10, thai: "ผิดหวัง",          phon: "pìt wǎng",           fr: "déçu(e) / disappointed",
+      rows: [
+        { thai: "ฉันผิดหวังนิดหน่อย",               phon: "chǎn pìt wǎng nít nòi",                         fr: "Je suis un peu déçue. / I'm a little disappointed." },
+        { thai: "เขาผิดหวังเพราะร้านปิด",           phon: "kǎo pìt wǎng prór ráan pìt",                     fr: "Il est déçu parce que le magasin est fermé. / He is disappointed because the shop is closed." },
+        { thai: "ฉันผิดหวังกับผลสอบ",               phon: "chǎn pìt wǎng gàp pon sòp",                     fr: "Je suis déçue du résultat de l'examen. / I'm disappointed with the exam result." },
+      ]
+    },
+    { num: 11, thai: "เหงา",             phon: "ngǎo",               fr: "se sentir seul(e) / to feel lonely",
+      rows: [
+        { thai: "ฉันรู้สึกเหงา",                    phon: "chǎn rúu sʉ̀k ngǎo",                              fr: "Je me sens seule. / I feel lonely." },
+        { thai: "วันนี้ฉันเหงานิดหน่อย",            phon: "wan née chǎn ngǎo nít nòi",                      fr: "Aujourd'hui je me sens un peu seule. / Today I feel a little lonely." },
+        { thai: "เขาเหงาเพราะอยู่คนเดียว",          phon: "kǎo ngǎo prór yùu kon diao",                     fr: "Il se sent seul parce qu'il est seul chez lui. / He feels lonely because he's alone at home." },
+      ]
+    },
+    { num: 12, thai: "อาย",              phon: "aai",                fr: "gêné(e) / embarrassé(e) / shy / embarrassed",
+      rows: [
+        { thai: "ฉันอายนิดหน่อย",                   phon: "chǎn aai nít nòi",                              fr: "Je suis un peu gênée. / I'm a little embarrassed." },
+        { thai: "เด็กอายเวลาพูดหน้าห้อง",           phon: "dèk aai wee-laa pûut nâa hông",                 fr: "L'enfant est gêné de parler devant la classe. / The child is shy about speaking in front of the class." },
+        { thai: "เขาดูอายมาก",                      phon: "kǎo duu aai mâak",                              fr: "Il a l'air très embarrassé. / He looks very embarrassed." },
+      ]
+    },
+    { num: 13, thai: "มีความหวัง",        phon: "mee kwaam wǎng",     fr: "plein(e) d'espoir / hopeful",
+      rows: [
+        { thai: "ฉันมีความหวังว่าเรื่องนี้จะดีขึ้น",  phon: "chǎn mee kwaam wǎng wâa rʉ̂ang née jà dee kʉ̂n", fr: "J'ai l'espoir que ça ira mieux. / I hope things will get better." },
+        { thai: "เขายังมีความหวังเสมอ",             phon: "kǎo yang mee kwaam wǎng sà-mǒer",               fr: "Il a toujours de l'espoir. / He always has hope." },
+        { thai: "ฉันรู้สึกมีความหวังมาก",           phon: "chǎn rúu sʉ̀k mee kwaam wǎng mâak",               fr: "Je me sens pleine d'espoir. / I feel full of hope." },
+      ]
+    },
+    { num: 14, thai: "สบายใจ",           phon: "sà-baai jai",        fr: "soulagé(e) / apaisé(e) / relieved / at ease",
+      rows: [
+        { thai: "ฉันสบายใจขึ้นแล้ว",                phon: "chǎn sà-baai jai kʉ̂n láew",                     fr: "Je me sens soulagée. / I feel relieved." },
+        { thai: "ฟังเพลงแล้วฉันรู้สึกสบายใจ",       phon: "fang pleeng láew chǎn rúu sʉ̀k sà-baai jai",     fr: "La musique me calme. / Music calms me." },
+        { thai: "เขาดูสบายใจมาก",                   phon: "kǎo duu sà-baai jai mâak",                      fr: "Il a l'air apaisé. / He looks at ease." },
+      ]
+    },
+    { num: 15, thai: "ตื่นเต้น",          phon: "tʉ̀n tên",            fr: "excité(e) / excited",
+      rows: [
+        { thai: "ฉันตื่นเต้นมาก",                   phon: "chǎn tʉ̀n tên mâak",                              fr: "Je suis très excitée. / I'm very excited." },
+        { thai: "เด็กตื่นเต้นกับของเล่นใหม่",       phon: "dèk tʉ̀n tên gàp kǒng lên mài",                  fr: "L'enfant est excité par son nouveau jouet. / The child is excited about his new toy." },
+        { thai: "ฉันตื่นเต้นกับวันพรุ่งนี้",        phon: "chǎn tʉ̀n tên gàp wan prûng née",                fr: "Je suis excitée pour demain. / I'm excited for tomorrow." },
+      ]
+    },
+  ];
+
+  // ── TTS ─────────────────────────────────────────────────────────────
+  const synth = window.speechSynthesis;
+  let currentBtn = null;
+
+  function speakText(text, btn) {
+    synth.cancel();
+    if (currentBtn && currentBtn !== btn) currentBtn.classList.remove('speaking');
+    const utter = new SpeechSynthesisUtterance(text.replace(/\s*\/\s*/g, ", "));
+    utter.lang = 'th-TH'; utter.rate = 0.85;
+    const v = synth.getVoices().find(v => v.lang === 'th-TH' || v.lang.startsWith('th'));
+    if (v) utter.voice = v;
+    btn.classList.add('speaking'); currentBtn = btn;
+    utter.onend = utter.onerror = () => { btn.classList.remove('speaking'); currentBtn = null; };
+    synth.speak(utter);
+  }
+
+  function speakerSVG() {
+    return `<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/>
+      <path d="M14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
+    </svg>`;
+  }
+
+  function makeBtn(text) {
+    const btn = document.createElement('button');
+    btn.className = 'speak-btn'; btn.title = 'Play pronunciation';
+    btn.innerHTML = speakerSVG();
+    btn.addEventListener('click', e => { e.stopPropagation(); speakText(text, btn); });
+    return btn;
+  }
+
+  // ── Render emotion sections ──────────────────────────────────────────
+  function renderEmotions() {
+    const container = document.getElementById('emotions-container');
+    emotions.forEach((e, idx) => {
+      // Section title
+      const h3 = document.createElement('h3');
+      h3.className = 'section-title';
+      const num = document.createElement('span'); num.className = 'st-num'; num.textContent = String(e.num).padStart(2,'0');
+      const thaiSp = document.createElement('span'); thaiSp.className = 'st-thai'; thaiSp.textContent = e.thai;
+      const phonSp = document.createElement('span'); phonSp.className = 'st-phon'; phonSp.textContent = '· ' + e.phon;
+      const frSp   = document.createElement('span'); frSp.className   = 'st-fr';   frSp.textContent   = e.fr;
+      h3.appendChild(num); h3.appendChild(thaiSp); h3.appendChild(phonSp); h3.appendChild(frSp);
+      container.appendChild(h3);
+
+      // Table
+      const wrap = document.createElement('div'); wrap.className = 'table-wrap';
+      const table = document.createElement('table');
+      const thead = document.createElement('thead');
+      thead.innerHTML = '<tr><th>ภาษาไทย</th><th>Pronunciation</th><th>Français / English</th></tr>';
+      table.appendChild(thead);
+      const tbody = document.createElement('tbody');
+      e.rows.forEach(row => {
+        const tr = document.createElement('tr');
+        const tdThai = document.createElement('td');
+        tdThai.className = 'col-thai';
+        const tRow = document.createElement('div'); tRow.className = 'thai-row';
+        const sp = document.createElement('span'); sp.textContent = row.thai;
+        tRow.appendChild(sp); tRow.appendChild(makeBtn(row.thai));
+        tdThai.appendChild(tRow);
+        const tdPhon = document.createElement('td'); tdPhon.className = 'col-phonetic'; tdPhon.textContent = row.phon;
+        const tdFr   = document.createElement('td'); tdFr.className   = 'col-fr';       tdFr.textContent   = row.fr;
+        tr.appendChild(tdThai); tr.appendChild(tdPhon); tr.appendChild(tdFr);
+        tbody.appendChild(tr);
+      });
+      table.appendChild(tbody);
+      wrap.appendChild(table);
+      container.appendChild(wrap);
+
+      // Divider between sections (not after last)
+      if (idx < emotions.length - 1) {
+        const hr = document.createElement('hr');
+        container.appendChild(hr);
+      }
+    });
+  }
+
+  function init() { renderEmotions(); }
+  if (synth.onvoiceschanged !== undefined) synth.onvoiceschanged = init;
+  init();
+</script>
+</body>
+</html>
