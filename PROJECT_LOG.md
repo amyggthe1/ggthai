@@ -110,6 +110,15 @@ not generated, unlike `glyph.html`):
   a bare numeral inconsistently.
 - Class pip reads "numeral" instead of "<class> class", in a neutral gold.
 
+**App icons.** `manifest.webmanifest` had no `icons` entry, so Chrome refused to
+offer installation at all and iOS fell back to a screenshot. Added `kie/icon-192.png`,
+`kie/icon-512.png`, `kie/icon-maskable-512.png` (padded into the central 80% safe
+zone) and `kie/apple-touch-icon.png`, plus `apple-touch-icon` / `icon` links in
+`home.html`. Artwork is generated, not hand-drawn: gold ก on the theme's dark
+ground, set in the repo's own `kie/glyph/Sarabun.ttf`, with the gold rule from the
+home-page hero along the bottom. Regenerate by re-running the Pillow snippet in the
+session notes if the palette ever changes.
+
 ### Session 1 — 9 August 2026
 
 **Repairs**

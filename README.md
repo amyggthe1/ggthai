@@ -23,6 +23,8 @@ index.html              local shortcut — redirects to kie/home.html (not uploa
 kie/                    the site (~18 MB)
   home.html               landing page — the entry point
   manifest.webmanifest    lets phones "Add to Home Screen" as an app
+  icon-*.png              app icons named by the manifest (192, 512, maskable 512)
+  apple-touch-icon.png    the icon iOS uses for Add to Home Screen
   lessons.html            directory of all 16 lesson pages
   index.html              the vocabulary quiz
   glyph.html              consonant stroke practice  (generated — see below)
