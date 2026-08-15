@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="fr"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#15133a">
+<title>Consonnes thaïes — entraînement au tracé</title>
+<style>:root{
+  --bg:#faf7f0; --navy:#15133a; --gold:#c59a3c; --card:#fefdf8;
+  --line:#e8e4da; --ink:#1a1a1a; --muted:#6f6b7d; --badge:#eae9ef;
+  --pill:#f5eedc; --red:#a31a1a;
+  --high:#1e3a6e; --high-soft:#eaf0f9; --high-line:#c6d4ea;
+  --mid:#b7861f;  --mid-soft:#fdf3dd;  --mid-line:#ecd6a2;
+  --low:#2f6b4f;  --low-soft:#eef7f1; --low-line:#c8e3d4;
+  /* Colour of the letterform itself, by consonant class. Deliberately separate
+     from --high/--mid/--low above: those tint the tiles, badges and pills and
+     stay as they are. Middle class keeps --ink so it reads as plain black. */
+  --glyph-high:#1e3a6e; --glyph-mid:#1a1a1a; --glyph-low:#2f6b4f;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{background:var(--bg);color:var(--navy);
+ font-family:'Segoe UI',system-ui,-apple-system,'Helvetica Neue',Arial,sans-serif;
+ -webkit-text-size-adjust:100%}
+@font-face{font-family:SarabunLocal;src:url('glyph/Sarabun.ttf') format('truetype');font-display:swap}
+.th{font-family:SarabunLocal,'Noto Sans Thai','Leelawadee UI',Tahoma,sans-serif}
+
+/* ---------- top bar ---------- */
+.nav{background:var(--navy);color:#fff;padding:14px 22px;display:flex;align-items:center;gap:20px;
+ position:sticky;top:0;z-index:20}
+.nav .brand{font-weight:700;letter-spacing:.14em;font-size:15px;color:var(--gold)}
+.nav .sub{font-size:13px;color:#b9b6cc;letter-spacing:.08em}
+.nav .spacer{flex:1}
+.nav a{color:#d9d7e6;text-decoration:none;font-size:14px}
+.nav a:hover{color:#fff}
+
+.wrap{max-width:1180px;margin:0 auto;padding:26px 20px 70px}
+.crumb{font-size:14px;color:var(--muted);margin-bottom:16px}
+.crumb a{color:#5b57a8;text-decoration:none}
+.crumb a:hover{text-decoration:underline}
+h1{font-size:32px;margin:0 0 4px;font-weight:800;letter-spacing:-.01em}
+h1 .lead{font-weight:400;font-style:italic;color:#9a97ab;font-size:22px}
+.intro{color:var(--muted);max-width:66ch;line-height:1.6;font-size:15px}
+
+/* ---------- filters ---------- */
+.filters{display:flex;flex-wrap:wrap;gap:9px;margin:22px 0 6px}
+.filters button{font:inherit;font-size:14px;padding:8px 16px;border-radius:999px;cursor:pointer;
+ border:1px solid var(--line);background:var(--card);color:var(--navy)}
+.filters button[aria-pressed="true"]{background:var(--navy);color:#fff;border-color:var(--navy)}
+
+/* ---------- grid ---------- */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(148px,1fr));gap:14px;margin-top:16px}
+.tile{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 10px 12px;
+ text-align:center;text-decoration:none;color:inherit;display:block;transition:.15s;position:relative}
+.tile:hover{transform:translateY(-2px);box-shadow:0 6px 18px rgba(21,19,58,.10);border-color:#d8d2c4}
+.tile .big{font-size:52px;line-height:1.05;color:var(--ink)}
+.tile .nm{font-size:15px;margin-top:6px}
+.tile .ph{font-size:12.5px;color:var(--muted);margin-top:2px}
+.tile .mn{font-size:12px;color:#9a97ab;font-style:italic;margin-top:1px}
+/* Mnemonic icons — hand-drawn line art, one per letter. They inherit the
+   consonant-class colour via currentColor, so there is no per-icon palette. */
+.mnemo{width:26px;height:26px;display:block;margin:8px auto 0;opacity:.62}
+.tile:hover .mnemo{opacity:1}
+.idhead .mnemo{width:44px;height:44px;margin:0;opacity:.75;flex:none}
+.dot{position:absolute;top:10px;right:10px;width:9px;height:9px;border-radius:50%}
+.dot.high{background:var(--high)}.dot.mid{background:var(--mid)}.dot.low{background:var(--low)}
+.tile.high{background:var(--high-soft);border-color:var(--high-line)}
+.tile.mid{background:var(--mid-soft);border-color:var(--mid-line)}
+.tile.low{background:var(--low-soft);border-color:var(--low-line)}
+.tile .nm{font-weight:600}
+.tile.high .nm{color:var(--high)}.tile.mid .nm{color:var(--mid)}.tile.low .nm{color:var(--low)}
+/* Letterform colour by class — grid tiles and the practice card heading. */
+.tile.high .big{color:var(--glyph-high)}
+.tile.mid  .big{color:var(--glyph-mid)}
+.tile.low  .big{color:var(--glyph-low)}
+.card.high .idhead .big{color:var(--glyph-high)}
+.card.mid  .idhead .big{color:var(--glyph-mid)}
+.card.low  .idhead .big{color:var(--glyph-low)}
+.filters button.high[aria-pressed="true"]{background:var(--high);border-color:var(--high)}
+.filters button.mid[aria-pressed="true"]{background:var(--mid);border-color:var(--mid)}
+.filters button.low[aria-pressed="true"]{background:var(--low);border-color:var(--low)}
+.card.high{border-color:var(--high-line)}.card.mid{border-color:var(--mid-line)}.card.low{border-color:var(--low-line)}
+.badge.high{background:var(--high-soft);color:var(--high)}
+.badge.mid{background:var(--mid-soft);color:var(--mid)}
+.badge.low{background:var(--low-soft);color:var(--low)}
+.pill.high[aria-pressed="true"]{background:var(--high-soft);border-color:var(--high-line)}
+.pill.mid[aria-pressed="true"]{background:var(--mid-soft);border-color:var(--mid-line)}
+.pill.low[aria-pressed="true"]{background:var(--low-soft);border-color:var(--low-line)}
+.pill.high .ic{border-color:var(--high)}.pill.mid .ic{border-color:var(--mid)}.pill.low .ic{border-color:var(--low)}
+.pill.high[aria-pressed="true"] .ic{background:var(--high)}
+.pill.mid[aria-pressed="true"] .ic{background:var(--mid)}
+.pill.low[aria-pressed="true"] .ic{background:var(--low)}
+.tile.dim{opacity:.24}
+
+/* ---------- section tabs ---------- */
+.tabs{display:flex;gap:6px;flex-wrap:wrap;border-bottom:1px solid var(--line);margin:22px 0 4px}
+.tabs a{font-size:15px;padding:10px 18px;color:var(--muted);text-decoration:none;
+ border-bottom:3px solid transparent;margin-bottom:-1px;white-space:nowrap}
+.tabs a:hover{color:var(--navy)}
+.tabs a[aria-current="page"]{color:var(--gold);font-weight:600;border-bottom-color:var(--gold)}
+.tabs a.tab-ext{color:var(--navy)}
+.tabs a.tab-ext:hover{color:var(--gold)}
+.tabs .ext-arrow{font-size:.8em;opacity:.7}
+
+/* ---------- reference tables (vowels, tones, numerals) ---------- */
+.refgroup{margin-top:26px}
+.refgroup h2{font-size:17px;font-weight:700;margin:0 0 2px}
+.refgroup .sub{font-size:13.5px;color:var(--muted);margin-bottom:12px}
+.refgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px}
+.rcard{background:var(--card);border:1px solid var(--line);border-radius:12px;
+ padding:14px 10px 12px;text-align:center}
+.rcard .form{font-size:34px;line-height:1.15;color:var(--ink)}
+.rcard .nm{font-size:14px;margin-top:6px;font-weight:600}
+.rcard .ph{font-size:12.5px;color:var(--muted);margin-top:2px}
+.rcard .snd{display:inline-block;margin-top:7px;font-size:12px;background:var(--pill);
+ border:1px solid #e0d2ab;border-radius:999px;padding:2px 10px;color:#6b5313}
+.rcard .pos{font-size:11.5px;color:#9a97ab;font-style:italic;margin-top:5px}
+.rcard .ar{font-size:13px;color:var(--muted);margin-top:2px}
+/* playable reference card — used by the vowel tab */
+.rcard{position:relative}
+button.rcard{width:100%;font-family:inherit;cursor:pointer;
+ transition:border-color .15s, box-shadow .15s, background .15s}
+button.rcard:hover{border-color:var(--gold);box-shadow:0 2px 10px rgba(0,0,0,.06)}
+button.rcard:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+button.rcard.on{border-color:var(--gold);background:var(--pill)}
+.rcard .spk{position:absolute;top:8px;right:8px;width:16px;height:16px;
+ color:var(--muted);opacity:.55;pointer-events:none}
+button.rcard:hover .spk,button.rcard.on .spk{color:var(--gold);opacity:1}
+.rcard .tts{position:absolute;top:9px;left:9px;font-size:9.5px;letter-spacing:.06em;
+ font-weight:700;color:#9a97ab;text-transform:uppercase}
+.vstatus{margin-top:10px;font-size:13px;color:var(--muted);min-height:1.2em}
+.refgrid .tile{padding:16px 10px 14px}
+.refgrid .tile .ar{font-size:12.5px;color:var(--muted);margin-top:3px}
+.arrowlink{display:block;margin-top:9px;font-size:12px;color:var(--gold);font-weight:600}
+.refnote{margin-top:22px;padding:12px 14px;border:1px solid var(--line);
+ border-left:3px solid var(--gold);border-radius:0 10px 10px 0;
+ background:var(--card);font-size:13.5px;color:var(--muted);line-height:1.6}
+
+/* ---------- detail ---------- */
+.detail{display:grid;grid-template-columns:340px 1fr;gap:24px;align-items:start;margin-top:18px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px}
+.badge{display:inline-flex;align-items:center;gap:7px;background:var(--badge);color:#3b3860;
+ border-radius:999px;padding:5px 13px;font-size:12px;font-weight:700;letter-spacing:.08em}
+.badge .dot{position:static;width:7px;height:7px}
+.idhead{display:flex;gap:16px;align-items:center;margin:18px 0 4px}
+.idhead .big{font-size:66px;line-height:1;color:var(--ink)}
+.idhead .nm{font-size:21px}
+.idhead .ph{font-size:15px;color:#4a4760;margin-top:2px}
+.idhead .mn{font-size:14px;color:var(--muted);font-style:italic;margin-top:2px}
+.rowbtn{display:flex;gap:10px;margin-top:16px;flex-wrap:wrap}
+.rowbtn button{font:inherit;font-size:14px;padding:9px 15px;border-radius:999px;cursor:pointer;
+ border:1px solid var(--line);background:#fff;color:var(--navy)}
+.rowbtn button:hover{background:#f3efe6}
+.note{margin-top:16px;padding-top:14px;border-top:1px solid var(--line);font-size:13px;
+ color:var(--muted);line-height:1.55}
+.nav2{display:flex;justify-content:space-between;gap:10px;margin-top:16px}
+.nav2 a{font-size:14px;color:#5b57a8;text-decoration:none}
+.nav2 a:hover{text-decoration:underline}
+
+/* ---------- practice panel ---------- */
+.panel{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px}
+.stage{position:relative;width:100%;max-width:560px;margin:0 auto;aspect-ratio:1/1;
+ background:#fff;border-radius:12px;overflow:hidden;touch-action:none}
+.stage .art{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;
+ pointer-events:none;user-select:none}
+.stage.blank .art{display:none}
+.stage.shadow .art{}
+.guides{position:absolute;inset:0;display:none;pointer-events:none}
+.stage.blank .guides{display:block}
+.guides span{position:absolute;left:5%;right:5%;border-top:2px dashed #d7d2c6}
+.guides .t{top:26%}.guides .b{top:76%}
+.ink{position:absolute;inset:0;width:100%;height:100%;touch-action:none;cursor:crosshair}
+.playbtn{position:absolute;inset:0;margin:auto;width:74px;height:74px;border-radius:50%;border:none;
+ background:rgba(24,24,24,.58);cursor:pointer;display:flex;align-items:center;justify-content:center;
+ transition:background .15s,opacity .15s;padding:0}
+.playbtn:hover{background:rgba(163,26,26,.85)}
+.playbtn:focus-visible{outline:3px solid var(--red);outline-offset:3px}
+.playbtn .tri{width:0;height:0;border-left:24px solid #fff;border-top:15px solid transparent;
+ border-bottom:15px solid transparent;margin-left:6px}
+/* Play button hides in blank AND shadow modes: it sits dead centre and would
+   cover the outline you are meant to be tracing. Tap Show to bring it back. */
+.stage.playing .playbtn,.stage.blank .playbtn,.stage.shadow .playbtn{opacity:0;pointer-events:none}
+.controls{display:flex;gap:12px;justify-content:center;align-items:center;margin-top:18px;flex-wrap:wrap}
+.pill{font:inherit;font-size:15px;padding:11px 26px;border-radius:999px;cursor:pointer;
+ border:1px solid var(--line);background:#fff;color:var(--navy);
+ display:inline-flex;align-items:center;gap:9px}
+.pill:hover{background:#f3efe6}
+.pill[aria-pressed="true"]{background:var(--pill);border-color:#e0d2ab;font-weight:600}
+.pill .ic{width:17px;height:17px;border-radius:50%;border:2px solid var(--gold);display:block}
+.pill[aria-pressed="true"] .ic{background:var(--gold)}
+.hint{text-align:center;color:var(--muted);font-size:13px;margin-top:12px;min-height:1.2em}
+
+@media (max-width:860px){
+  .detail{grid-template-columns:1fr}
+  .detail .panel{order:-1}
+  h1{font-size:25px} h1 .lead{font-size:17px;display:block;margin-top:2px}
+  .wrap{padding:18px 14px 60px}
+  .stage{max-width:none}
+  .grid{grid-template-columns:repeat(auto-fill,minmax(116px,1fr));gap:10px}
+  .tile .big{font-size:44px}
+  .pill{padding:12px 20px}
+}
+
+/* ---------- language flag, centred in the top bar ---------- */
+.flaglink{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+ display:inline-flex;align-items:center;gap:8px;text-decoration:none;
+ padding:4px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.18);
+ background:rgba(255,255,255,.06);transition:.15s}
+.flaglink:hover{background:rgba(255,255,255,.14);border-color:var(--gold)}
+.flaglink svg{width:26px;height:18px;display:block;border-radius:3px;
+ box-shadow:0 0 0 1px rgba(255,255,255,.35)}
+.flaglink .lang{font-size:12px;font-weight:700;letter-spacing:.10em;color:#fff}
+@media (max-width:860px){
+  .nav{gap:12px;flex-wrap:wrap}
+  .nav .sub{display:none}
+  .nav .spacer{display:none}
+  .flaglink{position:static;transform:none;margin-left:auto}
+}
+</style>
+</head><body>
+<div class="nav">
+  <span class="brand">CONSONNES THAÏES</span>
+  <span class="sub">entraînement au tracé</span>
+  <a class="flaglink" href="glyph.html" title="English version" aria-label="English version"><svg viewBox="0 0 60 40" aria-hidden="true"><rect width="60" height="40" fill="#012169"/><path d="M0 0 60 40M60 0 0 40" stroke="#fff" stroke-width="8"/><path d="M0 0 60 40M60 0 0 40" stroke="#C8102E" stroke-width="4"/><path d="M30 0V40M0 20H60" stroke="#fff" stroke-width="13"/><path d="M30 0V40M0 20H60" stroke="#C8102E" stroke-width="8"/></svg><span class="lang">EN</span></a>
+  <span class="spacer"></span>
+  <a href="#/">Alphabet</a>
+  <a href="glyph/alphabet.html">🎮 Jeu de l'alphabet</a>
+  <a href="lessons.html">📚 Leçons</a>
+  <a href="index.html">🎯 Quiz</a>
+</div>
+<div class="wrap"><div id="app"></div></div>
+<script>const DATA = [{"id": "01", "ch": "ก", "thai": "กอ ไก่", "name": "kɔɔ kài", "mean": "chicken", "cls": "mid", "gif": "glyph/thai_stroke_order/01_kɔɔ_kài.gif", "png": "glyph/thai_stroke_order/01_kɔɔ_kài.png", "out": "glyph/thai_stroke_order/01_kɔɔ_kài_outline.png", "ms": 4180, "derived": false, "strokeNote": "Tracé en un seul trait continu — le stylo ne quitte pas le papier.", "icon": "", "audio": "glyph/audio/consonants/01_kor-kai.mp3", "fr": "kàì", "frph": "[kɔɔ]", "frmean": "poulet"}, {"id": "02", "ch": "ข", "thai": "ขอ ไข่", "name": "khɔɔ khài", "mean": "egg", "cls": "high", "gif": "glyph/thai_stroke_order/02_khɔɔ_khài.gif", "png": "glyph/thai_stroke_order/02_khɔɔ_khài.png", "out": "glyph/thai_stroke_order/02_khɔɔ_khài_outline.png", "ms": 4180, "derived": false, "strokeNote": "Tracé en 2 traits, en levant le stylo entre les deux.", "icon": "", "audio": "glyph/audio/consonants/02_khor-khai.mp3", "fr": "kHàǐ", "frph": "[kHɔ̌ɔ]", "frmean": "œuf"}, {"id": "03", "ch": "ฃ", "thai": "ฃอ ขวด", "name": "khɔɔ khùat", "mean": "bottle (obsolete)", "cls": "high", "gif": "glyph/thai_stroke_order/03_khɔɔ_khùat.gif", "png": "glyph/thai_stroke_order/03_khɔɔ_khùat.png", "out": "glyph/thai_stroke_order/03_khɔɔ_khùat_outline.png", "ms": 4180, "derived": false, "strokeNote": "Tracé en 2 traits, en levant le stylo entre les deux.", "icon": "", "audio": "glyph/audio/consonants/03_khor-khuat.mp3", "fr": "kHòuuat", "frph": "[kHɔ̌ɔ]", "frmean": "bouteille"}, {"id": "04", "ch": "ค", "thai": "คอ ควาย", "name": "khɔɔ khwaai", "mean": "buffalo", "cls": "low", "gif": "glyph/thai_stroke_order/04_khɔɔ_khwaai.gif", "png": "glyph/thai_stroke_order/04_khɔɔ_khwaai.png", "out": "glyph/thai_stroke_order/04_khɔɔ_khwaai_outline.png", "ms": 4180, "derived": false, "strokeNote": "Tracé en 2 traits, en levant le stylo entre les deux.", "icon": "", "audio": "glyph/audio/consonants/04_khor-khwaay.mp3", "fr": "kHwaay", "frph": "[kHɔɔ]", "frmean": "buffle (d’eau)"}, {"id": "05", "ch": "ฅ", "thai": "ฅอ คน", "name": "khɔɔ khon", "mean": "person (obsolete)", "cls": "low", "gif": "glyph/thai_stroke_order/05_khɔɔ_khon.gif", "png": "glyph/thai_stroke_order/05_khɔɔ_khon.png", "out": "glyph/thai_stroke_order/05_khɔɔ_khon_outline.png", "ms": 4180, "derived": false, "strokeNote": "Tracé en un seul trait continu — le stylo ne quitte pas le papier.", "icon": "", "audio": "glyph/audio/consonants/05_khor-khon.mp3", "fr": "kHon", "frph": "[kHɔɔ]", "frmean": "personne"}, {"id": "06", "ch": "ฆ", "thai": "ฆอ ระฆัง", "name": "khɔɔ rá-khang", "mean": "bell", "cls": "low", "gif": "glyph/thai_stroke_order/06_khɔɔ_rá_khang.gif", "png": "glyph/thai_stroke_order/06_khɔɔ_rá_khang.png", "out": "glyph/thai_stroke_order/06_khɔɔ_rá_khang_outline.png", "ms": 4180, "derived": false, "strokeNote": "Tracé en un seul trait continu — le stylo ne quitte pas le papier.", "icon": "", "audio": "glyph/audio/consonants/06_khor-rakhang.mp3", "fr": "rá-kHang*", "frph": "[kHɔɔ]", "frmean": "cloche"}, {"id": "07", "ch": "ง", "thai": "งอ งู", "name": "ŋɔɔ ŋuu", "mean": "snake", "cls": "low", "gif": "glyph/thai_stroke_order/07_ŋɔɔ_ŋuu.gif", "png": "glyph/thai_stroke_order/07_ŋɔɔ_ŋuu.png", "out": "glyph/thai_stroke_order/07_ŋɔɔ_ŋuu_outline.png", "ms": 4180, "derived": false, "strokeNote": "Tracé en un seul trait continu — le stylo ne quitte pas le papier.", "icon": "", "audio": "glyph/audio/consonants/07_ngor-ngu.mp3", "fr": "ngouu", "frph": "[ngɔɔ]", "frmean": "serpent"}, {"id": "08", "ch": "จ", "thai": "จอ จาน", "name": "cɔɔ caan", "mean": "plate", "cls": "mid", "gif": "glyph/thai_stroke_order/08_cɔɔ_caan.gif", "png": "glyph/thai_stroke_order/08_cɔɔ_caan.png", "out": "glyph/thai_stroke_order/08_cɔɔ_caan_outline.png", "ms": 4180, "derived": false, "strokeNote": "Tracé en un seul trait continu — le stylo ne quitte pas le papier.", "icon": "", "audio": "glyph/audio/consonants/08_djor-djaan.mp3", "fr": "djaan", "frph": "[djɔɔ]", "frmean": "assiette"}, {"id": "09", "ch": "ฉ", "thai": "ฉอ ฉิ่ง", "name": "chɔɔ chìng", "mean": "cymbals", "cls": "high", "gif": "glyph/thai_stroke_order/09_chɔɔ_chìng.gif", "png": "glyph/thai_stroke_order/09_chɔɔ_chìng.png", "out": "glyph/thai_stroke_order/09_chɔɔ_chìng_outline.png", "ms": 4180, "derived": false, "strokeNote": "Tracé en un seul trait continu — le stylo ne quitte pas le papier.", "icon": "", "audio": "glyph/audio/consonants/09_tchor-tching.mp3", "fr": "tchìng", "frph": "[tchɔ̌ɔ]", "frmean": "cymbale"}, {"id": "10", "ch": "ช", "thai": "ชอ ช้าง", "name": "chɔɔ cháang", "mean": "elephant", "cls": "low", "gif": "glyph/thai_stroke_order/10_chɔɔ_cháang.gif", "png": "glyph/thai_stroke_order/10_chɔɔ_cháang.png", "out": "glyph/thai_stroke_order/10_chɔɔ_cháang_outline.png", "ms": 4180, "derived": false, "strokeNote": "Tracé en un seul trait continu — le stylo ne quitte pas le papier.", "icon": "", "audio": "glyph/audio/consonants/10_tchor-tchaang.mp3", "fr": "tcháang", "frph": "[tchɔɔ]", "frmean": "éléphant"}, {"id": "11", "ch": "ซ", "thai": "ซอ โซ่", "name": "sɔɔ sôo", "mean": "chain", "cls": "low", "gif": "glyph/thai_stroke_order/11_sɔɔ_sôo.gif", "png": "glyph/thai_stroke_order/11_sɔɔ_sôo.png", "out": "glyph/thai_stroke_order/11_sɔɔ_sôo_outline.png", "ms": 4180, "derived": true, "strokeNote": "Tracé en un seul trait continu — le stylo ne quitte pas le papier.", "icon": "", "audio": "glyph/audio/consonants/11_sor-so.mp3", "fr": "sôo", "frph": "[sɔɔ]", "frmean": "chaîne"}, {"id": "12", "ch": "ฌ", "thai": "ฌอ เฌอ", "name": "chɔɔ chəə", "mean": "tree", "cls": "low", "gif": "glyph/thai_stroke_order/12_chɔɔ_chəə.gif", "png": "glyph/thai_stroke_order/12_chɔɔ_chəə.png", "out": "glyph/thai_stroke_order/12_chɔɔ_chəə_outline.png", "ms": 4180, "derived": false, "strokeNote": "Tracé en un seul trait continu — le stylo ne quitte pas le papier.", "icon": "", "audio": "glyph/audio/consonants/12_tchor-tchoe.mp3", "fr": "tchoee", "frph": "[tchɔɔ]", "frmean": "arbuste"}, {"id": "13", "ch": "ญ", "thai": "ญอ หญิง", "name": "yɔɔ yǐng", "mean": "woman", "cls": "low", "gif": "glyph/thai_stroke_order/13_yɔɔ_yǐng.gif", "png": "glyph/thai_stroke_order/13_yɔɔ_yǐng.png", "out": "glyph/thai_stroke_order/13_yɔɔ_yǐng_outline.png", "ms": 6460, "derived": false, "strokeNote": "Tracé en 2 traits, en levant le stylo entre les deux.", "icon": "", "audio": "glyph/audio/consonants/13_yor-ying.mp3", "fr": "yǐng", "frph": "[yɔɔ]", "frmean": "femme"}, {"id": "14", "ch": "ฎ", "thai": "ฎอ ชฎา", "name": "dɔɔ chá-daa", "mean": "headdress", "cls": "mid", "gif": "glyph/thai_stroke_order/14_dɔɔ_chá_daa.gif", "png": "glyph/thai_stroke_order/14_dɔɔ_chá_daa.png", "out": "glyph/thai_stroke_order/14_dɔɔ_chá_daa_outline.png", "ms": 4180, "derived": false, "strokeNote": "Tracé en un seul trait continu — le stylo ne quitte pas le papier.", "icon": "", "audio": "glyph/audio/consonants/14_dor-tchada.mp3", "fr": "tcha-daa*", "frph": "[dɔɔ]", "frmean": "diadème"}, {"id": "15", "ch": "ฏ", "thai": "ฏอ ปฏัก", "name": "tɔɔ pà-tàk", "mean": "goad", "cls": "mid", "gif": "glyph/thai_stroke_order/15_tɔɔ_pà_tàk.gif", "png": "glyph/thai_stroke_order/15_tɔɔ_pà_tàk.png", "out": "glyph/thai_stroke_order/15_tɔɔ_pà_tàk_outline.png", "ms": 4180, "derived": false, "strokeNote": "Tracé en un seul trait continu — le stylo ne quitte pas le papier.", "icon": "", "audio": "glyph/audio/consonants/15_tor-patak.mp3", "fr": "pa-tàk*", "frph": "[tɔɔ]", "frmean": "lance"}, {"id": "16", "ch": "ฐ", "thai": "ฐอ ฐาน", "name": "thɔɔ thǎan", "mean": "pedestal", "cls": "high", "gif": "glyph/thai_stroke_order/16_thɔɔ_thǎan.gif", "png": "glyph/thai_stroke_order/16_thɔɔ_thǎan.png", "out": "glyph/thai_stroke_order/16_thɔɔ_thǎan_outline.png", "ms": 6460, "derived": false, "strokeNote": "Tracé en 2 traits, en levant le stylo entre les deux.", "icon": "", "audio": "glyph/audio/consonants/16_thor-santhaan.mp3", "fr": "sǎn-tHǎan*", "frph": "[tHɔ̌ɔ]", "frmean": "socle"}, {"id": "17", "ch": "ฑ", "thai": "ฑอ มณโฑ", "name": "thɔɔ mon-thoo", "mean": "Montho", "cls": "low", "gif": "glyph/thai_stroke_order/17_thɔɔ_mon_thoo.gif", "png": "glyph/thai_stroke_order/17_thɔɔ_mon_thoo.png", "out": "glyph/thai_stroke_order/17_thɔɔ_mon_thoo_outline.png", "ms": 4180, "derived": false, "strokeNote": "Tracé en un seul trait continu — le stylo ne quitte pas le papier.", "icon": "", "audio": "glyph/audio/consonants/17_thor-nangmonthoo.mp3", "fr": "nang-mon-tHoo*", "frph": "[tHɔɔ]", "frmean": "nom d'une princesse"}, {"id": "18", "ch": "ฒ", "thai": "ฒอ ผู้เฒ่า", "name": "thɔɔ phûu thâo", "mean": "elder", "cls": "low", "gif": "glyph/thai_stroke_order/18_thɔɔ_phûu_thâo.gif", "png": "glyph/thai_stroke_order/18_thɔɔ_phûu_thâo.png", "out": "glyph/thai_stroke_order/18_thɔɔ_phûu_thâo_outline.png", "ms": 4180, "derived": false, "strokeNote": "Tracé en un seul trait continu — le stylo ne quitte pas le papier.", "icon": "", "audio": "glyph/audio/consonants/18_thor-phuuthao.mp3", "fr": "pHôuu-tHâo*", "frph": "[tHɔɔ]", "frmean": "vieillard"}, {"id": "19", "ch": "ณ", "thai": "ณอ เณร", "name": "nɔɔ neen", "mean": "novice monk", "cls": "low", "gif": "glyph/thai_stroke_order/19_nɔɔ_neen.gif", "png": "glyph/thai_stroke_order/19_nɔɔ_neen.png", "out": "glyph/thai_stroke_order/19_nɔɔ_neen_outline.png", "ms": 4180, "derived": false, "strokeNote": "Tracé en un seul trait continu — le stylo ne quitte pas le papier.", "icon": "", "audio": "glyph/audio/consonants/19_nor-neen.mp3", "fr": "neen", "frph": "[nɔɔ]", "frmean": "moine novice"}, {"id": "20", "ch": "ด", "thai": "ดอ เด็ก", "name": "dɔɔ dèk", "mean": "child", "cls": "mid", "gif": "glyph/thai_stroke_order/20_dɔɔ_dèk.gif", "png": "glyph/thai_stroke_order/20_dɔɔ_dèk.png", "out": "glyph/thai_stroke_order/20_dɔɔ_dèk_outline.png", "ms": 4180, "derived": false, "strokeNote": "Tracé en un seul trait continu — le stylo ne quitte pas le papier.", "icon": "", "audio": "glyph/audio/consonants/20_dor-dek.mp3", "fr": "dèk", "frph": "[dɔɔ]", "frmean": "enfant"}, {"id": "21", "ch": "ต", "thai": "ตอ เต่า", "name": "tɔɔ tào", "mean": "turtle", "cls": "mid", "gif": "glyph/thai_stroke_order/21_tɔɔ_tào.gif", "png": "glyph/thai_stroke_order/21_tɔɔ_tào.png", "out": "glyph/thai_stroke_order/21_tɔɔ_tào_outline.png", "ms": 4180, "derived": false, "strokeNote": "Tracé en un seul trait continu — le stylo ne quitte pas le papier.", "icon": "", "audio": "glyph/audio/consonants/21_tor-tao.mp3", "fr": "tào", "frph": "[tɔɔ]", "frmean": "tortue"}, {"id": "22", "ch": "ถ", "thai": "ถอ ถุง", "name": "thɔɔ thǔng", "mean": "sack", "cls": "high", "gif": "glyph/thai_stroke_order/22_thɔɔ_thǔng.gif", "png": "glyph/thai_stroke_order/22_thɔɔ_thǔng.png", "out": "glyph/thai_stroke_order/22_thɔɔ_thǔng_outline.png", "ms": 4180, "derived": false, "strokeNote": "Tracé en un seul trait continu — le stylo ne quitte pas le papier.", "icon": "", "audio": "glyph/audio/consonants/22_thor-thung.mp3", "fr": "tHǒung", "frph": "[tHɔ̌ɔ]", "frmean": "sac"}, {"id": "23", "ch": "ท", "thai": "ทอ ทหาร", "name": "thɔɔ thá-hǎan", "mean": "soldier", "cls": "low", "gif": "glyph/thai_stroke_order/23_thɔɔ_thá_hǎan.gif", "png": "glyph/thai_stroke_order/23_thɔɔ_thá_hǎan.png", "out": "glyph/thai_stroke_order/23_thɔɔ_thá_hǎan_outline.png", "ms": 4180, "derived": false, "strokeNote": "Tracé en un seul trait continu — le stylo ne quitte pas le papier.", "icon": "", "audio": "glyph/audio/consonants/23_thor-thahaan.mp3", "fr": "tHa-Hǎan*", "frph": "[tHɔɔ]", "frmean": "soldat"}, {"id": "24", "ch": "ธ", "thai": "ธอ ธง", "name": "thɔɔ thong", "mean": "flag", "cls": "low", "gif": "glyph/thai_stroke_order/24_thɔɔ_thong.gif", "png": "glyph/thai_stroke_order/24_thɔɔ_thong.png", "out": "glyph/thai_stroke_order/24_thɔɔ_thong_outline.png", "ms": 4180, "derived": false, "strokeNote": "Tracé en un seul trait continu — le stylo ne quitte pas le papier.", "icon": "", "audio": "glyph/audio/consonants/24_thor-thong.mp3", "fr": "tHong", "frph": "[tHɔɔ]", "frmean": "drapeau"}, {"id": "25", "ch": "น", "thai": "นอ หนู", "name": "nɔɔ nǔu", "mean": "mouse", "cls": "low", "gif": "glyph/thai_stroke_order/25_nɔɔ_nǔu.gif", "png": "glyph/thai_stroke_order/25_nɔɔ_nǔu.png", "out": "glyph/thai_stroke_order/25_nɔɔ_nǔu_outline.png", "ms": 4180, "derived": false, "strokeNote": "Tracé en un seul trait continu — le stylo ne quitte pas le papier.", "icon": "", "audio": "glyph/audio/consonants/25_nor-nuu.mp3", "fr": "nǒuu", "frph": "[nɔɔ]", "frmean": "souris"}, {"id": "26", "ch": "บ", "thai": "บอ ใบไม้", "name": "bɔɔ bai-máai", "mean": "leaf", "cls": "mid", "gif": "glyph/thai_stroke_order/26_bɔɔ_bai_máai.gif", "png": "glyph/thai_stroke_order/26_bɔɔ_bai_máai.png", "out": "glyph/thai_stroke_order/26_bɔɔ_bai_máai_outline.png", "ms": 4180, "derived": false, "strokeNote": "Tracé en un seul trait continu — le stylo ne quitte pas le papier.", "icon": "", "audio": "glyph/audio/consonants/26_bor-baimaai.mp3", "fr": "baïmáï", "frph": "[bɔɔ]", "frmean": "feuille"}, {"id": "27", "ch": "ป", "thai": "ปอ ปลา", "name": "pɔɔ plaa", "mean": "fish", "cls": "mid", "gif": "glyph/thai_stroke_order/27_pɔɔ_plaa.gif", "png": "glyph/thai_stroke_order/27_pɔɔ_plaa.png", "out": "glyph/thai_stroke_order/27_pɔɔ_plaa_outline.png", "ms": 4180, "derived": false, "strokeNote": "Tracé en un seul trait continu — le stylo ne quitte pas le papier.", "icon": "", "audio": "glyph/audio/consonants/27_por-plaa.mp3", "fr": "plaa", "frph": "[pɔɔ]", "frmean": "poisson"}, {"id": "28", "ch": "ผ", "thai": "ผอ ผึ้ง", "name": "phɔɔ phɯ̂ng", "mean": "bee", "cls": "high", "gif": "glyph/thai_stroke_order/28_phɔɔ_phɯ̂ng.gif", "png": "glyph/thai_stroke_order/28_phɔɔ_phɯ̂ng.png", "out": "glyph/thai_stroke_order/28_phɔɔ_phɯ̂ng_outline.png", "ms": 4180, "derived": false, "strokeNote": "Tracé en un seul trait continu — le stylo ne quitte pas le papier.", "icon": "", "audio": "glyph/audio/consonants/28_phor-phung.mp3", "fr": "pHûng", "frph": "[pHɔ̌ɔ]", "frmean": "abeille"}, {"id": "29", "ch": "ฝ", "thai": "ฝอ ฝา", "name": "fɔɔ fǎa", "mean": "lid", "cls": "high", "gif": "glyph/thai_stroke_order/29_fɔɔ_fǎa.gif", "png": "glyph/thai_stroke_order/29_fɔɔ_fǎa.png", "out": "glyph/thai_stroke_order/29_fɔɔ_fǎa_outline.png", "ms": 4180, "derived": false, "strokeNote": "Tracé en un seul trait continu — le stylo ne quitte pas le papier.", "icon": "", "audio": "glyph/audio/consonants/29_for-faa.mp3", "fr": "fǎa", "frph": "[fɔ̌ɔ]", "frmean": "couvercle"}, {"id": "30", "ch": "พ", "thai": "พอ พาน", "name": "phɔɔ phaan", "mean": "tray", "cls": "low", "gif": "glyph/thai_stroke_order/30_phɔɔ_phaan.gif", "png": "glyph/thai_stroke_order/30_phɔɔ_phaan.png", "out": "glyph/thai_stroke_order/30_phɔɔ_phaan_outline.png", "ms": 4180, "derived": false, "strokeNote": "Tracé en un seul trait continu — le stylo ne quitte pas le papier.", "icon": "", "audio": "glyph/audio/consonants/30_phor-phaan.mp3", "fr": "pHaan", "frph": "[pHɔɔ]", "frmean": "coupe"}, {"id": "31", "ch": "ฟ", "thai": "ฟอ ฟัน", "name": "fɔɔ fan", "mean": "teeth", "cls": "low", "gif": "glyph/thai_stroke_order/31_fɔɔ_fan.gif", "png": "glyph/thai_stroke_order/31_fɔɔ_fan.png", "out": "glyph/thai_stroke_order/31_fɔɔ_fan_outline.png", "ms": 4180, "derived": false, "strokeNote": "Tracé en un seul trait continu — le stylo ne quitte pas le papier.", "icon": "", "audio": "glyph/audio/consonants/31_for-fan.mp3", "fr": "fan", "frph": "[fɔɔ]", "frmean": "dent"}, {"id": "32", "ch": "ภ", "thai": "ภอ สำเภา", "name": "phɔɔ sǎm-phao", "mean": "sailing ship", "cls": "low", "gif": "glyph/thai_stroke_order/32_phɔɔ_sǎm_phao.gif", "png": "glyph/thai_stroke_order/32_phɔɔ_sǎm_phao.png", "out": "glyph/thai_stroke_order/32_phɔɔ_sǎm_phao_outline.png", "ms": 4180, "derived": false, "strokeNote": "Tracé en un seul trait continu — le stylo ne quitte pas le papier.", "icon": "", "audio": "glyph/audio/consonants/32_phor-samphao.mp3", "fr": "sam-pHao*", "frph": "[pHɔɔ]", "frmean": "voilier"}, {"id": "33", "ch": "ม", "thai": "มอ ม้า", "name": "mɔɔ máa", "mean": "horse", "cls": "low", "gif": "glyph/thai_stroke_order/33_mɔɔ_máa.gif", "png": "glyph/thai_stroke_order/33_mɔɔ_máa.png", "out": "glyph/thai_stroke_order/33_mɔɔ_máa_outline.png", "ms": 4180, "derived": false, "strokeNote": "Tracé en un seul trait continu — le stylo ne quitte pas le papier.", "icon": "", "audio": "glyph/audio/consonants/33_mor-maa.mp3", "fr": "máa", "frph": "[mɔɔ]", "frmean": "cheval"}, {"id": "34", "ch": "ย", "thai": "ยอ ยักษ์", "name": "yɔɔ yák", "mean": "giant", "cls": "low", "gif": "glyph/thai_stroke_order/34_yɔɔ_yák.gif", "png": "glyph/thai_stroke_order/34_yɔɔ_yák.png", "out": "glyph/thai_stroke_order/34_yɔɔ_yák_outline.png", "ms": 4180, "derived": false, "strokeNote": "Tracé en un seul trait continu — le stylo ne quitte pas le papier.", "icon": "", "audio": "glyph/audio/consonants/34_yor-yak.mp3", "fr": "yák", "frph": "[yɔɔ]", "frmean": "ogre"}, {"id": "35", "ch": "ร", "thai": "รอ เรือ", "name": "rɔɔ rɯɯa", "mean": "boat", "cls": "low", "gif": "glyph/thai_stroke_order/35_rɔɔ_rɯɯa.gif", "png": "glyph/thai_stroke_order/35_rɔɔ_rɯɯa.png", "out": "glyph/thai_stroke_order/35_rɔɔ_rɯɯa_outline.png", "ms": 4180, "derived": false, "strokeNote": "Tracé en un seul trait continu — le stylo ne quitte pas le papier.", "icon": "", "audio": "glyph/audio/consonants/35_ror-ruua.mp3", "fr": "ruua", "frph": "[rɔɔ]", "frmean": "pirogue"}, {"id": "36", "ch": "ล", "thai": "ลอ ลิง", "name": "lɔɔ ling", "mean": "monkey", "cls": "low", "gif": "glyph/thai_stroke_order/36_lɔɔ_ling.gif", "png": "glyph/thai_stroke_order/36_lɔɔ_ling.png", "out": "glyph/thai_stroke_order/36_lɔɔ_ling_outline.png", "ms": 4180, "derived": false, "strokeNote": "Tracé en un seul trait continu — le stylo ne quitte pas le papier.", "icon": "", "audio": "glyph/audio/consonants/36_lor-ling.mp3", "fr": "ling", "frph": "[lɔɔ]", "frmean": "singe"}, {"id": "37", "ch": "ว", "thai": "วอ แหวน", "name": "wɔɔ wɛ̌ɛn", "mean": "ring", "cls": "low", "gif": "glyph/thai_stroke_order/37_wɔɔ_wɛ̌ɛn.gif", "png": "glyph/thai_stroke_order/37_wɔɔ_wɛ̌ɛn.png", "out": "glyph/thai_stroke_order/37_wɔɔ_wɛ̌ɛn_outline.png", "ms": 4180, "derived": false, "strokeNote": "Tracé en un seul trait continu — le stylo ne quitte pas le papier.", "icon": "", "audio": "glyph/audio/consonants/37_wor-ween.mp3", "fr": "wěen", "frph": "[wɔɔ]", "frmean": "bague"}, {"id": "38", "ch": "ศ", "thai": "ศอ ศาลา", "name": "sɔɔ sǎa-laa", "mean": "pavilion", "cls": "high", "gif": "glyph/thai_stroke_order/38_sɔɔ_sǎa_laa.gif", "png": "glyph/thai_stroke_order/38_sɔɔ_sǎa_laa.png", "out": "glyph/thai_stroke_order/38_sɔɔ_sǎa_laa_outline.png", "ms": 6460, "derived": false, "strokeNote": "Tracé en 2 traits, en levant le stylo entre les deux.", "icon": "", "audio": "glyph/audio/consonants/38_sor-saalaa.mp3", "fr": "sǎa-laa*", "frph": "[sɔ̌ɔ]", "frmean": "pavillon"}, {"id": "39", "ch": "ษ", "thai": "ษอ ฤๅษี", "name": "sɔɔ rɯɯ-sǐi", "mean": "hermit", "cls": "high", "gif": "glyph/thai_stroke_order/39_sɔɔ_rɯɯ_sǐi.gif", "png": "glyph/thai_stroke_order/39_sɔɔ_rɯɯ_sǐi.png", "out": "glyph/thai_stroke_order/39_sɔɔ_rɯɯ_sǐi_outline.png", "ms": 6460, "derived": false, "strokeNote": "Tracé en 2 traits, en levant le stylo entre les deux.", "icon": "", "audio": "glyph/audio/consonants/39_sor-ruusii.mp3", "fr": "ruu-sǐi*", "frph": "[sɔ̌ɔ]", "frmean": "ermite"}, {"id": "40", "ch": "ส", "thai": "สอ เสือ", "name": "sɔɔ sɯ̌a", "mean": "tiger", "cls": "high", "gif": "glyph/thai_stroke_order/40_sɔɔ_sɯ̌a.gif", "png": "glyph/thai_stroke_order/40_sɔɔ_sɯ̌a.png", "out": "glyph/thai_stroke_order/40_sɔɔ_sɯ̌a_outline.png", "ms": 6460, "derived": false, "strokeNote": "Tracé en 2 traits, en levant le stylo entre les deux.", "icon": "", "audio": "glyph/audio/consonants/40_sor-sua.mp3", "fr": "sǔua", "frph": "[sɔ̌ɔ]", "frmean": "tigre"}, {"id": "41", "ch": "ห", "thai": "หอ หีบ", "name": "hɔɔ hìip", "mean": "chest", "cls": "high", "gif": "glyph/thai_stroke_order/41_hɔɔ_hìip.gif", "png": "glyph/thai_stroke_order/41_hɔɔ_hìip.png", "out": "glyph/thai_stroke_order/41_hɔɔ_hìip_outline.png", "ms": 4180, "derived": false, "strokeNote": "Tracé en un seul trait continu — le stylo ne quitte pas le papier.", "icon": "", "audio": "glyph/audio/consonants/41_hor-hiip.mp3", "fr": "Hìip", "frph": "[Hɔ̌ɔ]", "frmean": "coffre"}, {"id": "42", "ch": "ฬ", "thai": "ฬอ จุฬา", "name": "lɔɔ cù-laa", "mean": "kite", "cls": "low", "gif": "glyph/thai_stroke_order/42_lɔɔ_cù_laa.gif", "png": "glyph/thai_stroke_order/42_lɔɔ_cù_laa.png", "out": "glyph/thai_stroke_order/42_lɔɔ_cù_laa_outline.png", "ms": 4180, "derived": false, "strokeNote": "Tracé en un seul trait continu — le stylo ne quitte pas le papier.", "icon": "", "audio": "glyph/audio/consonants/42_lor-djulaa.mp3", "fr": "djòu-laa*", "frph": "[lɔɔ]", "frmean": "cerf-volant"}, {"id": "43", "ch": "อ", "thai": "ออ อ่าง", "name": "ʔɔɔ àang", "mean": "basin", "cls": "mid", "gif": "glyph/thai_stroke_order/43_ʔɔɔ_àang.gif", "png": "glyph/thai_stroke_order/43_ʔɔɔ_àang.png", "out": "glyph/thai_stroke_order/43_ʔɔɔ_àang_outline.png", "ms": 4180, "derived": false, "strokeNote": "Tracé en un seul trait continu — le stylo ne quitte pas le papier.", "icon": "", "audio": "glyph/audio/consonants/43_or-aang.mp3", "fr": "àang", "frph": "[ɔɔ]", "frmean": "bassine"}, {"id": "44", "ch": "ฮ", "thai": "ฮอ นกฮูก", "name": "hɔɔ nók-hûuk", "mean": "owl", "cls": "low", "gif": "glyph/thai_stroke_order/44_hɔɔ_nók_hûuk.gif", "png": "glyph/thai_stroke_order/44_hɔɔ_nók_hûuk.png", "out": "glyph/thai_stroke_order/44_hɔɔ_nók_hûuk_outline.png", "ms": 4180, "derived": false, "strokeNote": "Tracé en un seul trait continu — le stylo ne quitte pas le papier.", "icon": "", "audio": "glyph/audio/consonants/44_hor-nokhuuk.mp3", "fr": "nók-Hôuuk*", "frph": "[Hɔɔ]", "frmean": "hibou"}];
+const NUMS = [{"id": "n01", "ch": "๐", "thai": "ศูนย์", "name": "sǔun", "mean": "Arabic 0", "cls": "", "gif": "glyph/thai_numeral_stroke_order/01_sǔun.gif", "png": "glyph/thai_numeral_stroke_order/01_sǔun.png", "out": "glyph/thai_numeral_stroke_order/01_sǔun_outline.png", "ms": 5680, "derived": false, "icon": "", "audio": "", "strokeNote": "Tracé en un seul trait continu — le stylo ne quitte pas le papier.", "frmean": "chiffre arabe 0", "fr": "sǒun"}, {"id": "n02", "ch": "๑", "thai": "หนึ่ง", "name": "nɯ̀ng", "mean": "Arabic 1", "cls": "", "gif": "glyph/thai_numeral_stroke_order/02_nɯ̀ng.gif", "png": "glyph/thai_numeral_stroke_order/02_nɯ̀ng.png", "out": "glyph/thai_numeral_stroke_order/02_nɯ̀ng_outline.png", "ms": 5680, "derived": false, "icon": "", "audio": "", "strokeNote": "Tracé en un seul trait continu — le stylo ne quitte pas le papier.", "frmean": "chiffre arabe 1", "fr": "nùng"}, {"id": "n03", "ch": "๒", "thai": "สอง", "name": "sɔ̌ɔng", "mean": "Arabic 2", "cls": "", "gif": "glyph/thai_numeral_stroke_order/03_sɔ̌ɔng.gif", "png": "glyph/thai_numeral_stroke_order/03_sɔ̌ɔng.png", "out": "glyph/thai_numeral_stroke_order/03_sɔ̌ɔng_outline.png", "ms": 5680, "derived": false, "icon": "", "audio": "", "strokeNote": "Tracé en un seul trait continu — le stylo ne quitte pas le papier.", "frmean": "chiffre arabe 2", "fr": "sɔ̌ɔng"}, {"id": "n04", "ch": "๓", "thai": "สาม", "name": "sǎam", "mean": "Arabic 3", "cls": "", "gif": "glyph/thai_numeral_stroke_order/04_sǎam.gif", "png": "glyph/thai_numeral_stroke_order/04_sǎam.png", "out": "glyph/thai_numeral_stroke_order/04_sǎam_outline.png", "ms": 5680, "derived": false, "icon": "", "audio": "", "strokeNote": "Tracé en un seul trait continu — le stylo ne quitte pas le papier.", "frmean": "chiffre arabe 3", "fr": "sǎam"}, {"id": "n05", "ch": "๔", "thai": "สี่", "name": "sìi", "mean": "Arabic 4", "cls": "", "gif": "glyph/thai_numeral_stroke_order/05_sìi.gif", "png": "glyph/thai_numeral_stroke_order/05_sìi.png", "out": "glyph/thai_numeral_stroke_order/05_sìi_outline.png", "ms": 5680, "derived": false, "icon": "", "audio": "", "strokeNote": "Tracé en un seul trait continu — le stylo ne quitte pas le papier.", "frmean": "chiffre arabe 4", "fr": "sìi"}, {"id": "n06", "ch": "๕", "thai": "ห้า", "name": "hâa", "mean": "Arabic 5", "cls": "", "gif": "glyph/thai_numeral_stroke_order/06_hâa.gif", "png": "glyph/thai_numeral_stroke_order/06_hâa.png", "out": "glyph/thai_numeral_stroke_order/06_hâa_outline.png", "ms": 5680, "derived": false, "icon": "", "audio": "", "strokeNote": "Tracé en un seul trait continu — le stylo ne quitte pas le papier.", "frmean": "chiffre arabe 5", "fr": "Hâa"}, {"id": "n07", "ch": "๖", "thai": "หก", "name": "hòk", "mean": "Arabic 6", "cls": "", "gif": "glyph/thai_numeral_stroke_order/07_hòk.gif", "png": "glyph/thai_numeral_stroke_order/07_hòk.png", "out": "glyph/thai_numeral_stroke_order/07_hòk_outline.png", "ms": 5680, "derived": false, "icon": "", "audio": "", "strokeNote": "Tracé en un seul trait continu — le stylo ne quitte pas le papier.", "frmean": "chiffre arabe 6", "fr": "Hòk"}, {"id": "n08", "ch": "๗", "thai": "เจ็ด", "name": "cèt", "mean": "Arabic 7", "cls": "", "gif": "glyph/thai_numeral_stroke_order/08_cèt.gif", "png": "glyph/thai_numeral_stroke_order/08_cèt.png", "out": "glyph/thai_numeral_stroke_order/08_cèt_outline.png", "ms": 5680, "derived": false, "icon": "", "audio": "", "strokeNote": "Tracé en un seul trait continu — le stylo ne quitte pas le papier.", "frmean": "chiffre arabe 7", "fr": "djèt"}, {"id": "n09", "ch": "๘", "thai": "แปด", "name": "pɛ̀ɛt", "mean": "Arabic 8", "cls": "", "gif": "glyph/thai_numeral_stroke_order/09_pɛ̀ɛt.gif", "png": "glyph/thai_numeral_stroke_order/09_pɛ̀ɛt.png", "out": "glyph/thai_numeral_stroke_order/09_pɛ̀ɛt_outline.png", "ms": 5680, "derived": false, "icon": "", "audio": "", "strokeNote": "Tracé en un seul trait continu — le stylo ne quitte pas le papier.", "frmean": "chiffre arabe 8", "fr": "pɛ̀ɛt"}, {"id": "n10", "ch": "๙", "thai": "เก้า", "name": "kâao", "mean": "Arabic 9", "cls": "", "gif": "glyph/thai_numeral_stroke_order/10_kâao.gif", "png": "glyph/thai_numeral_stroke_order/10_kâao.png", "out": "glyph/thai_numeral_stroke_order/10_kâao_outline.png", "ms": 5680, "derived": false, "icon": "", "audio": "", "strokeNote": "Tracé en un seul trait continu — le stylo ne quitte pas le papier.", "frmean": "chiffre arabe 9", "fr": "kâo"}];
+const REF = {"vowels": [["Voyelles courtes & longues", [["◌ะ", "สระ อะ", "[a]", "Courte", "après la consonne", "glyph/audio/vowels/01_a.mp3"], ["◌า", "สระ อา", "[aa]", "Longue", "après la consonne", "glyph/audio/vowels/02_aa.mp3"], ["◌ิ", "สระ อิ", "[i]", "Courte", "au-dessus de la consonne", "glyph/audio/vowels/03_i.mp3"], ["◌ี", "สระ อี", "[ii]", "Longue", "au-dessus de la consonne", "glyph/audio/vowels/04_ii.mp3"], ["◌ึ", "สระ อึ", "[u]", "Courte", "au-dessus de la consonne", "glyph/audio/vowels/05_u.mp3"], ["◌ือ", "สระ อือ", "[uu]", "Longue", "au-dessus de la consonne", "glyph/audio/vowels/06_uu.mp3"], ["◌ุ", "สระ อุ", "[ou]", "Courte", "en dessous de la consonne", "glyph/audio/vowels/07_ou.mp3"], ["◌ู", "สระ อู", "[ouu]", "Longue", "en dessous de la consonne", "glyph/audio/vowels/08_ouu.mp3"], ["เ◌ะ", "สระ เอะ", "[e]", "Courte", "autour de la consonne", "glyph/audio/vowels/09_e.mp3"], ["เ◌", "สระ เอ", "[ee]", "Longue", "avant la consonne", "glyph/audio/vowels/10_ee.mp3"], ["แ◌ะ", "สระ แอะ", "[ɛ]", "Courte", "autour de la consonne", "glyph/audio/vowels/11_ae.mp3"], ["แ◌", "สระ แอ", "[ɛɛ]", "Longue", "avant la consonne", "glyph/audio/vowels/12_aeae.mp3"], ["เ◌าะ", "สระ เอาะ", "[ɔ]", "Courte", "autour de la consonne", "glyph/audio/vowels/13_aw.mp3"], ["◌อ", "สระ ออ", "[ɔɔ]", "Longue", "après la consonne", "glyph/audio/vowels/14_awaw.mp3"], ["เ◌อะ", "สระ เออะ", "[oe]", "Courte", "autour de la consonne", "glyph/audio/vowels/15_oe.mp3"], ["เ◌อ", "สระ เออ", "[oee]", "Longue", "autour de la consonne", "glyph/audio/vowels/16_oee.mp3"], ["โ◌ะ", "สระ โอะ", "[o]", "Courte", "autour de la consonne", "glyph/audio/vowels/17_o.mp3"], ["โ◌", "สระ โอ", "[oo]", "Longue", "avant la consonne", "glyph/audio/vowels/18_oo.mp3"]]], ["Diphtongues (voyelles composées)", [["◌ัวะ", "สระ อัวะ", "[oua]", "Courte", "autour de la consonne", ""], ["◌ัว", "สระ อัว", "[ouua]", "Longue", "autour de la consonne", ""], ["เ◌ียะ", "สระ เอียะ", "[ia]", "Courte", "autour de la consonne", ""], ["เ◌ีย", "สระ เอีย", "[iaa]", "Longue", "autour de la consonne", ""], ["เ◌ือะ", "สระ เอือะ", "[ua]", "Courte", "autour de la consonne", ""], ["เ◌ือ", "สระ เอือ", "[uua]", "Longue", "autour de la consonne", ""]]], ["Semi-voyelles", [["◌ำ", "สระ อำ", "[aᵐ]", "Semi-voyelle", "après la consonne", ""], ["ไ◌", "สระ ไอ", "[aï]", "Semi-voyelle", "avant la consonne", ""], ["ใ◌", "สระ ใอ", "[aï]", "Semi-voyelle", "avant la consonne", ""], ["เ◌า", "สระ เอา", "[ao]", "Semi-voyelle", "autour de la consonne", ""]]], ["Voyelles rares", [["ฤ", "ฤ", "[ru] [ri] [roe]", "Vocalique", "s’écrit seule", ""], ["ฦ", "ฦ", "[lu]", "Vocalique", "s’écrit seule", ""], ["ฤๅ", "ฤๅ", "[ruu]", "Vocalique", "s’écrit seule", ""], ["ฦๅ", "ฦๅ", "[luu]", "Vocalique", "s’écrit seule", ""]]]], "tones": [["◌่", "ไม้เอก", "máï èek", "ton bas"], ["◌้", "ไม้โท", "máï tHoo", "ton descendant"], ["◌๊", "ไม้ตรี", "máï trii", "ton haut"], ["◌๋", "ไม้จัตวา", "máï djàt-ta-waa", "ton montant"]], "numerals": [["๐", "0", "ศูนย์", "sǒun"], ["๑", "1", "หนึ่ง", "nùng"], ["๒", "2", "สอง", "sɔ̌ɔng"], ["๓", "3", "สาม", "sǎam"], ["๔", "4", "สี่", "sìi"], ["๕", "5", "ห้า", "Hâa"], ["๖", "6", "หก", "Hòk"], ["๗", "7", "เจ็ด", "djèt"], ["๘", "8", "แปด", "pɛ̀ɛt"], ["๙", "9", "เก้า", "kâo"]], "vowelCount": 32};</script>
+<script>
+const $ = s => document.querySelector(s);
+const byId = id => DATA.find(d => d.id === id);
+
+/* Resolves once the browser has populated its voice list. Chrome returns an
+   empty array from getVoices() until it loads asynchronously, so an early click
+   would otherwise get no Thai voice at all. Falls through after 2s so a browser
+   that never fires voiceschanged cannot hang the button. */
+let _voices = null;
+function voicesReady(){
+  if(_voices) return _voices;
+  _voices = new Promise(resolve => {
+    const synth = window.speechSynthesis;
+    const now = synth.getVoices();
+    if(now && now.length){ resolve(now); return; }
+    const done = () => resolve(synth.getVoices() || []);
+    synth.addEventListener('voiceschanged', done, {once:true});
+    setTimeout(done, 2000);
+  });
+  return _voices;
+}
+const CLASSNAME = {high:'Consonnes Hautes', mid:'Consonnes Moyennes', low:'Consonnes Basses'};
+
+/* ---------------- section tabs ---------------- */
+const TABS = [
+  ['',        '#/',                  'Consonnes', DATA.length],
+  ['vowels',  '#/vowels',            'Voyelles',  REF.vowelCount],
+  ['tones',   '#/tones',             'Tons',      REF.tones.length],
+  ['numbers', '#/numbers',           'Chiffres',  NUMS.length || REF.numerals.length],
+  // Removed 10 Aug 2026: the "Alphabet quiz" tab next to Numbers. The game is
+  // still reachable from the top bar link and from home.html, so the duplicate
+  // tab was dropped. Previous version kept for reference:
+  //   // Leaves the app: the recognition quiz is its own page, so it is marked with
+  //   // an arrow rather than pretending to be another section of this one.
+  //   ['quiz',    'glyph/alphabet.html', 'Alphabet quiz', null],
+];
+function tabBar(active){
+  return '<nav class="tabs">' + TABS.map(([key,href,label,count]) => {
+    const ext = href.charAt(0) !== '#';
+    return `<a href="${href}"${key===active ? ' aria-current="page"' : ''}` +
+           `${ext ? ' class="tab-ext"' : ''}>${label}` +
+           `${count === null ? '' : ' (' + count + ')'}` +
+           `${ext ? ' <span class="ext-arrow">↗</span>' : ''}</a>`;
+  }).join('') + '</nav>';
+}
+
+/* ---------------- reference views ---------------- */
+function refCard(inner){ return `<div class="rcard">${inner}</div>`; }
+
+/* Small speaker glyph shown on every playable card. */
+const SPK = `<svg class="spk" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+ stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon
+ points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path
+ d="M15.5 8.5a5 5 0 0 1 0 7"></path><path d="M18.5 5.5a9 9 0 0 1 0 13"></path></svg>`;
+
+/* The card is a button so it works with the keyboard and on touch. data-audio
+   is the recorded clip when one exists; data-say is the text handed to the
+   speech API when it does not. */
+function playCard(form, thai, ph, tag, pos, audio){
+  const say = thai.replace(/^สระ\s*/, '');   // "สระ เอีย" -> "เอีย" : on prononce la
+                                                  // voyelle seule, comme les clips ont été enregistrés
+  return `<button type="button" class="rcard play" data-audio="${audio}" data-say="${say}"
+      aria-label="Écouter ${ph}">${SPK}${audio ? '' : '<span class="tts">TTS</span>'}
+      <div class="form th">${form}</div><div class="nm th">${thai}</div>
+      <div class="ph">${ph}</div><span class="snd">${tag}</span>
+      <div class="pos">${pos}</div></button>`;
+}
+
+function renderVowels(){
+  const groups = REF.vowels.map(([title, rows]) => {
+    const rec = rows.filter(r => r[5]).length;
+    const note = rec === rows.length ? 'audio enregistré'
+               : rec === 0 ? 'voix du navigateur'
+               : `${rec} enregistrées, ${rows.length - rec} en voix du navigateur`;
+    return `
+    <section class="refgroup">
+      <h2>${title}</h2>
+      <div class="sub">${rows.length} formes — ${note}</div>
+      <div class="refgrid">${rows.map(r => playCard(r[0],r[1],r[2],r[3],r[4],r[5]||'')).join('')}</div>
+    </section>`;
+  }).join('');
+  $('#app').innerHTML = `
+    <div class="crumb">Alphabet thaï</div>
+    <h1>Les voyelles du thaï <span class="lead">— ${REF.vowelCount} formes.</span></h1>
+    <p class="intro">Les voyelles s'écrivent avant, après, au-dessus ou en dessous de la consonne
+      qu'elles suivent à l'oral — et parfois tout autour. Le signe ◌ marque la place de la consonne.
+      <strong>Touchez une carte pour l'écouter.</strong></p>
+    ${tabBar('vowels')}
+    <div class="vstatus" id="vstatus"></div>${groups}
+    <div class="refnote">Les 18 voyelles courtes et longues utilisent un vrai enregistrement. Les
+      diphtongues, semi-voyelles et voyelles rares sont marquées TTS : elles passent par la voix thaïe
+      du navigateur tant que les enregistrements n'existent pas — installez une voix thaïe si vous
+      n'entendez rien. Les animations de tracé n'existent que pour les 44 consonnes.</div>`;
+}
+
+function renderTones(){
+  $('#app').innerHTML = `
+    <div class="crumb">Alphabet thaï</div>
+    <h1>Les marques de ton <span class="lead">— ${REF.tones.length} marques, 5 tons.</span></h1>
+    <p class="intro">Le thaï compte cinq tons : moyen, bas, descendant, haut et montant. Seuls quatre
+      s'écrivent, et la marque seule ne fixe pas le ton — la classe de la consonne et la fin de la
+      syllabe entrent aussi en jeu.</p>
+    ${tabBar('tones')}
+    <section class="refgroup">
+      <div class="refgrid">${REF.tones.map(([form,thai,ph,eff]) => refCard(
+        `<div class="form th">${form}</div><div class="nm th">${thai}</div>
+         <div class="ph">${ph}</div><span class="snd">${eff}</span>`)).join('')}</div>
+    </section>
+    <div class="refnote">Le ton indiqué est le résultat sur une syllabe vivante commençant par une
+      consonne de <strong>classe moyenne</strong>. Les initiales de classe haute ou basse changent le
+      résultat, et ไม้ตรี comme ไม้จัตวา ne s'écrivent presque que sur des consonnes de classe moyenne.
+      C'est pour cela que la classe de la consonne, dans l'onglet précédent, compte pour la lecture.</div>`;
+}
+
+function renderNumerals(){
+  $('#app').innerHTML = `
+    <div class="crumb">Alphabet thaï</div>
+    <h1>Les chiffres thaïs <span class="lead">— ๐ à ๙.</span></h1>
+    <p class="intro">Les chiffres arabes servent à presque tout au quotidien en Thaïlande. Les chiffres
+      thaïs restent visibles sur la signalétique des temples, les documents officiels, les billets de
+      banque et certains prix de marché.</p>
+    ${tabBar('numbers')}
+    <section class="refgroup">
+      <div class="refgrid">${NUMS.map(d => `
+        <a class="tile" href="#/${d.id}">
+          <div class="big th">${d.ch}</div>
+          <div class="ar">${d.frmean}</div>
+          <div class="nm th">${d.thai}</div>
+          <div class="ph">${d.fr}</div>
+          <span class="arrowlink">s'entraîner à l'écrire &rarr;</span>
+        </a>`).join('')}</div>
+    </section>
+    <div class="refnote">L'ordre des traits a été relevé image par image sur une vidéo d'écriture pour
+      enfants — en suivant l'apparition de l'encre, puis en ajustant ce tracé à la lettre Sarabun.
+      Le ๐ est repris du caractère de droite de ๑๐, seul endroit où la vidéo l'écrit.</div>`;
+}
+
+/* ---------------- grid ---------------- */
+function renderGrid(filter){
+  const tiles = DATA.map(d => `
+    <a class="tile ${d.cls} ${filter && filter!==d.cls ? 'dim':''}" href="#/${d.id}">
+      <span class="dot ${d.cls}" title="${CLASSNAME[d.cls]}"></span>
+      <div class="big th">${d.ch}</div>
+      <div class="nm th">${d.thai}</div>
+      <div class="ph">${d.frph} ${d.fr}</div>
+      <div class="mn">${d.frmean}</div>
+      ${d.icon || ''}
+    </a>`).join('');
+  $('#app').innerHTML = `
+    <div class="crumb">Alphabet thaï</div>
+    <h1>Les 44 consonnes du thaï <span class="lead">— touchez une lettre pour vous entraîner à l'écrire.</span></h1>
+    <p class="intro">Voici les 44 consonnes avec l'ordre des traits animé. Le tracé de chaque lettre
+      vous sera présenté à l'aide d'une animation, puis à vous de jouer en les reproduisant vous-même
+      à l'aide de votre stylet ou votre doigt.</p>
+    ${tabBar('')}
+    <div class="filters">
+      <button data-f="" aria-pressed="${!filter}">Les 44</button>
+      <button class="high" data-f="high" aria-pressed="${filter==='high'}">Consonnes Hautes · 11</button>
+      <button class="mid" data-f="mid" aria-pressed="${filter==='mid'}">Consonnes Moyennes · 9</button>
+      <button class="low" data-f="low" aria-pressed="${filter==='low'}">Consonnes Basses · 24</button>
+    </div>
+    <div class="grid">${tiles}</div>`;
+  document.querySelectorAll('.filters button').forEach(b =>
+    b.onclick = () => renderGrid(b.dataset.f || null));
+}
+
+/* ---------------- detail ---------------- */
+function renderDetail(id){
+  const isNum = id.charAt(0) === 'n';
+  const SET = isNum ? NUMS : DATA;
+  const d = SET.find(x => x.id === id);
+  if(!d) return renderGrid(null);
+  const i = SET.indexOf(d);
+  const prev = SET[(i-1+SET.length)%SET.length], next = SET[(i+1)%SET.length];
+  const back = isNum ? ['#/numbers','Chiffres thaïs'] : ['#/','Alphabet thaï'];
+  const badge = isNum ? 'CHIFFRE THAÏ' : CLASSNAME[d.cls].toUpperCase();
+  const ph = isNum ? d.fr : `${d.frph} ${d.fr}`;
+
+  $('#app').innerHTML = `
+    <div class="crumb"><a href="${back[0]}">${back[1]}</a> &nbsp;/&nbsp; <span class="th">${d.ch}</span></div>
+    <h1>Entraînement au tracé <span class="lead">— regardez, puis écrivez à votre tour.</span></h1>
+    <div class="detail">
+      <div class="card ${d.cls}">
+        <span class="badge ${d.cls}"><i class="dot ${d.cls}"></i>${badge}</span>
+        <div class="idhead">
+          <div class="big th">${d.ch}</div>
+          <div>
+            <div class="nm th">${d.thai}</div>
+            <div class="ph">${ph}</div>
+            <div class="mn">${d.frmean}</div>
+          </div>
+          ${d.icon || ''}
+        </div>
+        <div class="rowbtn">
+          <button id="say">🔊 Prononciation</button>
+          <button id="copy">Copier le caractère</button>
+          <button id="replay">Relancer l'animation</button>
+        </div>
+        <div class="note">${d.strokeNote}${d.derived ? '<br><br>Le tracé de cette lettre a été reconstitué et recoupé, il ne provient pas d\'une source publiée.' : ''}</div>
+        <div class="nav2">
+          <a href="#/${prev.id}">&larr; <span class="th">${prev.ch}</span> ${prev.fr}</a>
+          <a href="#/${next.id}"><span class="th">${next.ch}</span> ${next.fr} &rarr;</a>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="stage" id="stage">
+          <img class="art" id="art" src="${d.png}" alt="${d.fr}">
+          <div class="guides"><span class="t"></span><span class="b"></span></div>
+          <canvas class="ink" id="ink"></canvas>
+          <button class="playbtn" id="play" aria-label="Voir l'ordre des traits"><span class="tri"></span></button>
+        </div>
+        <div class="controls">
+          <button class="pill ${d.cls}" id="show" aria-pressed="true"><span class="ic"></span>Voir</button>
+          <button class="pill ${d.cls}" id="shadow" aria-pressed="false"><span class="ic"></span>Repasser le contour</button>
+          <button class="pill ${d.cls}" id="practice" aria-pressed="false"><span class="ic"></span>Écrire sur feuille vierge</button>
+          <button class="pill" id="clear">Effacer</button>
+        </div>
+        <div class="hint" id="hint">Appuyez sur lecture pour voir le tracé.</div>
+      </div>
+    </div>`;
+
+  setupPractice(d);
+}
+
+/* ---------------- animation + drawing ---------------- */
+function setupPractice(d){
+  const stage=$('#stage'), art=$('#art'), hint=$('#hint');
+  const showBtn=$('#show'), shadBtn=$('#shadow'), pracBtn=$('#practice');
+  let timer=null;
+  function press(active){
+    showBtn.setAttribute('aria-pressed', String(active==='show'));
+    shadBtn.setAttribute('aria-pressed', String(active==='shadow'));
+    pracBtn.setAttribute('aria-pressed', String(active==='practice'));
+  }
+
+  function stop(){ clearTimeout(timer); timer=null; stage.classList.remove('playing');
+    if(!stage.classList.contains('shadow')) art.src=d.png; }
+  function showMode(){
+    stage.classList.remove('blank','shadow');
+    art.src=d.png; press('show');
+    hint.textContent='Appuyez sur lecture pour voir le tracé.';
+  }
+  function shadowMode(){
+    stop();
+    stage.classList.remove('blank'); stage.classList.add('shadow');
+    art.src=d.out; press('shadow');
+    hint.textContent='Repassez à l\u2019intérieur du contour avec le doigt — touchez « Voir » pour revoir le tracé.';
+  }
+  function play(){
+    if(stage.classList.contains('blank')||stage.classList.contains('shadow')) showMode();
+    clearTimeout(timer);
+    stage.classList.add('playing');
+    art.src = d.gif + '?t=' + Date.now();      // cache-bust so it restarts at frame 1
+    hint.textContent='Suivez l\u2019ordre — le point rouge est le stylo.';
+    timer=setTimeout(()=>{ stop(); hint.textContent='Touchez « Écrire sur feuille vierge » et essayez vous-même.'; }, d.ms);
+  }
+  function practiceMode(){
+    stop();
+    stage.classList.remove('shadow'); stage.classList.add('blank');
+    press('practice');
+    hint.textContent='Espace vierge — écrivez la lettre de mémoire.';
+  }
+
+  $('#play').onclick=play;
+  $('#replay').onclick=play;
+  showBtn.onclick=showMode;
+  shadBtn.onclick=shadowMode;
+  pracBtn.onclick=practiceMode;
+  $('#say').onclick=async e=>{
+    // A real recording beats synthesis on every device, so try it first. Only
+    // the consonants have one; numerals fall through to the speech API.
+    if(d.audio){
+      try{
+        if(window._clip){ window._clip.pause(); }
+        const clip=new Audio(d.audio);
+        window._clip=clip;
+        hint.textContent='Lecture de l\u2019enregistrement.';
+        clip.onended=()=>{ hint.textContent='Appuyez sur lecture pour voir le tracé.'; };
+        await clip.play();
+        return;
+      }catch(err){ /* file missing or blocked — fall through to synthesis */ }
+    }
+    const synth=window.speechSynthesis;
+    if(!synth){ hint.textContent='La synthèse vocale n\u2019est pas disponible dans ce navigateur.'; return; }
+    // getVoices() is empty until Chrome finishes loading the list, so wait for it
+    // rather than silently falling back to an English voice reading Thai text.
+    const voices=await voicesReady();
+    const th=voices.find(v=>/^th/i.test(v.lang||''));
+    synth.cancel();
+    const u=new SpeechSynthesisUtterance(d.thai);   // e.g. กอ ไก่
+    u.lang='th-TH'; u.rate=0.8;
+    if(th) u.voice=th;
+    else hint.textContent='Aucune voix thaïe installée — Windows : Paramètres › Heure et langue › Voix › Ajouter des voix › Thai.';
+    // cancel() is asynchronous in Chrome; speaking in the same tick can drop the
+    // utterance, which is the usual cause of "the first click does nothing".
+    setTimeout(()=>synth.speak(u),60);
+  };
+  $('#copy').onclick=e=>{
+    navigator.clipboard?.writeText(d.ch);
+    e.target.textContent='Copié '+d.ch;
+    setTimeout(()=>e.target.textContent='Copier le caractère',1200);
+  };
+
+  /* finger drawing, sized for retina */
+  const cv=$('#ink'), ctx=cv.getContext('2d');
+  let strokes=[], cur=null;
+  const dpr=Math.min(window.devicePixelRatio||1, 3);
+
+  function redraw(){
+    ctx.clearRect(0,0,cv.width,cv.height);
+    ctx.lineCap='round'; ctx.lineJoin='round'; ctx.strokeStyle='#15133a';
+    ctx.lineWidth=Math.max(6, cv.width*0.022);
+    for(const s of strokes){
+      if(s.length<2) continue;
+      ctx.beginPath(); ctx.moveTo(s[0].x*cv.width, s[0].y*cv.height);
+      for(let i=1;i<s.length;i++) ctx.lineTo(s[i].x*cv.width, s[i].y*cv.height);
+      ctx.stroke();
+    }
+  }
+  function resize(){
+    const r=cv.getBoundingClientRect();
+    if(!r.width) return;
+    cv.width=Math.round(r.width*dpr); cv.height=Math.round(r.height*dpr);
+    redraw();
+  }
+  const pos=e=>{ const r=cv.getBoundingClientRect();
+    return {x:(e.clientX-r.left)/r.width, y:(e.clientY-r.top)/r.height}; };
+
+  cv.addEventListener('pointerdown',e=>{
+    cv.setPointerCapture(e.pointerId); cur=[pos(e)]; strokes.push(cur); redraw(); e.preventDefault();
+  });
+  cv.addEventListener('pointermove',e=>{ if(!cur) return; cur.push(pos(e)); redraw(); e.preventDefault(); });
+  ['pointerup','pointercancel','pointerleave'].forEach(t=>
+    cv.addEventListener(t,()=>{ cur=null; }));
+
+  $('#clear').onclick=()=>{ strokes=[]; cur=null; redraw(); };
+
+  new ResizeObserver(resize).observe(cv);
+  resize();
+}
+
+/* ---------------- reference-card playback ----------------
+   Same order of preference as the consonant detail view: a real recording
+   always beats synthesis, so try the MP3 first and only fall back to the
+   speech API when no clip is wired to the card. */
+async function playRef(btn){
+  const src = btn.dataset.audio, say = btn.dataset.say;
+  const status = $('#vstatus');
+  const setStatus = t => { if(status) status.textContent = t || ''; };
+
+  if(window._clip){ try{ window._clip.pause(); }catch(err){} }
+  if(window.speechSynthesis) window.speechSynthesis.cancel();
+  document.querySelectorAll('.rcard.play.on').forEach(el => el.classList.remove('on'));
+
+  if(src){
+    try{
+      const clip = new Audio(src);
+      window._clip = clip;
+      btn.classList.add('on');
+      clip.onended = () => btn.classList.remove('on');
+      clip.onerror = () => btn.classList.remove('on');
+      setStatus('');
+      await clip.play();
+      return;
+    }catch(err){ btn.classList.remove('on'); /* file missing or blocked — synthesise */ }
+  }
+
+  const synth = window.speechSynthesis;
+  if(!synth){ setStatus('La synthèse vocale n\u2019est pas disponible dans ce navigateur.'); return; }
+  // getVoices() is empty until Chrome finishes loading the list, so wait for it
+  // rather than silently falling back to an English voice reading Thai text.
+  const voices = await voicesReady();
+  const th = voices.find(v => /^th/i.test(v.lang || ''));
+  synth.cancel();
+  const u = new SpeechSynthesisUtterance(say);
+  u.lang = 'th-TH'; u.rate = 0.8;
+  if(th){ u.voice = th; setStatus(''); }
+  else setStatus('Aucune voix thaïe installée \u2014 Windows : Paramètres \u203a Heure et langue \u203a Voix \u203a Ajouter des voix \u203a Thai.');
+  btn.classList.add('on');
+  u.onend = () => btn.classList.remove('on');
+  // cancel() is asynchronous in Chrome; speaking in the same tick can drop the
+  // utterance, which is the usual cause of "the first click does nothing".
+  setTimeout(() => synth.speak(u), 60);
+}
+document.addEventListener('click', e => {
+  const btn = e.target.closest && e.target.closest('.rcard.play');
+  if(btn) playRef(btn);
+});
+
+/* ---------------- routing ---------------- */
+function route(){
+  const h=location.hash;
+  const m=h.match(/^#\/(n?\d{2})$/);
+  window.scrollTo(0,0);
+  if(m) renderDetail(m[1]);
+  else if(h==='#/vowels') renderVowels();
+  else if(h==='#/tones') renderTones();
+  else if(h==='#/numbers') renderNumerals();
+  else renderGrid(null);
+}
+addEventListener('hashchange', route);
+route();
+</script>
+</body></html>

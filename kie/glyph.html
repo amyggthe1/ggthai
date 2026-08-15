@@ -90,6 +90,19 @@ h1 .lead{font-weight:400;font-style:italic;color:#9a97ab;font-size:22px}
 .pill.low[aria-pressed="true"] .ic{background:var(--low)}
 .tile.dim{opacity:.24}
 
+/* ---------- language flag, centred in the top bar ----------
+   Added 15 Aug 2026: links to graphie.html, the French twin of this page.
+   Absolutely positioned so it sits at the true centre of the bar whatever the
+   width of the brand block on the left and the links on the right. */
+.flaglink{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+ display:inline-flex;align-items:center;gap:8px;text-decoration:none;
+ padding:4px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.18);
+ background:rgba(255,255,255,.06);transition:.15s}
+.flaglink:hover{background:rgba(255,255,255,.14);border-color:var(--gold)}
+.flaglink svg{width:26px;height:18px;display:block;border-radius:3px;
+ box-shadow:0 0 0 1px rgba(255,255,255,.35)}
+.flaglink .lang{font-size:12px;font-weight:700;letter-spacing:.10em;color:#fff}
+
 /* ---------- section tabs ---------- */
 .tabs{display:flex;gap:6px;flex-wrap:wrap;border-bottom:1px solid var(--line);margin:22px 0 4px}
 .tabs a{font-size:15px;padding:10px 18px;color:var(--muted);text-decoration:none;
@@ -189,6 +202,12 @@ button.rcard:hover .spk,button.rcard.on .spk{color:var(--gold);opacity:1}
 .hint{text-align:center;color:var(--muted);font-size:13px;margin-top:12px;min-height:1.2em}
 
 @media (max-width:860px){
+  /* Narrow bar: the subtitle goes, and the flag drops out of absolute centring
+     so it cannot land on top of the brand or the links. */
+  .nav{gap:12px;flex-wrap:wrap}
+  .nav .sub{display:none}
+  .nav .spacer{display:none}
+  .flaglink{position:static;transform:none;margin-left:auto}
   .detail{grid-template-columns:1fr}
   .detail .panel{order:-1}
   h1{font-size:25px} h1 .lead{font-size:17px;display:block;margin-top:2px}
@@ -203,6 +222,7 @@ button.rcard:hover .spk,button.rcard.on .spk{color:var(--gold);opacity:1}
 <div class="nav">
   <span class="brand">THAI CONSONANTS</span>
   <span class="sub">stroke practice</span>
+  <a class="flaglink" href="graphie.html" title="Version française" aria-label="Version française"><svg viewBox="0 0 60 40" aria-hidden="true"><rect width="20" height="40" fill="#002395"/><rect x="20" width="20" height="40" fill="#fff"/><rect x="40" width="20" height="40" fill="#ED2939"/></svg><span class="lang">FR</span></a>
   <span class="spacer"></span>
   <a href="#/">Alphabet</a>
   <a href="glyph/alphabet.html">🎮 Alphabet game</a>
