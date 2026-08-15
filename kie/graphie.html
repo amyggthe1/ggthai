@@ -157,6 +157,16 @@ button.rcard:hover .spk,button.rcard.on .spk{color:var(--gold);opacity:1}
 
 /* ---------- practice panel ---------- */
 .panel{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px}
+/* Replay sits above the glyph rather than in the left card (moved 15 Aug 2026),
+   so the control that restarts the animation is next to what it restarts.
+   Previous position: third button of .rowbtn, under the letter identity card. */
+.panelhead{display:flex;justify-content:center;margin:0 0 14px}
+.panelhead button{font:inherit;font-size:14px;padding:9px 18px;border-radius:999px;cursor:pointer;
+ border:1px solid var(--line);background:#fff;color:var(--navy);
+ display:inline-flex;align-items:center;gap:8px}
+.panelhead button:hover{background:#f3efe6;border-color:#d8d2c4}
+.panelhead button:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.panelhead .ico{font-size:15px;line-height:1}
 .stage{position:relative;width:100%;max-width:560px;margin:0 auto;aspect-ratio:1/1;
  background:#fff;border-radius:12px;overflow:hidden;touch-action:none}
 .stage .art{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;
@@ -426,7 +436,6 @@ function renderDetail(id){
         <div class="rowbtn">
           <button id="say">🔊 Prononciation</button>
           <button id="copy">Copier le caractère</button>
-          <button id="replay">Relancer l'animation</button>
         </div>
         <div class="note">${d.strokeNote}${d.derived ? '<br><br>Le tracé de cette lettre a été reconstitué et recoupé, il ne provient pas d\'une source publiée.' : ''}</div>
         <div class="nav2">
@@ -436,6 +445,7 @@ function renderDetail(id){
       </div>
 
       <div class="panel">
+        <div class="panelhead"><button id="replay"><span class="ico">&#8635;</span>Relancer l'animation</button></div>
         <div class="stage" id="stage">
           <img class="art" id="art" src="${d.png}" alt="${d.fr}">
           <div class="guides"><span class="t"></span><span class="b"></span></div>
