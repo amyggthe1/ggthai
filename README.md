@@ -34,7 +34,8 @@ kie/                    the site (~18 MB)
     Sarabun.ttf           font used by glyph.html
     thai_stroke_order/          132 consonant GIFs / posters / outlines
     thai_numeral_stroke_order/  30 numeral GIFs / posters / outlines
-    audio/                      44 recorded consonant names (mp3)
+    audio/consonants/           44 recorded consonant names (mp3)
+    audio/vowels/               18 recorded vowel sounds (mp3)
 
 glyph_project/          build source for the stroke artwork — NOT published
 graphie/                separate, unfinished project — NOT published
@@ -105,8 +106,10 @@ No build command; publish directory is the repository root.
   after any large file move.
 - **Size.** `kie/` is ~18 MB, almost all of it the stroke GIFs. Comfortably
   within free-tier limits, but the stroke page is the heavy one on mobile data.
-- **Audio.** The 44 consonants play a real recording from `kie/glyph/audio/`,
-  paired to each letter by the `NN_` filename prefix. Everything else — the
+- **Audio.** The 44 consonants play a real recording from
+  `kie/glyph/audio/consonants/`, paired to each letter by the `NN_` filename
+  prefix, and the 18 simple vowels play one from `kie/glyph/audio/vowels/`,
+  paired by IPA value. Everything else — the 7 diphthongs and special forms, the
   numerals and the vocabulary quiz — falls back to the browser's Web Speech API
   with `lang="th-TH"`, which needs a Thai voice installed on the device. The app
   says so plainly when one is missing. Recordings are fetched on click, never

@@ -6,7 +6,7 @@ machine. For *how the stroke animations work*, read
 `README.md`. This file is the history and the to-do list.
 
 **Live:** http://gerardlam.free.fr/kie/ · entry point `home.html`
-**Last session:** 10 August 2026
+**Last session:** 15 August 2026
 
 ---
 
@@ -85,6 +85,45 @@ breaks it.
 ---
 
 ## History
+
+### Session 3 — 15 August 2026
+
+**Vowel audio wired up.** Antoine supplied 18 recordings (9 short + 9 long
+simple vowels). Every card on the Vowels tab is now a `<button>`: tap or
+keyboard-activate it to hear the sound, speaker icon top-right, gold highlight
+while playing. The 3 diphthongs and 4 special forms have no clip, carry a small
+`TTS` badge and fall back to `speechSynthesis` — the same recording-beats-
+synthesis order the consonant detail view already used, and the same "no Thai
+voice installed" hint, shown in a `#vstatus` line under the tab bar.
+
+The clips are pinned to a vowel **by IPA value**, never by index. Their
+filenames use a French-style romanisation whose numbering does not follow the
+classic Thai teaching order: `u`=/ɯ/, `ou`=/u/, `aw`=/ɔ/, `oe`=/ə/, `o`=/o/
+(doubled = long), so files 13–18 are ɔ/ɔː, ə/əː, o/oː. A naive sequential
+mapping mislabels the last six. The pairing lives in `reference_data.py`, where
+`VOWELS` rows gained a 6th field holding the clip path (`''` = use TTS).
+
+**Consonant clips moved** from `kie/glyph/audio/` into
+`kie/glyph/audio/consonants/`, so the folder now holds only `consonants/` and
+`vowels/`. `DIR_AUDIO` in `build_index.py` carries the change (old value kept
+commented out); `deploy_to_site.py`'s bare `"audio/` prefix rewrite still covers
+both sub-folders, and its audio-ref assertion went from `(0, 44)` to
+`(0, 44, 62)` — 44 consonants + 18 vowels.
+
+All of the above was made in `glyph_project/scripts/`, then rebuilt and
+redeployed (`build_index.py` → `deploy_to_site.py`). `kie/glyph.html` had been
+hand-edited earlier in the session, which the next rebuild would have silently
+reverted — it is a build artifact, as HANDOVER §4a says.
+
+Verified in a headless Chromium against the deployed page: 25 vowel cards, 18
+clips returning 200, playback starting on click, consonant clips resolving to
+`glyph/audio/consonants/…`, 225 asset references with none missing, no JS
+errors.
+
+Still open: the GitHub Pages copy needs `kie/glyph/audio/consonants/` and
+`kie/glyph/audio/vowels/` uploaded, and the old loose MP3s in `kie/glyph/audio/`
+deleted there.
+
 
 ### Session 2 — 10 August 2026
 
