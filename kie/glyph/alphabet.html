@@ -7,6 +7,10 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,300;0,400;1,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
+/* Local Thai font, same one the stroke-order artwork was drawn from — used for the
+   ghost letterform in Draw mode so the model shape matches the stroke GIFs. */
+@font-face{font-family:SarabunLocal;src:url('Sarabun.ttf') format('truetype');font-display:swap}
+
 :root {
   --ink: #1a120a;
   --ink2: #4a3828;
@@ -348,21 +352,22 @@ body {
 .next-btn:hover { background: var(--ink2); transform: translateY(-1px); }
 
 /* ── MODE PILLS ── */
+/* was a 3-up flex row; now a grid so the 4th "Draw it" pill fits without squashing */
 .mode-row {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
   gap: 8px;
   margin-bottom: 1.25rem;
   flex-shrink: 0;
 }
 
 .mode-pill {
-  flex: 1;
-  padding: 8px 6px;
+  padding: 8px 4px;
   border-radius: 10px;
   border: 0.5px solid var(--paper3);
   background: white;
   font-family: 'Crimson Pro', serif;
-  font-size: 14px;
+  font-size: 13px;
   color: var(--ink2);
   cursor: pointer;
   text-align: center;
@@ -376,6 +381,183 @@ body {
 .mode-pill:hover:not(.active) {
   border-color: var(--ink2);
 }
+
+/* ── DRAW MODE ── */
+/* The prompt card in draw mode shows text (transliteration / meaning), not a glyph */
+.prompt-main {
+  font-family: 'Crimson Pro', serif;
+  font-size: 38px;
+  line-height: 1.15;
+  color: var(--ink);
+  text-align: center;
+  margin-bottom: 4px;
+  word-break: break-word;
+}
+.prompt-main.small { font-size: 30px; }
+.prompt-second {
+  font-size: 18px;
+  font-style: italic;
+  color: var(--ink2);
+  text-align: center;
+  margin-bottom: 2px;
+}
+.prompt-audio-btn {
+  width: 64px; height: 64px;
+  border-radius: 50%;
+  border: 1px solid var(--paper3);
+  background: white;
+  color: var(--gold);
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  margin: 6px auto 10px;
+  transition: all 0.15s;
+}
+.prompt-audio-btn:hover { background: var(--gold-light); border-color: var(--gold); }
+.prompt-audio-btn.speaking { animation: pulse-ring 0.9s ease-out infinite; }
+
+/* Which clue the prompt shows — small chips under the mode pills */
+.clue-row {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 1rem;
+  flex-shrink: 0;
+}
+.clue-chip {
+  flex: 1;
+  padding: 5px 4px;
+  border-radius: 20px;
+  border: 0.5px solid var(--paper3);
+  background: var(--paper2);
+  font-family: 'Crimson Pro', serif;
+  font-size: 12px;
+  color: var(--ink3);
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.12s;
+}
+.clue-chip.active {
+  background: var(--gold-light);
+  border-color: var(--gold);
+  color: #7a5410;
+}
+
+/* Canvas */
+.draw-wrap { margin-bottom: 1rem; }
+
+.canvas-box {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  max-height: 340px;
+  background: white;
+  border: 0.5px solid var(--paper3);
+  border-radius: 20px;
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+/* three stacked layers: guides (bottom), ghost answer (middle), user ink (top) */
+.canvas-box canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  touch-action: none;   /* stop the page scrolling while drawing on mobile */
+}
+#inkCanvas { cursor: crosshair; z-index: 3; }
+#ghostCanvas { z-index: 2; opacity: 0; transition: opacity 0.25s ease; }
+#ghostCanvas.show { opacity: 1; }
+#guideCanvas { z-index: 1; }
+
+.canvas-hint {
+  font-size: 11px;
+  color: var(--ink3);
+  font-style: italic;
+  text-align: center;
+  margin-top: 6px;
+}
+
+.draw-tools {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+}
+.tool-btn {
+  flex: 1;
+  padding: 10px 6px;
+  border-radius: 10px;
+  border: 0.5px solid var(--paper3);
+  background: white;
+  font-family: 'Crimson Pro', serif;
+  font-size: 14px;
+  color: var(--ink2);
+  cursor: pointer;
+  transition: all 0.12s;
+}
+.tool-btn:hover:not(:disabled) { border-color: var(--ink2); }
+.tool-btn:disabled { opacity: 0.4; cursor: default; }
+.tool-btn.peek.active { background: var(--gold-light); border-color: var(--gold); color: #7a5410; }
+
+.reveal-btn {
+  width: 100%;
+  padding: 14px;
+  margin-top: 10px;
+  border-radius: var(--radius);
+  border: none;
+  background: var(--ink);
+  color: var(--paper);
+  font-family: 'Crimson Pro', serif;
+  font-size: 17px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.reveal-btn:hover { background: var(--ink2); transform: translateY(-1px); }
+
+/* Self-grade buttons shown after reveal */
+.grade-row {
+  display: none;
+  gap: 10px;
+  margin-top: 10px;
+}
+.grade-row.visible { display: flex; }
+.grade-btn {
+  flex: 1;
+  padding: 14px 8px;
+  border-radius: var(--radius);
+  border: 1px solid var(--paper3);
+  background: white;
+  font-family: 'Crimson Pro', serif;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.12s;
+}
+.grade-btn.good { color: var(--green); border-color: rgba(45,106,79,0.35); }
+.grade-btn.good:hover { background: var(--green-light); border-color: var(--green); }
+.grade-btn.bad { color: var(--red); border-color: rgba(192,57,43,0.3); }
+.grade-btn.bad:hover { background: var(--red-light); border-color: var(--red); }
+
+/* Stroke-order animation revealed with the answer */
+.stroke-panel {
+  display: none;
+  align-items: center;
+  gap: 12px;
+  margin-top: 10px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: var(--paper2);
+  border: 0.5px solid var(--paper3);
+}
+.stroke-panel.visible { display: flex; }
+.stroke-panel img {
+  width: 84px;
+  height: 84px;
+  object-fit: contain;
+  background: white;
+  border-radius: 8px;
+  border: 0.5px solid var(--paper3);
+  flex-shrink: 0;
+}
+.stroke-text { font-size: 13px; color: var(--ink2); line-height: 1.45; }
+.stroke-text b { font-weight: 400; font-style: italic; color: var(--ink); }
 
 /* ── START SCREEN ── */
 #startScreen {
@@ -702,6 +884,10 @@ body {
   .char-display{font-size:96px}
   .choices{gap:8px}
   .choice-btn{padding:12px 12px}
+  /* 4 mode pills are too tight below ~420px — wrap them 2×2 */
+  .mode-row{grid-template-columns:repeat(2,1fr)}
+  .prompt-main{font-size:32px}
+  .prompt-main.small{font-size:26px}
 }
 </style>
 </head>
@@ -711,7 +897,7 @@ body {
 <div class="screen active" id="startScreen">
   <div class="start-thai">กขค</div>
   <div class="start-title">Learn Thai Script</div>
-  <div class="start-sub">Recognise all 44 consonants and the 10 numerals</div>
+  <div class="start-sub">Recognise all 44 consonants and the 10 numerals — or draw them from memory</div>
 
   <div class="start-options">
     <div class="option-card selected" data-mode="all" onclick="selectMode(this,'all')">
@@ -790,11 +976,33 @@ body {
     <div class="mode-pill active" id="modeChar" onclick="setQuestionMode('char')">Thai → Name</div>
     <div class="mode-pill" id="modeMean" onclick="setQuestionMode('meaning')">Thai → Meaning</div>
     <div class="mode-pill" id="modeRom" onclick="setQuestionMode('romanize')">Sound → Thai</div>
+    <div class="mode-pill" id="modeDraw" onclick="setQuestionMode('draw')">✎ Draw it</div>
+  </div>
+
+  <!-- Draw mode only: which clue the prompt card shows -->
+  <div class="clue-row" id="clueRow" style="display:none">
+    <div class="clue-chip active" id="clueSound" onclick="setClue('sound')">Sound</div>
+    <div class="clue-chip" id="clueEn" onclick="setClue('en')">English</div>
+    <div class="clue-chip" id="clueFr" onclick="setClue('fr')">Français</div>
+    <div class="clue-chip" id="clueBoth" onclick="setClue('both')">Both</div>
+    <div class="clue-chip" id="clueAudio" onclick="setClue('audio')">🔊 only</div>
   </div>
 
   <div class="char-card" id="charCard">
     <div class="class-pip pip-mid" id="classPip">middle</div>
     <div class="char-display" id="charDisplay">ก</div>
+    <!-- draw-mode prompt: text clue instead of a glyph -->
+    <div id="promptBlock" style="display:none">
+      <div class="prompt-main" id="promptMain"></div>
+      <div class="prompt-second" id="promptSecond"></div>
+      <button class="prompt-audio-btn" id="promptAudioBtn" style="display:none" onclick="speakPrompt()" aria-label="Hear the name">
+        <svg width="30" height="30" viewBox="0 0 20 20" fill="none">
+          <path d="M3 7.5h3l4-4v13l-4-4H3v-5z" fill="currentColor" opacity="0.9"/>
+          <path d="M13 7a4 4 0 0 1 0 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          <path d="M15 4.5a7 7 0 0 1 0 11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" opacity="0.5"/>
+        </svg>
+      </button>
+    </div>
     <div class="char-hint" id="charHint"></div>
     <button class="speaker-btn" id="speakerBtn" onclick="speakCurrent()" aria-label="Hear pronunciation">
       <svg class="speaker-icon" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -808,6 +1016,30 @@ body {
   </div>
 
   <div class="choices" id="choices"></div>
+
+  <!-- Draw mode only: canvas + tools -->
+  <div class="draw-wrap" id="drawWrap" style="display:none">
+    <div class="canvas-box">
+      <canvas id="guideCanvas"></canvas>
+      <canvas id="ghostCanvas"></canvas>
+      <canvas id="inkCanvas"></canvas>
+    </div>
+    <div class="canvas-hint">Draw the character with your finger, stylus or mouse</div>
+    <div class="draw-tools">
+      <button class="tool-btn" id="undoBtn" onclick="undoStroke()" disabled>↶ Undo</button>
+      <button class="tool-btn" id="clearBtn" onclick="clearInk()" disabled>Clear</button>
+      <button class="tool-btn peek" id="peekBtn" onclick="togglePeek()">👁 Peek</button>
+    </div>
+    <button class="reveal-btn" id="revealBtn" onclick="revealGlyph()">Reveal answer</button>
+    <div class="grade-row" id="gradeRow">
+      <button class="grade-btn good" onclick="gradeDrawing(true)">✓ Got it</button>
+      <button class="grade-btn bad" onclick="gradeDrawing(false)">✗ Missed it</button>
+    </div>
+    <div class="stroke-panel" id="strokePanel">
+      <img id="strokeImg" alt="Stroke order animation">
+      <div class="stroke-text" id="strokeText"></div>
+    </div>
+  </div>
 
   <div class="feedback" id="feedback">
     <div class="feedback-main" id="feedbackMain"></div>
@@ -954,50 +1186,50 @@ function shuffle(a) {
 }
 
 const CHARS = [
-  {th:'ก',rom:'g / k',cls:'mid',mean:'chicken',phon:'gɔɔ gài',word:'ไก่'},
-  {th:'จ',rom:'j',cls:'mid',mean:'plate',phon:'jɔɔ jaan',word:'จาน'},
-  {th:'ด',rom:'d',cls:'mid',mean:'child',phon:'dɔɔ dèk',word:'เด็ก'},
-  {th:'ต',rom:'dt / t',cls:'mid',mean:'turtle',phon:'dtɔɔ dtào',word:'เต่า'},
-  {th:'บ',rom:'b',cls:'mid',mean:'leaf',phon:'bɔɔ bai máai',word:'ใบไม้'},
-  {th:'ป',rom:'bp / p',cls:'mid',mean:'fish',phon:'bpɔɔ bplaa',word:'ปลา'},
-  {th:'พ',rom:'ph',cls:'mid',mean:'tray',phon:'phɔɔ phaan',word:'พาน'},
-  {th:'ฟ',rom:'f',cls:'mid',mean:'teeth',phon:'fɔɔ fan',word:'ฟัน'},
-  {th:'อ',rom:'o / silent',cls:'mid',mean:'basin',phon:'ɔɔ àang',word:'อ่าง'},
-  {th:'ข',rom:'kh',cls:'high',mean:'egg',phon:'khɔɔ khài',word:'ไข่'},
-  {th:'ฉ',rom:'ch',cls:'high',mean:'cymbals',phon:'chɔɔ chìng',word:'ฉิ่ง'},
-  {th:'ถ',rom:'th',cls:'high',mean:'bag',phon:'thɔɔ thǔng',word:'ถุง'},
-  {th:'ผ',rom:'ph',cls:'high',mean:'bee',phon:'phɔɔ phûeng',word:'ผึ้ง'},
-  {th:'ฝ',rom:'f',cls:'high',mean:'lid',phon:'fɔɔ fǎa',word:'ฝา'},
-  {th:'ศ',rom:'s',cls:'high',mean:'hermit',phon:'sɔɔ sǎalaa',word:'ศาลา'},
-  {th:'ษ',rom:'s',cls:'high',mean:'sage',phon:'sɔɔ rʉʉsǐi',word:'ฤๅษี'},
-  {th:'ส',rom:'s',cls:'high',mean:'tiger',phon:'sɔɔ sʉʉa',word:'เสือ'},
-  {th:'ห',rom:'h',cls:'high',mean:'chest',phon:'hɔɔ hìip',word:'หีบ'},
-  {th:'ฐ',rom:'th',cls:'high',mean:'pedestal',phon:'thɔɔ thǎan',word:'ฐาน'},
-  {th:'ค',rom:'kh',cls:'low',mean:'buffalo',phon:'khɔɔ khwaai',word:'ควาย'},
-  {th:'ง',rom:'ng',cls:'low',mean:'snake',phon:'ngɔɔ nguu',word:'งู'},
-  {th:'ช',rom:'ch',cls:'low',mean:'elephant',phon:'chɔɔ cháang',word:'ช้าง'},
-  {th:'ซ',rom:'s',cls:'low',mean:'chain',phon:'sɔɔ sôo',word:'โซ่'},
-  {th:'ญ',rom:'y',cls:'low',mean:'woman',phon:'yɔɔ yǐng',word:'หญิง'},
-  {th:'ณ',rom:'n',cls:'low',mean:'person',phon:'nɔɔ neen',word:'เณร'},
-  {th:'น',rom:'n',cls:'low',mean:'mouse',phon:'nɔɔ nǔu',word:'หนู'},
-  {th:'ม',rom:'m',cls:'low',mean:'horse',phon:'mɔɔ máa',word:'ม้า'},
-  {th:'ย',rom:'y',cls:'low',mean:'giant',phon:'yɔɔ yâak',word:'ยักษ์'},
-  {th:'ร',rom:'r',cls:'low',mean:'boat',phon:'rɔɔ reua',word:'เรือ'},
-  {th:'ล',rom:'l',cls:'low',mean:'monkey',phon:'lɔɔ ling',word:'ลิง'},
-  {th:'ว',rom:'w',cls:'low',mean:'ring',phon:'wɔɔ wɛɛn',word:'แหวน'},
-  {th:'ท',rom:'th',cls:'low',mean:'soldier',phon:'thɔɔ tháhǎan',word:'ทหาร'},
-  {th:'ธ',rom:'th',cls:'low',mean:'flag',phon:'thɔɔ thong',word:'ธง'},
-  {th:'ภ',rom:'ph',cls:'low',mean:'mountain',phon:'phɔɔ phukhǎo',word:'ภูเขา'},
-  {th:'ฆ',rom:'kh',cls:'low',mean:'bell',phon:'khɔɔ rakhang',word:'ระฆัง'},
-  {th:'ฌ',rom:'ch',cls:'low',mean:'tree',phon:'chɔɔ chə̂ə',word:'เฌอ'},
-  {th:'ฬ',rom:'l',cls:'low',mean:'kite',phon:'lɔɔ julaa',word:'จุฬา'},
-  {th:'ฮ',rom:'h',cls:'low',mean:'owl',phon:'hɔɔ nók hûuk',word:'นกฮูก'},
-  {th:'ฎ',rom:'d',cls:'low',mean:'headdress',phon:'dɔɔ chadaa',word:'ชฎา'},
-  {th:'ฏ',rom:'dt',cls:'low',mean:'crown',phon:'dtɔɔ bpatàk',word:'ปฏัก'},
-  {th:'ฑ',rom:'th / dt',cls:'low',mean:'old woman',phon:'thɔɔ montho',word:'มณโฑ'},
-  {th:'ฒ',rom:'th',cls:'low',mean:'elder',phon:'thɔɔ phûu thâo',word:'ผู้เฒ่า'},
-  {th:'ฃ',rom:'kh',cls:'high',mean:'bottle',phon:'khɔɔ khùat',word:'ขวด'},
-  {th:'ฅ',rom:'kh',cls:'low',mean:'person',phon:'khɔɔ khon',word:'คน'},
+  {th:'ก',rom:'g / k',cls:'mid',mean:'chicken',meanFr:'poulet',phon:'gɔɔ gài',word:'ไก่'},
+  {th:'จ',rom:'j',cls:'mid',mean:'plate',meanFr:'assiette',phon:'jɔɔ jaan',word:'จาน'},
+  {th:'ด',rom:'d',cls:'mid',mean:'child',meanFr:'enfant',phon:'dɔɔ dèk',word:'เด็ก'},
+  {th:'ต',rom:'dt / t',cls:'mid',mean:'turtle',meanFr:'tortue',phon:'dtɔɔ dtào',word:'เต่า'},
+  {th:'บ',rom:'b',cls:'mid',mean:'leaf',meanFr:'feuille',phon:'bɔɔ bai máai',word:'ใบไม้'},
+  {th:'ป',rom:'bp / p',cls:'mid',mean:'fish',meanFr:'poisson',phon:'bpɔɔ bplaa',word:'ปลา'},
+  {th:'พ',rom:'ph',cls:'mid',mean:'tray',meanFr:'plateau',phon:'phɔɔ phaan',word:'พาน'},
+  {th:'ฟ',rom:'f',cls:'mid',mean:'teeth',meanFr:'dents',phon:'fɔɔ fan',word:'ฟัน'},
+  {th:'อ',rom:'o / silent',cls:'mid',mean:'basin',meanFr:'bassine',phon:'ɔɔ àang',word:'อ่าง'},
+  {th:'ข',rom:'kh',cls:'high',mean:'egg',meanFr:'œuf',phon:'khɔɔ khài',word:'ไข่'},
+  {th:'ฉ',rom:'ch',cls:'high',mean:'cymbals',meanFr:'cymbales',phon:'chɔɔ chìng',word:'ฉิ่ง'},
+  {th:'ถ',rom:'th',cls:'high',mean:'bag',meanFr:'sac',phon:'thɔɔ thǔng',word:'ถุง'},
+  {th:'ผ',rom:'ph',cls:'high',mean:'bee',meanFr:'abeille',phon:'phɔɔ phûeng',word:'ผึ้ง'},
+  {th:'ฝ',rom:'f',cls:'high',mean:'lid',meanFr:'couvercle',phon:'fɔɔ fǎa',word:'ฝา'},
+  {th:'ศ',rom:'s',cls:'high',mean:'hermit',meanFr:'ermite',phon:'sɔɔ sǎalaa',word:'ศาลา'},
+  {th:'ษ',rom:'s',cls:'high',mean:'sage',meanFr:'sage',phon:'sɔɔ rʉʉsǐi',word:'ฤๅษี'},
+  {th:'ส',rom:'s',cls:'high',mean:'tiger',meanFr:'tigre',phon:'sɔɔ sʉʉa',word:'เสือ'},
+  {th:'ห',rom:'h',cls:'high',mean:'chest',meanFr:'coffre',phon:'hɔɔ hìip',word:'หีบ'},
+  {th:'ฐ',rom:'th',cls:'high',mean:'pedestal',meanFr:'socle',phon:'thɔɔ thǎan',word:'ฐาน'},
+  {th:'ค',rom:'kh',cls:'low',mean:'buffalo',meanFr:'buffle',phon:'khɔɔ khwaai',word:'ควาย'},
+  {th:'ง',rom:'ng',cls:'low',mean:'snake',meanFr:'serpent',phon:'ngɔɔ nguu',word:'งู'},
+  {th:'ช',rom:'ch',cls:'low',mean:'elephant',meanFr:'éléphant',phon:'chɔɔ cháang',word:'ช้าง'},
+  {th:'ซ',rom:'s',cls:'low',mean:'chain',meanFr:'chaîne',phon:'sɔɔ sôo',word:'โซ่'},
+  {th:'ญ',rom:'y',cls:'low',mean:'woman',meanFr:'femme',phon:'yɔɔ yǐng',word:'หญิง'},
+  {th:'ณ',rom:'n',cls:'low',mean:'person',meanFr:'personne',phon:'nɔɔ neen',word:'เณร'},
+  {th:'น',rom:'n',cls:'low',mean:'mouse',meanFr:'souris',phon:'nɔɔ nǔu',word:'หนู'},
+  {th:'ม',rom:'m',cls:'low',mean:'horse',meanFr:'cheval',phon:'mɔɔ máa',word:'ม้า'},
+  {th:'ย',rom:'y',cls:'low',mean:'giant',meanFr:'géant',phon:'yɔɔ yâak',word:'ยักษ์'},
+  {th:'ร',rom:'r',cls:'low',mean:'boat',meanFr:'bateau',phon:'rɔɔ reua',word:'เรือ'},
+  {th:'ล',rom:'l',cls:'low',mean:'monkey',meanFr:'singe',phon:'lɔɔ ling',word:'ลิง'},
+  {th:'ว',rom:'w',cls:'low',mean:'ring',meanFr:'bague',phon:'wɔɔ wɛɛn',word:'แหวน'},
+  {th:'ท',rom:'th',cls:'low',mean:'soldier',meanFr:'soldat',phon:'thɔɔ tháhǎan',word:'ทหาร'},
+  {th:'ธ',rom:'th',cls:'low',mean:'flag',meanFr:'drapeau',phon:'thɔɔ thong',word:'ธง'},
+  {th:'ภ',rom:'ph',cls:'low',mean:'mountain',meanFr:'montagne',phon:'phɔɔ phukhǎo',word:'ภูเขา'},
+  {th:'ฆ',rom:'kh',cls:'low',mean:'bell',meanFr:'cloche',phon:'khɔɔ rakhang',word:'ระฆัง'},
+  {th:'ฌ',rom:'ch',cls:'low',mean:'tree',meanFr:'arbre',phon:'chɔɔ chə̂ə',word:'เฌอ'},
+  {th:'ฬ',rom:'l',cls:'low',mean:'kite',meanFr:'cerf-volant',phon:'lɔɔ julaa',word:'จุฬา'},
+  {th:'ฮ',rom:'h',cls:'low',mean:'owl',meanFr:'hibou',phon:'hɔɔ nók hûuk',word:'นกฮูก'},
+  {th:'ฎ',rom:'d',cls:'low',mean:'headdress',meanFr:'coiffe',phon:'dɔɔ chadaa',word:'ชฎา'},
+  {th:'ฏ',rom:'dt',cls:'low',mean:'crown',meanFr:'couronne',phon:'dtɔɔ bpatàk',word:'ปฏัก'},
+  {th:'ฑ',rom:'th / dt',cls:'low',mean:'old woman',meanFr:'vieille femme',phon:'thɔɔ montho',word:'มณโฑ'},
+  {th:'ฒ',rom:'th',cls:'low',mean:'elder',meanFr:'ancien',phon:'thɔɔ phûu thâo',word:'ผู้เฒ่า'},
+  {th:'ฃ',rom:'kh',cls:'high',mean:'bottle',meanFr:'bouteille',phon:'khɔɔ khùat',word:'ขวด'},
+  {th:'ฅ',rom:'kh',cls:'low',mean:'person',meanFr:'personne',phon:'khɔɔ khon',word:'คน'},
 ];
 
 // Thai numerals ๐–๙. Same shape as CHARS so every game mode works unchanged:
@@ -1007,20 +1239,81 @@ const CHARS = [
 //   word = the number spelled out in Thai, shown and spoken in the feedback panel
 // Data matches REF.numerals / NUMS in kie/glyph.html — keep the two in step.
 const NUMS = [
-  {th:'๐',rom:'0',cls:'num',mean:'zero',phon:'sǔun',word:'ศูนย์'},
-  {th:'๑',rom:'1',cls:'num',mean:'one',phon:'nɯ̀ng',word:'หนึ่ง'},
-  {th:'๒',rom:'2',cls:'num',mean:'two',phon:'sɔ̌ɔng',word:'สอง'},
-  {th:'๓',rom:'3',cls:'num',mean:'three',phon:'sǎam',word:'สาม'},
-  {th:'๔',rom:'4',cls:'num',mean:'four',phon:'sìi',word:'สี่'},
-  {th:'๕',rom:'5',cls:'num',mean:'five',phon:'hâa',word:'ห้า'},
-  {th:'๖',rom:'6',cls:'num',mean:'six',phon:'hòk',word:'หก'},
-  {th:'๗',rom:'7',cls:'num',mean:'seven',phon:'cèt',word:'เจ็ด'},
-  {th:'๘',rom:'8',cls:'num',mean:'eight',phon:'pɛ̀ɛt',word:'แปด'},
-  {th:'๙',rom:'9',cls:'num',mean:'nine',phon:'kâao',word:'เก้า'},
+  {th:'๐',rom:'0',cls:'num',mean:'zero',meanFr:'zéro',phon:'sǔun',word:'ศูนย์'},
+  {th:'๑',rom:'1',cls:'num',mean:'one',meanFr:'un',phon:'nɯ̀ng',word:'หนึ่ง'},
+  {th:'๒',rom:'2',cls:'num',mean:'two',meanFr:'deux',phon:'sɔ̌ɔng',word:'สอง'},
+  {th:'๓',rom:'3',cls:'num',mean:'three',meanFr:'trois',phon:'sǎam',word:'สาม'},
+  {th:'๔',rom:'4',cls:'num',mean:'four',meanFr:'quatre',phon:'sìi',word:'สี่'},
+  {th:'๕',rom:'5',cls:'num',mean:'five',meanFr:'cinq',phon:'hâa',word:'ห้า'},
+  {th:'๖',rom:'6',cls:'num',mean:'six',meanFr:'six',phon:'hòk',word:'หก'},
+  {th:'๗',rom:'7',cls:'num',mean:'seven',meanFr:'sept',phon:'cèt',word:'เจ็ด'},
+  {th:'๘',rom:'8',cls:'num',mean:'eight',meanFr:'huit',phon:'pɛ̀ɛt',word:'แปด'},
+  {th:'๙',rom:'9',cls:'num',mean:'nine',meanFr:'neuf',phon:'kâao',word:'เก้า'},
 ];
 
 // true when an entry is a numeral rather than a consonant
 function isNum(c) { return c.cls === 'num'; }
+
+// ── STROKE-ORDER ARTWORK ──
+// Thai character -> animated GIF, relative to this file (kie/glyph/).
+// Generated from the DATA / NUMS arrays in kie/glyph.html — keep the two in step.
+// Filenames use IPA characters and are NFC-normalised; never rename them from a Mac.
+const STROKE_GIF = {
+  'ก': 'thai_stroke_order/01_kɔɔ_kài.gif',
+  'ข': 'thai_stroke_order/02_khɔɔ_khài.gif',
+  'ฃ': 'thai_stroke_order/03_khɔɔ_khùat.gif',
+  'ค': 'thai_stroke_order/04_khɔɔ_khwaai.gif',
+  'ฅ': 'thai_stroke_order/05_khɔɔ_khon.gif',
+  'ฆ': 'thai_stroke_order/06_khɔɔ_rá_khang.gif',
+  'ง': 'thai_stroke_order/07_ŋɔɔ_ŋuu.gif',
+  'จ': 'thai_stroke_order/08_cɔɔ_caan.gif',
+  'ฉ': 'thai_stroke_order/09_chɔɔ_chìng.gif',
+  'ช': 'thai_stroke_order/10_chɔɔ_cháang.gif',
+  'ซ': 'thai_stroke_order/11_sɔɔ_sôo.gif',
+  'ฌ': 'thai_stroke_order/12_chɔɔ_chəə.gif',
+  'ญ': 'thai_stroke_order/13_yɔɔ_yǐng.gif',
+  'ฎ': 'thai_stroke_order/14_dɔɔ_chá_daa.gif',
+  'ฏ': 'thai_stroke_order/15_tɔɔ_pà_tàk.gif',
+  'ฐ': 'thai_stroke_order/16_thɔɔ_thǎan.gif',
+  'ฑ': 'thai_stroke_order/17_thɔɔ_mon_thoo.gif',
+  'ฒ': 'thai_stroke_order/18_thɔɔ_phûu_thâo.gif',
+  'ณ': 'thai_stroke_order/19_nɔɔ_neen.gif',
+  'ด': 'thai_stroke_order/20_dɔɔ_dèk.gif',
+  'ต': 'thai_stroke_order/21_tɔɔ_tào.gif',
+  'ถ': 'thai_stroke_order/22_thɔɔ_thǔng.gif',
+  'ท': 'thai_stroke_order/23_thɔɔ_thá_hǎan.gif',
+  'ธ': 'thai_stroke_order/24_thɔɔ_thong.gif',
+  'น': 'thai_stroke_order/25_nɔɔ_nǔu.gif',
+  'บ': 'thai_stroke_order/26_bɔɔ_bai_máai.gif',
+  'ป': 'thai_stroke_order/27_pɔɔ_plaa.gif',
+  'ผ': 'thai_stroke_order/28_phɔɔ_phɯ̂ng.gif',
+  'ฝ': 'thai_stroke_order/29_fɔɔ_fǎa.gif',
+  'พ': 'thai_stroke_order/30_phɔɔ_phaan.gif',
+  'ฟ': 'thai_stroke_order/31_fɔɔ_fan.gif',
+  'ภ': 'thai_stroke_order/32_phɔɔ_sǎm_phao.gif',
+  'ม': 'thai_stroke_order/33_mɔɔ_máa.gif',
+  'ย': 'thai_stroke_order/34_yɔɔ_yák.gif',
+  'ร': 'thai_stroke_order/35_rɔɔ_rɯɯa.gif',
+  'ล': 'thai_stroke_order/36_lɔɔ_ling.gif',
+  'ว': 'thai_stroke_order/37_wɔɔ_wɛ̌ɛn.gif',
+  'ศ': 'thai_stroke_order/38_sɔɔ_sǎa_laa.gif',
+  'ษ': 'thai_stroke_order/39_sɔɔ_rɯɯ_sǐi.gif',
+  'ส': 'thai_stroke_order/40_sɔɔ_sɯ̌a.gif',
+  'ห': 'thai_stroke_order/41_hɔɔ_hìip.gif',
+  'ฬ': 'thai_stroke_order/42_lɔɔ_cù_laa.gif',
+  'อ': 'thai_stroke_order/43_ʔɔɔ_àang.gif',
+  'ฮ': 'thai_stroke_order/44_hɔɔ_nók_hûuk.gif',
+  '๐': 'thai_numeral_stroke_order/01_sǔun.gif',
+  '๑': 'thai_numeral_stroke_order/02_nɯ̀ng.gif',
+  '๒': 'thai_numeral_stroke_order/03_sɔ̌ɔng.gif',
+  '๓': 'thai_numeral_stroke_order/04_sǎam.gif',
+  '๔': 'thai_numeral_stroke_order/05_sìi.gif',
+  '๕': 'thai_numeral_stroke_order/06_hâa.gif',
+  '๖': 'thai_numeral_stroke_order/07_hòk.gif',
+  '๗': 'thai_numeral_stroke_order/08_cèt.gif',
+  '๘': 'thai_numeral_stroke_order/09_pɛ̀ɛt.gif',
+  '๙': 'thai_numeral_stroke_order/10_kâao.gif'
+};
 
 const TOTAL_Q = 20;
 let pool = [], weights = {}, questionMode = 'char';
@@ -1073,10 +1366,23 @@ function weightedRandom() {
 
 function setQuestionMode(mode) {
   questionMode = mode;
-  ['Char','Mean','Rom'].forEach(m => document.getElementById('mode'+m).classList.remove('active'));
-  const map = {char:'Char', meaning:'Mean', romanize:'Rom'};
+  ['Char','Mean','Rom','Draw'].forEach(m => document.getElementById('mode'+m).classList.remove('active'));
+  const map = {char:'Char', meaning:'Mean', romanize:'Rom', draw:'Draw'};
   document.getElementById('mode'+map[mode]).classList.add('active');
-  if (currentChar) renderQuestion();
+  // Re-render only while the question is still open. Re-rendering an answered
+  // question used to hand back a second attempt at the same character.
+  if (currentChar && !answered) renderQuestion();
+}
+
+// Which clue the Draw-mode prompt shows: sound / en / fr / both / audio
+let clueMode = 'sound';
+
+function setClue(mode) {
+  clueMode = mode;
+  const map = {sound:'clueSound', en:'clueEn', fr:'clueFr', both:'clueBoth', audio:'clueAudio'};
+  Object.values(map).forEach(id => document.getElementById(id).classList.remove('active'));
+  document.getElementById(map[mode]).classList.add('active');
+  if (currentChar && questionMode === 'draw' && !answered) renderPrompt();
 }
 
 function nextQuestion() {
@@ -1088,6 +1394,7 @@ function nextQuestion() {
   document.getElementById('feedbackSub').textContent = '';
   document.getElementById('feedbackExample').style.display = 'none';
   hideSpeakerBtn();
+  resetDrawing();
 
   currentChar = weightedRandom();
   qNum++;
@@ -1104,6 +1411,15 @@ function renderQuestion() {
   const pip = document.getElementById('classPip');
   pip.textContent = isNum(c) ? 'numeral' : c.cls + ' class';
   pip.className = 'class-pip pip-' + c.cls;
+
+  // Draw mode swaps the multiple-choice block for a canvas — handled separately
+  const drawing = questionMode === 'draw';
+  document.getElementById('choices').style.display = drawing ? 'none' : 'grid';
+  document.getElementById('drawWrap').style.display = drawing ? 'block' : 'none';
+  document.getElementById('clueRow').style.display = drawing ? 'flex' : 'none';
+  document.getElementById('charDisplay').style.display = drawing ? 'none' : 'block';
+  document.getElementById('promptBlock').style.display = drawing ? 'block' : 'none';
+  if (drawing) { renderPrompt(); return; }
 
   // Question display & hint
   const display = document.getElementById('charDisplay');
@@ -1187,6 +1503,12 @@ function handleAnswer(chosen, btn) {
     else b.classList.add('dimmed');
   });
 
+  applyResult(correct);
+}
+
+// Scoring, streaks, adaptive weights and the feedback panel.
+// Shared by the multiple-choice modes and by Draw mode's self-grading.
+function applyResult(correct) {
   const fb = document.getElementById('feedback');
   const fbMain = document.getElementById('feedbackMain');
   const fbSub = document.getElementById('feedbackSub');
@@ -1221,6 +1543,266 @@ function handleAnswer(chosen, btn) {
   document.getElementById('nextBtn').classList.add('visible');
   document.getElementById('nextBtn').textContent = qNum >= TOTAL_Q ? 'See results →' : 'Next →';
   showSpeakerBtn();
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   DRAW MODE
+   Prompt shows the transliteration and/or the English/French word;
+   you draw the glyph, reveal the model letterform as a ghost behind
+   your ink, then grade yourself. Self-grading feeds the same score,
+   streak and adaptive-weight system as the other three modes.
+   ══════════════════════════════════════════════════════════════════ */
+
+let inkCanvas, inkCtx, ghostCanvas, ghostCtx, guideCanvas, guideCtx;
+let strokes = [];        // array of strokes; each stroke is [{x,y}, ...] in 0–1 units
+let activeStroke = null;
+let peeking = false;     // ghost shown faintly while drawing
+let revealed = false;    // answer shown, waiting for the self-grade
+
+const GHOST_FONT = '"SarabunLocal","Noto Sans Thai","Leelawadee UI",serif';
+
+// Prompt card: which clue to show for the current character
+function renderPrompt() {
+  const c = currentChar;
+  const main = document.getElementById('promptMain');
+  const second = document.getElementById('promptSecond');
+  const audioBtn = document.getElementById('promptAudioBtn');
+  const hint = document.getElementById('charHint');
+
+  main.style.display = 'block';
+  second.style.display = 'block';
+  audioBtn.style.display = 'none';
+  main.classList.remove('small');
+
+  if (clueMode === 'sound') {
+    main.textContent = c.phon;
+    second.textContent = '';
+    second.style.display = 'none';
+  } else if (clueMode === 'en') {
+    main.textContent = cap(c.mean);
+    second.textContent = '';
+    second.style.display = 'none';
+  } else if (clueMode === 'fr') {
+    main.textContent = cap(c.meanFr);
+    second.textContent = '';
+    second.style.display = 'none';
+  } else if (clueMode === 'both') {
+    main.classList.add('small');
+    main.textContent = c.phon;
+    second.textContent = `${cap(c.mean)} · ${cap(c.meanFr)}`;
+  } else { // audio — nothing written, listen and draw
+    main.textContent = '';
+    main.style.display = 'none';
+    second.textContent = '';
+    second.style.display = 'none';
+    audioBtn.style.display = 'flex';
+    setTimeout(speakPrompt, 200);
+  }
+
+  hint.textContent = isNum(c)
+    ? 'Draw this Thai numeral'
+    : 'Draw this Thai character';
+
+  sizeCanvases();
+}
+
+function cap(s) { return s ? s.charAt(0).toUpperCase() + s.slice(1) : ''; }
+
+// Audio clue: numerals are read from their spelled-out word (see speakCurrent)
+function speakPrompt() {
+  if (!currentChar) return;
+  const btn = document.getElementById('promptAudioBtn');
+  if (!window.speechSynthesis) return;
+  speechSynthesis.cancel();
+  const utt = new SpeechSynthesisUtterance(currentChar.word);
+  utt.lang = 'th-TH';
+  if (thaiVoice) utt.voice = thaiVoice;
+  btn.classList.add('speaking');
+  utt.onend = () => btn.classList.remove('speaking');
+  utt.onerror = () => btn.classList.remove('speaking');
+  speechSynthesis.speak(utt);
+}
+
+// ── canvas plumbing ──
+function initCanvases() {
+  inkCanvas = document.getElementById('inkCanvas');
+  ghostCanvas = document.getElementById('ghostCanvas');
+  guideCanvas = document.getElementById('guideCanvas');
+  if (!inkCanvas) return;
+  inkCtx = inkCanvas.getContext('2d');
+  ghostCtx = ghostCanvas.getContext('2d');
+  guideCtx = guideCanvas.getContext('2d');
+
+  inkCanvas.addEventListener('pointerdown', onPointerDown);
+  inkCanvas.addEventListener('pointermove', onPointerMove);
+  inkCanvas.addEventListener('pointerup', onPointerUp);
+  inkCanvas.addEventListener('pointercancel', onPointerUp);
+  inkCanvas.addEventListener('pointerleave', onPointerUp);
+
+  window.addEventListener('resize', () => { if (questionMode === 'draw') sizeCanvases(); });
+}
+
+// Match the backing store to the CSS box (and the device pixel ratio) so the
+// ink stays crisp, then repaint everything from the stored 0–1 coordinates.
+function sizeCanvases() {
+  if (!inkCanvas) return;
+  const rect = inkCanvas.getBoundingClientRect();
+  if (!rect.width) return;
+  const dpr = window.devicePixelRatio || 1;
+  [inkCanvas, ghostCanvas, guideCanvas].forEach(cv => {
+    cv.width = Math.round(rect.width * dpr);
+    cv.height = Math.round(rect.height * dpr);
+  });
+  drawGuides();
+  redrawInk();
+  if (peeking || revealed) drawGhost();
+}
+
+function drawGuides() {
+  const w = guideCanvas.width, h = guideCanvas.height;
+  guideCtx.clearRect(0, 0, w, h);
+  guideCtx.strokeStyle = 'rgba(138,120,104,0.28)';
+  guideCtx.lineWidth = Math.max(1, w / 400);
+  guideCtx.setLineDash([6, 8]);
+  guideCtx.beginPath();
+  guideCtx.moveTo(w / 2, 0); guideCtx.lineTo(w / 2, h);      // vertical centre
+  guideCtx.moveTo(0, h / 2); guideCtx.lineTo(w, h / 2);      // vertical midpoint
+  guideCtx.stroke();
+  // baseline and top line of the Thai body height, 12% margins
+  guideCtx.strokeStyle = 'rgba(200,136,42,0.30)';
+  guideCtx.beginPath();
+  guideCtx.moveTo(0, h * 0.80); guideCtx.lineTo(w, h * 0.80);
+  guideCtx.moveTo(0, h * 0.22); guideCtx.lineTo(w, h * 0.22);
+  guideCtx.stroke();
+  guideCtx.setLineDash([]);
+}
+
+// The model letterform, drawn from the same Sarabun face as the stroke artwork
+function drawGhost() {
+  const w = ghostCanvas.width, h = ghostCanvas.height;
+  ghostCtx.clearRect(0, 0, w, h);
+  const size = h * 0.70;
+  ghostCtx.font = size + 'px ' + GHOST_FONT;
+  ghostCtx.textAlign = 'center';
+  ghostCtx.textBaseline = 'middle';
+  ghostCtx.fillStyle = 'rgba(200,136,42,0.16)';
+  ghostCtx.fillText(currentChar.th, w / 2, h * 0.51);
+  ghostCtx.lineWidth = Math.max(1.5, w / 260);
+  ghostCtx.strokeStyle = 'rgba(200,136,42,0.62)';
+  ghostCtx.strokeText(currentChar.th, w / 2, h * 0.51);
+}
+
+function redrawInk() {
+  const w = inkCanvas.width, h = inkCanvas.height;
+  inkCtx.clearRect(0, 0, w, h);
+  inkCtx.strokeStyle = '#1a120a';
+  inkCtx.lineWidth = Math.max(3, w / 60);
+  inkCtx.lineCap = 'round';
+  inkCtx.lineJoin = 'round';
+  strokes.forEach(st => {
+    if (!st.length) return;
+    inkCtx.beginPath();
+    inkCtx.moveTo(st[0].x * w, st[0].y * h);
+    if (st.length === 1) inkCtx.lineTo(st[0].x * w + 0.1, st[0].y * h);  // a tap leaves a dot
+    else st.slice(1).forEach(p => inkCtx.lineTo(p.x * w, p.y * h));
+    inkCtx.stroke();
+  });
+  const has = strokes.length > 0;
+  document.getElementById('undoBtn').disabled = !has;
+  document.getElementById('clearBtn').disabled = !has;
+}
+
+function pointFromEvent(e) {
+  const r = inkCanvas.getBoundingClientRect();
+  return { x: (e.clientX - r.left) / r.width, y: (e.clientY - r.top) / r.height };
+}
+
+function onPointerDown(e) {
+  if (revealed) return;               // no drawing once the answer is on screen
+  e.preventDefault();
+  inkCanvas.setPointerCapture(e.pointerId);
+  activeStroke = [pointFromEvent(e)];
+  strokes.push(activeStroke);
+  redrawInk();
+}
+
+function onPointerMove(e) {
+  if (!activeStroke) return;
+  e.preventDefault();
+  activeStroke.push(pointFromEvent(e));
+  redrawInk();
+}
+
+function onPointerUp() { activeStroke = null; }
+
+function undoStroke() {
+  strokes.pop();
+  redrawInk();
+}
+
+function clearInk() {
+  strokes = [];
+  redrawInk();
+}
+
+// Peek = a faint ghost while you draw. Honest studying is on you.
+function togglePeek() {
+  if (revealed) return;
+  peeking = !peeking;
+  const btn = document.getElementById('peekBtn');
+  btn.classList.toggle('active', peeking);
+  if (peeking) { drawGhost(); ghostCanvas.style.opacity = '0.32'; }
+  else ghostCanvas.style.opacity = '0';
+}
+
+// Back to a blank slate for the next question
+function resetDrawing() {
+  strokes = [];
+  activeStroke = null;
+  peeking = false;
+  revealed = false;
+  if (!inkCanvas) return;
+  if (inkCtx) inkCtx.clearRect(0, 0, inkCanvas.width, inkCanvas.height);
+  if (ghostCtx) ghostCtx.clearRect(0, 0, ghostCanvas.width, ghostCanvas.height);
+  ghostCanvas.style.opacity = '0';
+  document.getElementById('peekBtn').classList.remove('active');
+  document.getElementById('revealBtn').style.display = 'block';
+  document.getElementById('gradeRow').classList.remove('visible');
+  document.getElementById('strokePanel').classList.remove('visible');
+  document.getElementById('undoBtn').disabled = true;
+  document.getElementById('clearBtn').disabled = true;
+}
+
+function revealGlyph() {
+  if (revealed) return;
+  revealed = true;
+  drawGhost();
+  ghostCanvas.style.opacity = '1';
+  document.getElementById('revealBtn').style.display = 'none';
+  document.getElementById('gradeRow').classList.add('visible');
+
+  // Stroke-order animation for this character, if we have artwork for it
+  const gif = STROKE_GIF[currentChar.th];
+  const panel = document.getElementById('strokePanel');
+  if (gif) {
+    // cache-bust so the GIF restarts from stroke 1 every time it is revealed
+    document.getElementById('strokeImg').src = gif + '?r=' + Date.now();
+    document.getElementById('strokeText').innerHTML =
+      `<b>${currentChar.th}</b> — ${currentChar.phon}<br>${cap(currentChar.mean)} · ${cap(currentChar.meanFr)}`;
+    panel.classList.add('visible');
+  } else {
+    panel.classList.remove('visible');
+  }
+  speakCurrent();
+}
+
+// Self-grade: same consequences as picking a multiple-choice answer
+function gradeDrawing(ok) {
+  if (answered) return;
+  if (!revealed) revealGlyph();
+  answered = true;
+  document.getElementById('gradeRow').classList.remove('visible');
+  applyResult(ok);
 }
 
 function updateStats() {
@@ -1283,6 +1865,11 @@ function showResults() {
 
 function init() {
   initTTS();
+  initCanvases();
+  // Warm the local Thai face so the first ghost letterform is not drawn with a fallback
+  if (document.fonts && document.fonts.load) {
+    document.fonts.load('40px SarabunLocal', 'ก').catch(() => {});
+  }
 }
 
 // Boot
