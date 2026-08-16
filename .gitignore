@@ -22,3 +22,6 @@ _github_upload/
 
 # Scratch folder for things awaiting manual deletion. Not part of the site.
 _to_delete/
+
+# Local backup zips of the whole project. Never publish these.
+backups/
