@@ -351,8 +351,9 @@ body {
 .next-btn.visible { display: block; }
 .next-btn:hover { background: var(--ink2); transform: translateY(-1px); }
 
-/* Draw mode moves the Next button up here; only claim the space when it holds it */
-#nextSlotTop:not(:empty) { margin-bottom: 1.25rem; }
+/* Draw mode lifts its action buttons up here; only claim the space when one is
+   actually showing (the slot can hold a hidden element between questions). */
+#nextSlotTop.filled { margin-bottom: 1.25rem; }
 
 /* ── MODE PILLS ── */
 /* was a 3-up flex row; now a grid so the 4th "Draw it" pill fits without squashing */
@@ -1018,8 +1019,9 @@ body {
     <div class="no-tts" id="noTts">Thai voice not available on this device</div>
   </div>
 
-  <!-- Draw mode parks the Next button here, right under the prompt, so a full round
-       needs no scrolling back down to the bottom of the page between questions. -->
+  <!-- Draw mode parks its action buttons here, right under the prompt, so a full
+       round needs no scrolling back down to the bottom of the page: first the
+       Got it / Missed it pair on reveal, then Next once graded. -->
   <div id="nextSlotTop"></div>
 
   <div class="choices" id="choices"></div>
@@ -1038,9 +1040,12 @@ body {
       <button class="tool-btn peek" id="peekBtn" onclick="togglePeek()">👁 Peek</button>
     </div>
     <button class="reveal-btn" id="revealBtn" onclick="revealGlyph()">Reveal answer</button>
-    <div class="grade-row" id="gradeRow">
-      <button class="grade-btn good" onclick="gradeDrawing(true)">✓ Got it</button>
-      <button class="grade-btn bad" onclick="gradeDrawing(false)">✗ Missed it</button>
+    <!-- Default home of the grade buttons; revealGlyph() lifts them to #nextSlotTop -->
+    <div id="gradeSlotBottom">
+      <div class="grade-row" id="gradeRow">
+        <button class="grade-btn good" onclick="gradeDrawing(true)">✓ Got it</button>
+        <button class="grade-btn bad" onclick="gradeDrawing(false)">✗ Missed it</button>
+      </div>
     </div>
     <div class="stroke-panel" id="strokePanel">
       <img id="strokeImg" alt="Stroke order animation">
@@ -1433,6 +1438,7 @@ function nextQuestion() {
   answered = false;
   document.getElementById('nextBtn').classList.remove('visible');
   placeNextBtn(false);   // back to its default home while hidden
+  syncTopSlot();
   document.getElementById('feedback').className = 'feedback';
   document.getElementById('feedbackMain').textContent = '';
   document.getElementById('feedbackSub').textContent = '';
@@ -1589,14 +1595,32 @@ function applyResult(correct) {
   placeNextBtn(questionMode === 'draw');
   document.getElementById('nextBtn').classList.add('visible');
   document.getElementById('nextBtn').textContent = qNum >= TOTAL_Q ? 'See results →' : 'Next →';
+  syncTopSlot();
   showSpeakerBtn();
 }
 
 // Park the Next button under the prompt (atTop) or back below the feedback panel
 function placeNextBtn(atTop) {
-  const btn = document.getElementById('nextBtn');
-  const slot = document.getElementById(atTop ? 'nextSlotTop' : 'nextSlotBottom');
-  if (btn.parentElement !== slot) slot.appendChild(btn);
+  moveToSlot('nextBtn', atTop ? 'nextSlotTop' : 'nextSlotBottom');
+}
+
+// Park the Got it / Missed it pair under the prompt (atTop) or back under the canvas
+function placeGradeRow(atTop) {
+  moveToSlot('gradeRow', atTop ? 'nextSlotTop' : 'gradeSlotBottom');
+}
+
+function moveToSlot(elId, slotId) {
+  const el = document.getElementById(elId);
+  const slot = document.getElementById(slotId);
+  if (el.parentElement !== slot) slot.appendChild(el);
+  syncTopSlot();
+}
+
+// The top slot only takes up space while it actually shows something
+function syncTopSlot() {
+  const slot = document.getElementById('nextSlotTop');
+  const showing = Array.from(slot.children).some(c => getComputedStyle(c).display !== 'none');
+  slot.classList.toggle('filled', showing);
 }
 
 /* ══════════════════════════════════════════════════════════════════
@@ -1812,6 +1836,7 @@ function resetDrawing() {
   document.getElementById('peekBtn').classList.remove('active');
   document.getElementById('revealBtn').style.display = 'block';
   document.getElementById('gradeRow').classList.remove('visible');
+  placeGradeRow(false);   // back under the canvas while hidden
   document.getElementById('strokePanel').classList.remove('visible');
   document.getElementById('undoBtn').disabled = true;
   document.getElementById('clearBtn').disabled = true;
@@ -1823,7 +1848,10 @@ function revealGlyph() {
   drawGhost();
   ghostCanvas.style.opacity = '1';
   document.getElementById('revealBtn').style.display = 'none';
+  // Grade buttons sit under the prompt, not at the foot of a long page
+  placeGradeRow(true);
   document.getElementById('gradeRow').classList.add('visible');
+  syncTopSlot();
 
   // Stroke-order animation for this character, if we have artwork for it
   const gif = STROKE_GIF[currentChar.th];
@@ -1838,6 +1866,9 @@ function revealGlyph() {
     panel.classList.remove('visible');
   }
   speakCurrent();
+  // Reveal is clicked from down by the canvas — bring the prompt, the grade
+  // buttons and the revealed letterform back into view together.
+  document.getElementById('charCard').scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
 // Self-grade: same consequences as picking a multiple-choice answer
@@ -1846,6 +1877,7 @@ function gradeDrawing(ok) {
   if (!revealed) revealGlyph();
   answered = true;
   document.getElementById('gradeRow').classList.remove('visible');
+  placeGradeRow(false);           // frees the slot for the Next button
   applyResult(ok);
   // The grade buttons sit low on the page — bring the prompt, the Next button and
   // the revealed letterform back into view instead of leaving the user down there.
