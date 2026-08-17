@@ -351,6 +351,9 @@ body {
 .next-btn.visible { display: block; }
 .next-btn:hover { background: var(--ink2); transform: translateY(-1px); }
 
+/* Draw mode moves the Next button up here; only claim the space when it holds it */
+#nextSlotTop:not(:empty) { margin-bottom: 1.25rem; }
+
 /* ── MODE PILLS ── */
 /* was a 3-up flex row; now a grid so the 4th "Draw it" pill fits without squashing */
 .mode-row {
@@ -1015,6 +1018,10 @@ body {
     <div class="no-tts" id="noTts">Thai voice not available on this device</div>
   </div>
 
+  <!-- Draw mode parks the Next button here, right under the prompt, so a full round
+       needs no scrolling back down to the bottom of the page between questions. -->
+  <div id="nextSlotTop"></div>
+
   <div class="choices" id="choices"></div>
 
   <!-- Draw mode only: canvas + tools -->
@@ -1056,7 +1063,10 @@ body {
     </div>
   </div>
 
-  <button class="next-btn" id="nextBtn" onclick="nextQuestion()">Next →</button>
+  <!-- Home of the Next button in the three multiple-choice modes -->
+  <div id="nextSlotBottom">
+    <button class="next-btn" id="nextBtn" onclick="nextQuestion()">Next →</button>
+  </div>
 
   <div class="review-strip" id="reviewStrip"></div>
 </div>
@@ -1389,6 +1399,7 @@ function nextQuestion() {
   if (qNum >= TOTAL_Q) { showResults(); return; }
   answered = false;
   document.getElementById('nextBtn').classList.remove('visible');
+  placeNextBtn(false);   // back to its default home while hidden
   document.getElementById('feedback').className = 'feedback';
   document.getElementById('feedbackMain').textContent = '';
   document.getElementById('feedbackSub').textContent = '';
@@ -1540,9 +1551,19 @@ function applyResult(correct) {
   document.getElementById('exampleSpeakBtn').classList.remove('speaking');
 
   updateStats();
+  // In Draw mode the canvas and stroke panel push the page long, so the Next
+  // button sits just under the prompt instead of below everything.
+  placeNextBtn(questionMode === 'draw');
   document.getElementById('nextBtn').classList.add('visible');
   document.getElementById('nextBtn').textContent = qNum >= TOTAL_Q ? 'See results →' : 'Next →';
   showSpeakerBtn();
+}
+
+// Park the Next button under the prompt (atTop) or back below the feedback panel
+function placeNextBtn(atTop) {
+  const btn = document.getElementById('nextBtn');
+  const slot = document.getElementById(atTop ? 'nextSlotTop' : 'nextSlotBottom');
+  if (btn.parentElement !== slot) slot.appendChild(btn);
 }
 
 /* ══════════════════════════════════════════════════════════════════
@@ -1803,6 +1824,9 @@ function gradeDrawing(ok) {
   answered = true;
   document.getElementById('gradeRow').classList.remove('visible');
   applyResult(ok);
+  // The grade buttons sit low on the page — bring the prompt, the Next button and
+  // the revealed letterform back into view instead of leaving the user down there.
+  document.getElementById('charCard').scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
 function updateStats() {
