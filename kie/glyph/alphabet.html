@@ -1128,7 +1128,8 @@ function initTTS() {
   if (!thaiVoice) speechSynthesis.addEventListener('voiceschanged', findVoice, { once: true });
 }
 
-function speakText(text) {
+// btn is optional — the button that should pulse while the phrase is spoken
+function speakText(text, btn) {
   if (!window.speechSynthesis) return;
   speechSynthesis.cancel();
   const utt = new SpeechSynthesisUtterance(text.replace(/\s*\/\s*/g, ", "));
@@ -1136,41 +1137,71 @@ function speakText(text) {
   if (thaiVoice) utt.voice = thaiVoice;
   utt.rate = 1.0;
   utt.pitch = 1.0;
-  const btn = document.getElementById('speakerBtn');
+  if (btn === undefined) btn = document.getElementById('speakerBtn');
   if (btn) btn.classList.add('speaking');
   utt.onend = () => { if (btn) btn.classList.remove('speaking'); };
   utt.onerror = () => { if (btn) btn.classList.remove('speaking'); };
   speechSynthesis.speak(utt);
 }
 
+// ── PLAYING A CHARACTER'S NAME ──
+// Every speaker button plays the FULL spoken name of the letter — "บอ ใบไม้",
+// not the bare example word — since that whole phrase is how the letter is
+// taught and recited. Two sources, in order of preference:
+//   1. the real recording under audio/consonants/ (all 44 consonants),
+//   2. speechSynthesis reading thaiFull, for the numerals and as a fallback.
+// The recordings also mean audio works with no Thai voice installed, which was
+// the case on this PC — see the project note on audio.
+let currentAudio = null;
+
+function playName(c, btn) {
+  if (!c) return;
+  stopAudio();
+  if (c.audio) {
+    const a = new Audio(c.audio);
+    currentAudio = a;
+    if (btn) btn.classList.add('speaking');
+    const done = () => {
+      if (btn) btn.classList.remove('speaking');
+      if (currentAudio === a) currentAudio = null;
+    };
+    a.onended = done;
+    // A missing or unplayable file falls through to the speech engine
+    a.onerror = () => { done(); speakText(c.thaiFull || c.word, btn || null); };
+    const p = a.play();
+    if (p && p.catch) p.catch(() => { done(); speakText(c.thaiFull || c.word, btn || null); });
+    return;
+  }
+  speakText(c.thaiFull || c.word, btn || null);
+}
+
+function stopAudio() {
+  if (currentAudio) { currentAudio.pause(); currentAudio = null; }
+  if (window.speechSynthesis) speechSynthesis.cancel();
+}
+
+// true when this character can be heard at all on this device
+function canHear(c) { return !!(c && (c.audio || thaiVoice)); }
+
 function speakCurrent() {
-  if (!currentChar) return;
-  // A bare numeral glyph is read inconsistently by the speech engines, so speak
-  // the spelled-out Thai word instead. Consonants keep speaking the glyph.
-  speakText(currentChar.cls === 'num' ? currentChar.word : currentChar.th);
+  playName(currentChar, document.getElementById('speakerBtn'));
 }
 
 function speakExample() {
-  if (!currentChar) return;
-  const btn = document.getElementById('exampleSpeakBtn');
-  if (!window.speechSynthesis) return;
-  speechSynthesis.cancel();
-  const utt = new SpeechSynthesisUtterance(currentChar.word);
-  utt.lang = 'th-TH';
-  if (thaiVoice) utt.voice = thaiVoice;
-  utt.rate = 1.0;
-  utt.pitch = 1.0;
-  btn.classList.add('speaking');
-  utt.onend = () => btn.classList.remove('speaking');
-  utt.onerror = () => btn.classList.remove('speaking');
-  speechSynthesis.speak(utt);
+  playName(currentChar, document.getElementById('exampleSpeakBtn'));
+}
+
+// Results screen: tap a missed character to hear its full name again
+function playByChar(th) {
+  playName(CHARS.concat(NUMS).find(x => x.th === th), null);
 }
 
 function showSpeakerBtn() {
   const btn = document.getElementById('speakerBtn');
   const noTts = document.getElementById('noTts');
   btn.classList.add('show');
-  if (ttsReady && !thaiVoice) {
+  // Only warn about the missing voice when there is no recording to fall back on
+  if (ttsReady && !canHear(currentChar)) {
     noTts.style.display = 'block';
   }
   // Auto-speak on reveal
@@ -1181,7 +1212,9 @@ function hideSpeakerBtn() {
   const btn = document.getElementById('speakerBtn');
   btn.classList.remove('show', 'speaking');
   document.getElementById('noTts').style.display = 'none';
-  speechSynthesis && speechSynthesis.cancel();
+  document.getElementById('exampleSpeakBtn').classList.remove('speaking');
+  document.getElementById('promptAudioBtn').classList.remove('speaking');
+  stopAudio();
 }
 
 initTTS();
@@ -1196,50 +1229,50 @@ function shuffle(a) {
 }
 
 const CHARS = [
-  {th:'ก',rom:'g / k',cls:'mid',mean:'chicken',meanFr:'poulet',phon:'gɔɔ gài',word:'ไก่'},
-  {th:'จ',rom:'j',cls:'mid',mean:'plate',meanFr:'assiette',phon:'jɔɔ jaan',word:'จาน'},
-  {th:'ด',rom:'d',cls:'mid',mean:'child',meanFr:'enfant',phon:'dɔɔ dèk',word:'เด็ก'},
-  {th:'ต',rom:'dt / t',cls:'mid',mean:'turtle',meanFr:'tortue',phon:'dtɔɔ dtào',word:'เต่า'},
-  {th:'บ',rom:'b',cls:'mid',mean:'leaf',meanFr:'feuille',phon:'bɔɔ bai máai',word:'ใบไม้'},
-  {th:'ป',rom:'bp / p',cls:'mid',mean:'fish',meanFr:'poisson',phon:'bpɔɔ bplaa',word:'ปลา'},
-  {th:'พ',rom:'ph',cls:'mid',mean:'tray',meanFr:'plateau',phon:'phɔɔ phaan',word:'พาน'},
-  {th:'ฟ',rom:'f',cls:'mid',mean:'teeth',meanFr:'dents',phon:'fɔɔ fan',word:'ฟัน'},
-  {th:'อ',rom:'o / silent',cls:'mid',mean:'basin',meanFr:'bassine',phon:'ɔɔ àang',word:'อ่าง'},
-  {th:'ข',rom:'kh',cls:'high',mean:'egg',meanFr:'œuf',phon:'khɔɔ khài',word:'ไข่'},
-  {th:'ฉ',rom:'ch',cls:'high',mean:'cymbals',meanFr:'cymbales',phon:'chɔɔ chìng',word:'ฉิ่ง'},
-  {th:'ถ',rom:'th',cls:'high',mean:'bag',meanFr:'sac',phon:'thɔɔ thǔng',word:'ถุง'},
-  {th:'ผ',rom:'ph',cls:'high',mean:'bee',meanFr:'abeille',phon:'phɔɔ phûeng',word:'ผึ้ง'},
-  {th:'ฝ',rom:'f',cls:'high',mean:'lid',meanFr:'couvercle',phon:'fɔɔ fǎa',word:'ฝา'},
-  {th:'ศ',rom:'s',cls:'high',mean:'hermit',meanFr:'ermite',phon:'sɔɔ sǎalaa',word:'ศาลา'},
-  {th:'ษ',rom:'s',cls:'high',mean:'sage',meanFr:'sage',phon:'sɔɔ rʉʉsǐi',word:'ฤๅษี'},
-  {th:'ส',rom:'s',cls:'high',mean:'tiger',meanFr:'tigre',phon:'sɔɔ sʉʉa',word:'เสือ'},
-  {th:'ห',rom:'h',cls:'high',mean:'chest',meanFr:'coffre',phon:'hɔɔ hìip',word:'หีบ'},
-  {th:'ฐ',rom:'th',cls:'high',mean:'pedestal',meanFr:'socle',phon:'thɔɔ thǎan',word:'ฐาน'},
-  {th:'ค',rom:'kh',cls:'low',mean:'buffalo',meanFr:'buffle',phon:'khɔɔ khwaai',word:'ควาย'},
-  {th:'ง',rom:'ng',cls:'low',mean:'snake',meanFr:'serpent',phon:'ngɔɔ nguu',word:'งู'},
-  {th:'ช',rom:'ch',cls:'low',mean:'elephant',meanFr:'éléphant',phon:'chɔɔ cháang',word:'ช้าง'},
-  {th:'ซ',rom:'s',cls:'low',mean:'chain',meanFr:'chaîne',phon:'sɔɔ sôo',word:'โซ่'},
-  {th:'ญ',rom:'y',cls:'low',mean:'woman',meanFr:'femme',phon:'yɔɔ yǐng',word:'หญิง'},
-  {th:'ณ',rom:'n',cls:'low',mean:'person',meanFr:'personne',phon:'nɔɔ neen',word:'เณร'},
-  {th:'น',rom:'n',cls:'low',mean:'mouse',meanFr:'souris',phon:'nɔɔ nǔu',word:'หนู'},
-  {th:'ม',rom:'m',cls:'low',mean:'horse',meanFr:'cheval',phon:'mɔɔ máa',word:'ม้า'},
-  {th:'ย',rom:'y',cls:'low',mean:'giant',meanFr:'géant',phon:'yɔɔ yâak',word:'ยักษ์'},
-  {th:'ร',rom:'r',cls:'low',mean:'boat',meanFr:'bateau',phon:'rɔɔ reua',word:'เรือ'},
-  {th:'ล',rom:'l',cls:'low',mean:'monkey',meanFr:'singe',phon:'lɔɔ ling',word:'ลิง'},
-  {th:'ว',rom:'w',cls:'low',mean:'ring',meanFr:'bague',phon:'wɔɔ wɛɛn',word:'แหวน'},
-  {th:'ท',rom:'th',cls:'low',mean:'soldier',meanFr:'soldat',phon:'thɔɔ tháhǎan',word:'ทหาร'},
-  {th:'ธ',rom:'th',cls:'low',mean:'flag',meanFr:'drapeau',phon:'thɔɔ thong',word:'ธง'},
-  {th:'ภ',rom:'ph',cls:'low',mean:'mountain',meanFr:'montagne',phon:'phɔɔ phukhǎo',word:'ภูเขา'},
-  {th:'ฆ',rom:'kh',cls:'low',mean:'bell',meanFr:'cloche',phon:'khɔɔ rakhang',word:'ระฆัง'},
-  {th:'ฌ',rom:'ch',cls:'low',mean:'tree',meanFr:'arbre',phon:'chɔɔ chə̂ə',word:'เฌอ'},
-  {th:'ฬ',rom:'l',cls:'low',mean:'kite',meanFr:'cerf-volant',phon:'lɔɔ julaa',word:'จุฬา'},
-  {th:'ฮ',rom:'h',cls:'low',mean:'owl',meanFr:'hibou',phon:'hɔɔ nók hûuk',word:'นกฮูก'},
-  {th:'ฎ',rom:'d',cls:'low',mean:'headdress',meanFr:'coiffe',phon:'dɔɔ chadaa',word:'ชฎา'},
-  {th:'ฏ',rom:'dt',cls:'low',mean:'crown',meanFr:'couronne',phon:'dtɔɔ bpatàk',word:'ปฏัก'},
-  {th:'ฑ',rom:'th / dt',cls:'low',mean:'old woman',meanFr:'vieille femme',phon:'thɔɔ montho',word:'มณโฑ'},
-  {th:'ฒ',rom:'th',cls:'low',mean:'elder',meanFr:'ancien',phon:'thɔɔ phûu thâo',word:'ผู้เฒ่า'},
-  {th:'ฃ',rom:'kh',cls:'high',mean:'bottle',meanFr:'bouteille',phon:'khɔɔ khùat',word:'ขวด'},
-  {th:'ฅ',rom:'kh',cls:'low',mean:'person',meanFr:'personne',phon:'khɔɔ khon',word:'คน'},
+  {th:'ก',rom:'g / k',cls:'mid',mean:'chicken',meanFr:'poulet',phon:'gɔɔ gài',word:'ไก่',thaiFull:'กอ ไก่',audio:'audio/consonants/01_kor-kai.mp3'},
+  {th:'จ',rom:'j',cls:'mid',mean:'plate',meanFr:'assiette',phon:'jɔɔ jaan',word:'จาน',thaiFull:'จอ จาน',audio:'audio/consonants/08_djor-djaan.mp3'},
+  {th:'ด',rom:'d',cls:'mid',mean:'child',meanFr:'enfant',phon:'dɔɔ dèk',word:'เด็ก',thaiFull:'ดอ เด็ก',audio:'audio/consonants/20_dor-dek.mp3'},
+  {th:'ต',rom:'dt / t',cls:'mid',mean:'turtle',meanFr:'tortue',phon:'dtɔɔ dtào',word:'เต่า',thaiFull:'ตอ เต่า',audio:'audio/consonants/21_tor-tao.mp3'},
+  {th:'บ',rom:'b',cls:'mid',mean:'leaf',meanFr:'feuille',phon:'bɔɔ bai máai',word:'ใบไม้',thaiFull:'บอ ใบไม้',audio:'audio/consonants/26_bor-baimaai.mp3'},
+  {th:'ป',rom:'bp / p',cls:'mid',mean:'fish',meanFr:'poisson',phon:'bpɔɔ bplaa',word:'ปลา',thaiFull:'ปอ ปลา',audio:'audio/consonants/27_por-plaa.mp3'},
+  {th:'พ',rom:'ph',cls:'mid',mean:'tray',meanFr:'plateau',phon:'phɔɔ phaan',word:'พาน',thaiFull:'พอ พาน',audio:'audio/consonants/30_phor-phaan.mp3'},
+  {th:'ฟ',rom:'f',cls:'mid',mean:'teeth',meanFr:'dents',phon:'fɔɔ fan',word:'ฟัน',thaiFull:'ฟอ ฟัน',audio:'audio/consonants/31_for-fan.mp3'},
+  {th:'อ',rom:'o / silent',cls:'mid',mean:'basin',meanFr:'bassine',phon:'ɔɔ àang',word:'อ่าง',thaiFull:'ออ อ่าง',audio:'audio/consonants/43_or-aang.mp3'},
+  {th:'ข',rom:'kh',cls:'high',mean:'egg',meanFr:'œuf',phon:'khɔɔ khài',word:'ไข่',thaiFull:'ขอ ไข่',audio:'audio/consonants/02_khor-khai.mp3'},
+  {th:'ฉ',rom:'ch',cls:'high',mean:'cymbals',meanFr:'cymbales',phon:'chɔɔ chìng',word:'ฉิ่ง',thaiFull:'ฉอ ฉิ่ง',audio:'audio/consonants/09_tchor-tching.mp3'},
+  {th:'ถ',rom:'th',cls:'high',mean:'bag',meanFr:'sac',phon:'thɔɔ thǔng',word:'ถุง',thaiFull:'ถอ ถุง',audio:'audio/consonants/22_thor-thung.mp3'},
+  {th:'ผ',rom:'ph',cls:'high',mean:'bee',meanFr:'abeille',phon:'phɔɔ phûeng',word:'ผึ้ง',thaiFull:'ผอ ผึ้ง',audio:'audio/consonants/28_phor-phung.mp3'},
+  {th:'ฝ',rom:'f',cls:'high',mean:'lid',meanFr:'couvercle',phon:'fɔɔ fǎa',word:'ฝา',thaiFull:'ฝอ ฝา',audio:'audio/consonants/29_for-faa.mp3'},
+  {th:'ศ',rom:'s',cls:'high',mean:'hermit',meanFr:'ermite',phon:'sɔɔ sǎalaa',word:'ศาลา',thaiFull:'ศอ ศาลา',audio:'audio/consonants/38_sor-saalaa.mp3'},
+  {th:'ษ',rom:'s',cls:'high',mean:'sage',meanFr:'sage',phon:'sɔɔ rʉʉsǐi',word:'ฤๅษี',thaiFull:'ษอ ฤๅษี',audio:'audio/consonants/39_sor-ruusii.mp3'},
+  {th:'ส',rom:'s',cls:'high',mean:'tiger',meanFr:'tigre',phon:'sɔɔ sʉʉa',word:'เสือ',thaiFull:'สอ เสือ',audio:'audio/consonants/40_sor-sua.mp3'},
+  {th:'ห',rom:'h',cls:'high',mean:'chest',meanFr:'coffre',phon:'hɔɔ hìip',word:'หีบ',thaiFull:'หอ หีบ',audio:'audio/consonants/41_hor-hiip.mp3'},
+  {th:'ฐ',rom:'th',cls:'high',mean:'pedestal',meanFr:'socle',phon:'thɔɔ thǎan',word:'ฐาน',thaiFull:'ฐอ ฐาน',audio:'audio/consonants/16_thor-santhaan.mp3'},
+  {th:'ค',rom:'kh',cls:'low',mean:'buffalo',meanFr:'buffle',phon:'khɔɔ khwaai',word:'ควาย',thaiFull:'คอ ควาย',audio:'audio/consonants/04_khor-khwaay.mp3'},
+  {th:'ง',rom:'ng',cls:'low',mean:'snake',meanFr:'serpent',phon:'ngɔɔ nguu',word:'งู',thaiFull:'งอ งู',audio:'audio/consonants/07_ngor-ngu.mp3'},
+  {th:'ช',rom:'ch',cls:'low',mean:'elephant',meanFr:'éléphant',phon:'chɔɔ cháang',word:'ช้าง',thaiFull:'ชอ ช้าง',audio:'audio/consonants/10_tchor-tchaang.mp3'},
+  {th:'ซ',rom:'s',cls:'low',mean:'chain',meanFr:'chaîne',phon:'sɔɔ sôo',word:'โซ่',thaiFull:'ซอ โซ่',audio:'audio/consonants/11_sor-so.mp3'},
+  {th:'ญ',rom:'y',cls:'low',mean:'woman',meanFr:'femme',phon:'yɔɔ yǐng',word:'หญิง',thaiFull:'ญอ หญิง',audio:'audio/consonants/13_yor-ying.mp3'},
+  {th:'ณ',rom:'n',cls:'low',mean:'person',meanFr:'personne',phon:'nɔɔ neen',word:'เณร',thaiFull:'ณอ เณร',audio:'audio/consonants/19_nor-neen.mp3'},
+  {th:'น',rom:'n',cls:'low',mean:'mouse',meanFr:'souris',phon:'nɔɔ nǔu',word:'หนู',thaiFull:'นอ หนู',audio:'audio/consonants/25_nor-nuu.mp3'},
+  {th:'ม',rom:'m',cls:'low',mean:'horse',meanFr:'cheval',phon:'mɔɔ máa',word:'ม้า',thaiFull:'มอ ม้า',audio:'audio/consonants/33_mor-maa.mp3'},
+  {th:'ย',rom:'y',cls:'low',mean:'giant',meanFr:'géant',phon:'yɔɔ yâak',word:'ยักษ์',thaiFull:'ยอ ยักษ์',audio:'audio/consonants/34_yor-yak.mp3'},
+  {th:'ร',rom:'r',cls:'low',mean:'boat',meanFr:'bateau',phon:'rɔɔ reua',word:'เรือ',thaiFull:'รอ เรือ',audio:'audio/consonants/35_ror-ruua.mp3'},
+  {th:'ล',rom:'l',cls:'low',mean:'monkey',meanFr:'singe',phon:'lɔɔ ling',word:'ลิง',thaiFull:'ลอ ลิง',audio:'audio/consonants/36_lor-ling.mp3'},
+  {th:'ว',rom:'w',cls:'low',mean:'ring',meanFr:'bague',phon:'wɔɔ wɛɛn',word:'แหวน',thaiFull:'วอ แหวน',audio:'audio/consonants/37_wor-ween.mp3'},
+  {th:'ท',rom:'th',cls:'low',mean:'soldier',meanFr:'soldat',phon:'thɔɔ tháhǎan',word:'ทหาร',thaiFull:'ทอ ทหาร',audio:'audio/consonants/23_thor-thahaan.mp3'},
+  {th:'ธ',rom:'th',cls:'low',mean:'flag',meanFr:'drapeau',phon:'thɔɔ thong',word:'ธง',thaiFull:'ธอ ธง',audio:'audio/consonants/24_thor-thong.mp3'},
+  {th:'ภ',rom:'ph',cls:'low',mean:'mountain',meanFr:'montagne',phon:'phɔɔ phukhǎo',word:'ภูเขา',thaiFull:'ภอ สำเภา',audio:'audio/consonants/32_phor-samphao.mp3'},
+  {th:'ฆ',rom:'kh',cls:'low',mean:'bell',meanFr:'cloche',phon:'khɔɔ rakhang',word:'ระฆัง',thaiFull:'ฆอ ระฆัง',audio:'audio/consonants/06_khor-rakhang.mp3'},
+  {th:'ฌ',rom:'ch',cls:'low',mean:'tree',meanFr:'arbre',phon:'chɔɔ chə̂ə',word:'เฌอ',thaiFull:'ฌอ เฌอ',audio:'audio/consonants/12_tchor-tchoe.mp3'},
+  {th:'ฬ',rom:'l',cls:'low',mean:'kite',meanFr:'cerf-volant',phon:'lɔɔ julaa',word:'จุฬา',thaiFull:'ฬอ จุฬา',audio:'audio/consonants/42_lor-djulaa.mp3'},
+  {th:'ฮ',rom:'h',cls:'low',mean:'owl',meanFr:'hibou',phon:'hɔɔ nók hûuk',word:'นกฮูก',thaiFull:'ฮอ นกฮูก',audio:'audio/consonants/44_hor-nokhuuk.mp3'},
+  {th:'ฎ',rom:'d',cls:'low',mean:'headdress',meanFr:'coiffe',phon:'dɔɔ chadaa',word:'ชฎา',thaiFull:'ฎอ ชฎา',audio:'audio/consonants/14_dor-tchada.mp3'},
+  {th:'ฏ',rom:'dt',cls:'low',mean:'crown',meanFr:'couronne',phon:'dtɔɔ bpatàk',word:'ปฏัก',thaiFull:'ฏอ ปฏัก',audio:'audio/consonants/15_tor-patak.mp3'},
+  {th:'ฑ',rom:'th / dt',cls:'low',mean:'old woman',meanFr:'vieille femme',phon:'thɔɔ montho',word:'มณโฑ',thaiFull:'ฑอ มณโฑ',audio:'audio/consonants/17_thor-nangmonthoo.mp3'},
+  {th:'ฒ',rom:'th',cls:'low',mean:'elder',meanFr:'ancien',phon:'thɔɔ phûu thâo',word:'ผู้เฒ่า',thaiFull:'ฒอ ผู้เฒ่า',audio:'audio/consonants/18_thor-phuuthao.mp3'},
+  {th:'ฃ',rom:'kh',cls:'high',mean:'bottle',meanFr:'bouteille',phon:'khɔɔ khùat',word:'ขวด',thaiFull:'ฃอ ขวด',audio:'audio/consonants/03_khor-khuat.mp3'},
+  {th:'ฅ',rom:'kh',cls:'low',mean:'person',meanFr:'personne',phon:'khɔɔ khon',word:'คน',thaiFull:'ฅอ คน',audio:'audio/consonants/05_khor-khon.mp3'},
 ];
 
 // Thai numerals ๐–๙. Same shape as CHARS so every game mode works unchanged:
@@ -1249,16 +1282,16 @@ const CHARS = [
 //   word = the number spelled out in Thai, shown and spoken in the feedback panel
 // Data matches REF.numerals / NUMS in kie/glyph.html — keep the two in step.
 const NUMS = [
-  {th:'๐',rom:'0',cls:'num',mean:'zero',meanFr:'zéro',phon:'sǔun',word:'ศูนย์'},
-  {th:'๑',rom:'1',cls:'num',mean:'one',meanFr:'un',phon:'nɯ̀ng',word:'หนึ่ง'},
-  {th:'๒',rom:'2',cls:'num',mean:'two',meanFr:'deux',phon:'sɔ̌ɔng',word:'สอง'},
-  {th:'๓',rom:'3',cls:'num',mean:'three',meanFr:'trois',phon:'sǎam',word:'สาม'},
-  {th:'๔',rom:'4',cls:'num',mean:'four',meanFr:'quatre',phon:'sìi',word:'สี่'},
-  {th:'๕',rom:'5',cls:'num',mean:'five',meanFr:'cinq',phon:'hâa',word:'ห้า'},
-  {th:'๖',rom:'6',cls:'num',mean:'six',meanFr:'six',phon:'hòk',word:'หก'},
-  {th:'๗',rom:'7',cls:'num',mean:'seven',meanFr:'sept',phon:'cèt',word:'เจ็ด'},
-  {th:'๘',rom:'8',cls:'num',mean:'eight',meanFr:'huit',phon:'pɛ̀ɛt',word:'แปด'},
-  {th:'๙',rom:'9',cls:'num',mean:'nine',meanFr:'neuf',phon:'kâao',word:'เก้า'},
+  {th:'๐',rom:'0',cls:'num',mean:'zero',meanFr:'zéro',phon:'sǔun',word:'ศูนย์',thaiFull:'ศูนย์',audio:''},
+  {th:'๑',rom:'1',cls:'num',mean:'one',meanFr:'un',phon:'nɯ̀ng',word:'หนึ่ง',thaiFull:'หนึ่ง',audio:''},
+  {th:'๒',rom:'2',cls:'num',mean:'two',meanFr:'deux',phon:'sɔ̌ɔng',word:'สอง',thaiFull:'สอง',audio:''},
+  {th:'๓',rom:'3',cls:'num',mean:'three',meanFr:'trois',phon:'sǎam',word:'สาม',thaiFull:'สาม',audio:''},
+  {th:'๔',rom:'4',cls:'num',mean:'four',meanFr:'quatre',phon:'sìi',word:'สี่',thaiFull:'สี่',audio:''},
+  {th:'๕',rom:'5',cls:'num',mean:'five',meanFr:'cinq',phon:'hâa',word:'ห้า',thaiFull:'ห้า',audio:''},
+  {th:'๖',rom:'6',cls:'num',mean:'six',meanFr:'six',phon:'hòk',word:'หก',thaiFull:'หก',audio:''},
+  {th:'๗',rom:'7',cls:'num',mean:'seven',meanFr:'sept',phon:'cèt',word:'เจ็ด',thaiFull:'เจ็ด',audio:''},
+  {th:'๘',rom:'8',cls:'num',mean:'eight',meanFr:'huit',phon:'pɛ̀ɛt',word:'แปด',thaiFull:'แปด',audio:''},
+  {th:'๙',rom:'9',cls:'num',mean:'nine',meanFr:'neuf',phon:'kâao',word:'เก้า',thaiFull:'เก้า',audio:''},
 ];
 
 // true when an entry is a numeral rather than a consonant
@@ -1543,9 +1576,9 @@ function applyResult(correct) {
     fbSub.textContent = `${currentChar.phon} · "${currentChar.mean}"`;
   }
 
-  // Show example word with speaker
+  // Show the full recited name with its speaker, so the text matches the audio
   const exEl = document.getElementById('feedbackExample');
-  document.getElementById('exampleWord').textContent = currentChar.word;
+  document.getElementById('exampleWord').textContent = currentChar.thaiFull;
   document.getElementById('exampleLabel').textContent = '· ' + currentChar.mean;
   exEl.style.display = 'flex';
   document.getElementById('exampleSpeakBtn').classList.remove('speaking');
@@ -1629,19 +1662,9 @@ function renderPrompt() {
 
 function cap(s) { return s ? s.charAt(0).toUpperCase() + s.slice(1) : ''; }
 
-// Audio clue: numerals are read from their spelled-out word (see speakCurrent)
+// Audio clue in Draw mode: the full recited name, e.g. "บอ ใบไม้"
 function speakPrompt() {
-  if (!currentChar) return;
-  const btn = document.getElementById('promptAudioBtn');
-  if (!window.speechSynthesis) return;
-  speechSynthesis.cancel();
-  const utt = new SpeechSynthesisUtterance(currentChar.word);
-  utt.lang = 'th-TH';
-  if (thaiVoice) utt.voice = thaiVoice;
-  btn.classList.add('speaking');
-  utt.onend = () => btn.classList.remove('speaking');
-  utt.onerror = () => btn.classList.remove('speaking');
-  speechSynthesis.speak(utt);
+  playName(currentChar, document.getElementById('promptAudioBtn'));
 }
 
 // ── canvas plumbing ──
@@ -1877,8 +1900,8 @@ function showResults() {
   if (missed.length > 0) {
     document.getElementById('missSection').style.display = 'block';
     document.getElementById('missChars').innerHTML = missed.map(c =>
-      // numerals speak their spelled-out word — see speakCurrent()
-      `<div class="miss-char" onclick="speakText('${isNum(c) ? c.word : c.th}')" title="Tap to hear">${c.th} <small>${c.phon}</small></div>`
+      // plays the recording of the full name where there is one — see playName()
+      `<div class="miss-char" onclick="playByChar('${c.th}')" title="Tap to hear">${c.th} <small>${c.phon}</small></div>`
     ).join('');
   } else {
     document.getElementById('missSection').style.display = 'none';
