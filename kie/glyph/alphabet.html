@@ -4,6 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Thai Script — Recognition Game</title>
+<!-- Language comes from the address: no parameter = English (linked from glyph.html),
+     ?lang=fr = French (linked from graphie.html). Everything below is written in
+     English and translated at boot by applyLang(); the flag in the top bar swaps. -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,300;0,400;1,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
@@ -69,6 +72,40 @@ body {
 }
 
 .logo span { color: var(--gold); }
+
+/* ── LANGUAGE FLAG ──
+   Same idea as the flag in glyph.html / graphie.html, restyled for this page's
+   paper palette. Links to the other language version of the game. */
+.flaglink {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  text-decoration: none;
+  padding: 4px 9px;
+  border-radius: 999px;
+  border: 0.5px solid var(--paper3);
+  background: white;
+  transition: all 0.15s;
+  flex-shrink: 0;
+}
+.flaglink:hover { border-color: var(--gold); background: var(--gold-light); }
+.flaglink svg {
+  width: 22px; height: 15px;
+  display: block;
+  border-radius: 2px;
+  box-shadow: 0 0 0 0.5px rgba(26,18,10,0.18);
+}
+.flaglink .lang {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  color: var(--ink2);
+}
+
+/* The flag sits between the wordmark and the stats on the game screen, and on
+   its own under the title on the start screen. */
+.start-flag { margin-bottom: 1.75rem; }
 
 .stats-row {
   display: flex;
@@ -900,73 +937,76 @@ body {
 <!-- START SCREEN -->
 <div class="screen active" id="startScreen">
   <div class="start-thai">กขค</div>
-  <div class="start-title">Learn Thai Script</div>
-  <div class="start-sub">Recognise all 44 consonants and the 10 numerals — or draw them from memory</div>
+  <div class="start-title" data-i18n="startTitle">Learn Thai Script</div>
+  <div class="start-sub" data-i18n="startSub">Recognise all 44 consonants and the 10 numerals — or draw them from memory</div>
+
+  <a class="flaglink start-flag" id="startFlag" href="#"></a>
 
   <div class="start-options">
     <div class="option-card selected" data-mode="all" onclick="selectMode(this,'all')">
       <div class="option-icon">ก–ฮ</div>
       <div class="option-text">
-        <strong>All consonants</strong>
-        <span>All 44 characters · adaptive difficulty</span>
+        <strong data-i18n="optAll">All consonants</strong>
+        <span data-i18n="optAllSub">All 44 characters · adaptive difficulty</span>
       </div>
     </div>
     <div class="option-card" data-mode="mid" onclick="selectMode(this,'mid')">
       <div class="option-icon">ก</div>
       <div class="option-text">
-        <strong>Middle class</strong>
-        <span>9 characters · start here</span>
+        <strong data-i18n="optMid">Middle class</strong>
+        <span data-i18n="optMidSub">9 characters · start here</span>
       </div>
     </div>
     <div class="option-card" data-mode="high" onclick="selectMode(this,'high')">
       <div class="option-icon">ข</div>
       <div class="option-text">
-        <strong>High class</strong>
-        <span>11 characters</span>
+        <strong data-i18n="optHigh">High class</strong>
+        <span data-i18n="optHighSub">11 characters</span>
       </div>
     </div>
     <div class="option-card" data-mode="low" onclick="selectMode(this,'low')">
       <div class="option-icon">ค</div>
       <div class="option-text">
-        <strong>Low class</strong>
-        <span>24 characters</span>
+        <strong data-i18n="optLow">Low class</strong>
+        <span data-i18n="optLowSub">24 characters</span>
       </div>
     </div>
     <div class="option-card" data-mode="num" onclick="selectMode(this,'num')">
       <div class="option-icon">๓</div>
       <div class="option-text">
-        <strong>Numerals ๐–๙</strong>
-        <span>10 characters · digits and their names</span>
+        <strong data-i18n="optNum">Numerals ๐–๙</strong>
+        <span data-i18n="optNumSub">10 characters · digits and their names</span>
       </div>
     </div>
     <div class="option-card" data-mode="everything" onclick="selectMode(this,'everything')">
       <div class="option-icon icon-pair">ก๙</div>
       <div class="option-text">
-        <strong>Everything</strong>
-        <span>All 54 characters · consonants and numerals</span>
+        <strong data-i18n="optEvery">Everything</strong>
+        <span data-i18n="optEverySub">All 54 characters · consonants and numerals</span>
       </div>
     </div>
   </div>
 
-  <button class="start-btn" onclick="startGame()">Begin →</button>
+  <button class="start-btn" onclick="startGame()" data-i18n="begin">Begin →</button>
 </div>
 
 <!-- GAME SCREEN -->
 <div class="screen" id="gameScreen">
   <div class="top-bar">
-    <div class="logo">Thai <span>Script</span></div>
+    <div class="logo" id="logo" data-i18n-html="logo">Thai <span>Script</span></div>
+    <a class="flaglink" id="gameFlag" href="#"></a>
     <div class="stats-row">
       <div class="stat">
         <div class="stat-val streak-val" id="streakVal">0</div>
-        <div class="stat-lbl">streak</div>
+        <div class="stat-lbl" data-i18n="lblStreak">streak</div>
       </div>
       <div class="stat">
         <div class="stat-val" id="scoreVal">0</div>
-        <div class="stat-lbl">score</div>
+        <div class="stat-lbl" data-i18n="lblScore">score</div>
       </div>
       <div class="stat">
         <div class="stat-val" id="qNumVal">1/20</div>
-        <div class="stat-lbl">round</div>
+        <div class="stat-lbl" data-i18n="lblRound">round</div>
       </div>
     </div>
   </div>
@@ -977,19 +1017,19 @@ body {
   </div>
 
   <div class="mode-row">
-    <div class="mode-pill active" id="modeChar" onclick="setQuestionMode('char')">Thai → Name</div>
-    <div class="mode-pill" id="modeMean" onclick="setQuestionMode('meaning')">Thai → Meaning</div>
-    <div class="mode-pill" id="modeRom" onclick="setQuestionMode('romanize')">Sound → Thai</div>
-    <div class="mode-pill" id="modeDraw" onclick="setQuestionMode('draw')">✎ Draw it</div>
+    <div class="mode-pill active" id="modeChar" onclick="setQuestionMode('char')" data-i18n="modeChar">Thai → Name</div>
+    <div class="mode-pill" id="modeMean" onclick="setQuestionMode('meaning')" data-i18n="modeMean">Thai → Meaning</div>
+    <div class="mode-pill" id="modeRom" onclick="setQuestionMode('romanize')" data-i18n="modeRom">Sound → Thai</div>
+    <div class="mode-pill" id="modeDraw" onclick="setQuestionMode('draw')" data-i18n="modeDraw">✎ Draw it</div>
   </div>
 
-  <!-- Draw mode only: which clue the prompt card shows -->
+  <!-- Draw mode only: which clue the prompt card shows. The "word" chip follows the
+       page language — English on glyph.html's version, French on graphie.html's. -->
   <div class="clue-row" id="clueRow" style="display:none">
-    <div class="clue-chip active" id="clueSound" onclick="setClue('sound')">Sound</div>
-    <div class="clue-chip" id="clueEn" onclick="setClue('en')">English</div>
-    <div class="clue-chip" id="clueFr" onclick="setClue('fr')">Français</div>
-    <div class="clue-chip" id="clueBoth" onclick="setClue('both')">Both</div>
-    <div class="clue-chip" id="clueAudio" onclick="setClue('audio')">🔊 only</div>
+    <div class="clue-chip active" id="clueSound" onclick="setClue('sound')" data-i18n="clueSound">Sound</div>
+    <div class="clue-chip" id="clueWord" onclick="setClue('word')" data-i18n="clueWord">English</div>
+    <div class="clue-chip" id="clueBoth" onclick="setClue('both')" data-i18n="clueBoth">Both</div>
+    <div class="clue-chip" id="clueAudio" onclick="setClue('audio')" data-i18n="clueAudio">🔊 only</div>
   </div>
 
   <div class="char-card" id="charCard">
@@ -1014,9 +1054,9 @@ body {
         <path d="M13 7a4 4 0 0 1 0 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
         <path d="M15 4.5a7 7 0 0 1 0 11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" opacity="0.5"/>
       </svg>
-      Hear it
+      <span data-i18n="hearIt">Hear it</span>
     </button>
-    <div class="no-tts" id="noTts">Thai voice not available on this device</div>
+    <div class="no-tts" id="noTts" data-i18n="noVoice">Thai voice not available on this device</div>
   </div>
 
   <!-- Draw mode parks its action buttons here, right under the prompt, so a full
@@ -1033,22 +1073,22 @@ body {
       <canvas id="ghostCanvas"></canvas>
       <canvas id="inkCanvas"></canvas>
     </div>
-    <div class="canvas-hint">Draw the character with your finger, stylus or mouse</div>
+    <div class="canvas-hint" data-i18n="canvasHint">Draw the character with your finger, stylus or mouse</div>
     <div class="draw-tools">
-      <button class="tool-btn" id="undoBtn" onclick="undoStroke()" disabled>↶ Undo</button>
-      <button class="tool-btn" id="clearBtn" onclick="clearInk()" disabled>Clear</button>
-      <button class="tool-btn peek" id="peekBtn" onclick="togglePeek()">👁 Peek</button>
+      <button class="tool-btn" id="undoBtn" onclick="undoStroke()" data-i18n="undo" disabled>↶ Undo</button>
+      <button class="tool-btn" id="clearBtn" onclick="clearInk()" data-i18n="clear" disabled>Clear</button>
+      <button class="tool-btn peek" id="peekBtn" onclick="togglePeek()" data-i18n="peek">👁 Peek</button>
     </div>
-    <button class="reveal-btn" id="revealBtn" onclick="revealGlyph()">Reveal answer</button>
+    <button class="reveal-btn" id="revealBtn" onclick="revealGlyph()" data-i18n="reveal">Reveal answer</button>
     <!-- Default home of the grade buttons; revealGlyph() lifts them to #nextSlotTop -->
     <div id="gradeSlotBottom">
       <div class="grade-row" id="gradeRow">
-        <button class="grade-btn good" onclick="gradeDrawing(true)">✓ Got it</button>
-        <button class="grade-btn bad" onclick="gradeDrawing(false)">✗ Missed it</button>
+        <button class="grade-btn good" onclick="gradeDrawing(true)" data-i18n="gotIt">✓ Got it</button>
+        <button class="grade-btn bad" onclick="gradeDrawing(false)" data-i18n="missedIt">✗ Missed it</button>
       </div>
     </div>
     <div class="stroke-panel" id="strokePanel">
-      <img id="strokeImg" alt="Stroke order animation">
+      <img id="strokeImg" alt="" data-i18n-alt="altStroke">
       <div class="stroke-text" id="strokeText"></div>
     </div>
   </div>
@@ -1085,30 +1125,168 @@ body {
   <div class="results-grid">
     <div class="res-stat">
       <div class="res-stat-val" id="resCorrect">—</div>
-      <div class="res-stat-lbl">Correct</div>
+      <div class="res-stat-lbl" data-i18n="lblResCorrect">Correct</div>
     </div>
     <div class="res-stat">
       <div class="res-stat-val" id="resAccuracy">—</div>
-      <div class="res-stat-lbl">Accuracy</div>
+      <div class="res-stat-lbl" data-i18n="lblAccuracy">Accuracy</div>
     </div>
     <div class="res-stat">
       <div class="res-stat-val" id="resBest">—</div>
-      <div class="res-stat-lbl">Best streak</div>
+      <div class="res-stat-lbl" data-i18n="lblBest">Best streak</div>
     </div>
   </div>
 
   <div class="miss-section" id="missSection" style="display:none">
-    <div class="miss-title">Characters to review</div>
+    <div class="miss-title" data-i18n="reviewTitle">Characters to review</div>
     <div class="miss-chars" id="missChars"></div>
   </div>
 
   <div class="results-btns">
-    <button class="btn-primary" onclick="startGame()">Play again →</button>
-    <button class="btn-secondary" onclick="showStart()">Change mode</button>
+    <button class="btn-primary" onclick="startGame()" data-i18n="playAgain">Play again →</button>
+    <button class="btn-secondary" onclick="showStart()" data-i18n="changeMode">Change mode</button>
   </div>
 </div>
 
 <script>
+/* ══════════════════════════════════════════════════════════════════
+   LANGUAGE
+   One page serves both versions. glyph.html (English) links here with
+   no parameter; graphie.html (French) links to ?lang=fr. The English
+   game only ever offers English words, the French game only French —
+   that is the whole point of the split. The French wording for the
+   letters comes from graphie.html's own data (frmean / frph+fr), so
+   the game agrees with the French reference page it is reached from.
+   ══════════════════════════════════════════════════════════════════ */
+const LANG = /^fr/i.test(new URLSearchParams(location.search).get('lang') || '') ? 'fr' : 'en';
+
+const STR = {
+  en: {
+    title: 'Thai Script — Recognition Game',
+    logo: 'Thai <span>Script</span>',
+    startTitle: 'Learn Thai Script',
+    startSub: 'Recognise all 44 consonants and the 10 numerals — or draw them from memory',
+    optAll: 'All consonants',       optAllSub: 'All 44 characters · adaptive difficulty',
+    optMid: 'Middle class',         optMidSub: '9 characters · start here',
+    optHigh: 'High class',          optHighSub: '11 characters',
+    optLow: 'Low class',            optLowSub: '24 characters',
+    optNum: 'Numerals ๐–๙',         optNumSub: '10 characters · digits and their names',
+    optEvery: 'Everything',         optEverySub: 'All 54 characters · consonants and numerals',
+    begin: 'Begin →',
+    lblStreak: 'streak', lblScore: 'score', lblRound: 'round',
+    progress: 'Question {n} of {t}',
+    modeChar: 'Thai → Name', modeMean: 'Thai → Meaning', modeRom: 'Sound → Thai', modeDraw: '✎ Draw it',
+    clueSound: 'Sound', clueWord: 'English', clueBoth: 'Both', clueAudio: '🔊 only',
+    hearIt: 'Hear it',
+    noVoice: 'Thai voice not available on this device',
+    canvasHint: 'Draw the character with your finger, stylus or mouse',
+    undo: '↶ Undo', clear: 'Clear', peek: '👁 Peek',
+    reveal: 'Reveal answer', gotIt: '✓ Got it', missedIt: '✗ Missed it',
+    next: 'Next →', seeResults: 'See results →',
+    clsMid: 'middle class', clsHigh: 'high class', clsLow: 'low class', clsNum: 'numeral',
+    hintRomNum: 'Which Thai numeral is this?',
+    hintRomChar: 'Which Thai character makes this sound?',
+    hintNameNum: 'What is this numeral called?',
+    hintNameChar: 'What is this character called?',
+    hintMeanNum: 'What number is this?',
+    hintMeanChar: "What does this character's name mean?",
+    hintDrawNum: 'Draw this Thai numeral',
+    hintDrawChar: 'Draw this Thai character',
+    fbCorrect: 'Correct ✓',
+    fbStreak: '{n}× streak! +{p} pts',
+    fbThatWas: 'That was {c}',
+    lblResCorrect: 'Correct', lblAccuracy: 'Accuracy', lblBest: 'Best streak',
+    reviewTitle: 'Characters to review',
+    playAgain: 'Play again →', changeMode: 'Change mode',
+    tapToHear: 'Tap to hear',
+    res100: 'Perfect round!',   res100Sub: 'Flawless — สุดยอด!',
+    res80: 'Excellent!',        res80Sub: "You're getting it — เก่งมาก!",
+    res60: 'Good progress',     res60Sub: 'Keep going — สู้ๆ!',
+    res0: 'Keep practising',    res0Sub: 'Every mistake is learning — ไม่เป็นไร',
+    altStroke: 'Stroke order animation',
+    flagHref: 'alphabet.html?lang=fr', flagLabel: 'FR', flagTitle: 'Version française',
+  },
+  fr: {
+    title: 'Écriture thaïe — Jeu de reconnaissance',
+    logo: 'Écriture <span>thaïe</span>',
+    startTitle: 'Apprendre l’écriture thaïe',
+    startSub: 'Reconnaître les 44 consonnes et les 10 chiffres — ou les dessiner de mémoire',
+    optAll: 'Toutes les consonnes', optAllSub: 'Les 44 caractères · difficulté adaptative',
+    optMid: 'Classe moyenne',       optMidSub: '9 caractères · commencer ici',
+    optHigh: 'Classe haute',        optHighSub: '11 caractères',
+    optLow: 'Classe basse',         optLowSub: '24 caractères',
+    optNum: 'Chiffres ๐–๙',         optNumSub: '10 caractères · les chiffres et leurs noms',
+    optEvery: 'Tout',               optEverySub: 'Les 54 caractères · consonnes et chiffres',
+    begin: 'Commencer →',
+    lblStreak: 'série', lblScore: 'score', lblRound: 'tour',
+    progress: 'Question {n} sur {t}',
+    modeChar: 'Thaï → Nom', modeMean: 'Thaï → Sens', modeRom: 'Son → Thaï', modeDraw: '✎ Dessiner',
+    clueSound: 'Son', clueWord: 'Français', clueBoth: 'Les deux', clueAudio: '🔊 seul',
+    hearIt: 'Écouter',
+    noVoice: 'Aucune voix thaïe sur cet appareil',
+    canvasHint: 'Dessine le caractère au doigt, au stylet ou à la souris',
+    undo: '↶ Annuler', clear: 'Effacer', peek: '👁 Aperçu',
+    reveal: 'Voir la réponse', gotIt: '✓ Réussi', missedIt: '✗ Manqué',
+    next: 'Suivant →', seeResults: 'Voir les résultats →',
+    clsMid: 'classe moyenne', clsHigh: 'classe haute', clsLow: 'classe basse', clsNum: 'chiffre',
+    hintRomNum: 'Quel chiffre thaï est-ce ?',
+    hintRomChar: 'Quel caractère thaï fait ce son ?',
+    hintNameNum: 'Comment s’appelle ce chiffre ?',
+    hintNameChar: 'Comment s’appelle ce caractère ?',
+    hintMeanNum: 'Quel nombre est-ce ?',
+    hintMeanChar: 'Que signifie le nom de ce caractère ?',
+    hintDrawNum: 'Dessine ce chiffre thaï',
+    hintDrawChar: 'Dessine ce caractère thaï',
+    fbCorrect: 'Correct ✓',
+    fbStreak: 'Série de {n} ! +{p} pts',
+    fbThatWas: 'C’était {c}',
+    lblResCorrect: 'Réussis', lblAccuracy: 'Précision', lblBest: 'Meilleure série',
+    reviewTitle: 'Caractères à revoir',
+    playAgain: 'Rejouer →', changeMode: 'Changer de mode',
+    tapToHear: 'Toucher pour écouter',
+    res100: 'Tour parfait !',      res100Sub: 'Sans faute — สุดยอด !',
+    res80: 'Excellent !',          res80Sub: 'Ça vient — เก่งมาก !',
+    res60: 'Bonne progression',    res60Sub: 'Continue — สู้ๆ !',
+    res0: 'Continue à t’entraîner', res0Sub: 'Chaque erreur fait progresser — ไม่เป็นไร',
+    altStroke: 'Animation du tracé',
+    flagHref: 'alphabet.html', flagLabel: 'EN', flagTitle: 'English version',
+  },
+};
+
+// t('key') -> the string; t('key', {n: 3}) -> with {n} substituted
+function t(key, vars) {
+  let s = (STR[LANG] && STR[LANG][key]) !== undefined ? STR[LANG][key] : STR.en[key];
+  if (s === undefined) return key;
+  if (vars) for (const k in vars) s = s.split('{' + k + '}').join(vars[k]);
+  return s;
+}
+
+// The meaning and the transliteration always follow the page language.
+// French wording and French-style romanisation come from graphie.html.
+function meaningOf(c) { return LANG === 'fr' ? c.meanFr : c.mean; }
+function phonOf(c)    { return LANG === 'fr' ? c.phonFr : c.phon; }
+
+const FLAG_SVG = {
+  // tricolour, shown on the English page as the way across to the French one
+  FR: '<svg viewBox="0 0 60 40" aria-hidden="true"><rect width="20" height="40" fill="#002395"/><rect x="20" width="20" height="40" fill="#fff"/><rect x="40" width="20" height="40" fill="#ED2939"/></svg>',
+  EN: '<svg viewBox="0 0 60 40" aria-hidden="true"><rect width="60" height="40" fill="#012169"/><path d="M0 0 60 40M60 0 0 40" stroke="#fff" stroke-width="8"/><path d="M0 0 60 40M60 0 0 40" stroke="#C8102E" stroke-width="4"/><path d="M30 0V40M0 20H60" stroke="#fff" stroke-width="13"/><path d="M30 0V40M0 20H60" stroke="#C8102E" stroke-width="8"/></svg>',
+};
+
+function applyLang() {
+  document.documentElement.lang = LANG;
+  document.title = t('title');
+  document.querySelectorAll('[data-i18n]').forEach(el => { el.textContent = t(el.dataset.i18n); });
+  document.querySelectorAll('[data-i18n-html]').forEach(el => { el.innerHTML = t(el.dataset.i18nHtml); });
+  document.querySelectorAll('[data-i18n-alt]').forEach(el => { el.alt = t(el.dataset.i18nAlt); });
+  const label = t('flagLabel');
+  ['startFlag', 'gameFlag'].forEach(id => {
+    const a = document.getElementById(id);
+    a.href = t('flagHref');
+    a.title = a.ariaLabel = t('flagTitle');
+    a.innerHTML = FLAG_SVG[label] + '<span class="lang">' + label + '</span>';
+  });
+}
+
 // ── SPEECH ──
 let thaiVoice = null;
 let ttsReady = false;
@@ -1234,50 +1412,50 @@ function shuffle(a) {
 }
 
 const CHARS = [
-  {th:'ก',rom:'g / k',cls:'mid',mean:'chicken',meanFr:'poulet',phon:'gɔɔ gài',word:'ไก่',thaiFull:'กอ ไก่',audio:'audio/consonants/01_kor-kai.mp3'},
-  {th:'จ',rom:'j',cls:'mid',mean:'plate',meanFr:'assiette',phon:'jɔɔ jaan',word:'จาน',thaiFull:'จอ จาน',audio:'audio/consonants/08_djor-djaan.mp3'},
-  {th:'ด',rom:'d',cls:'mid',mean:'child',meanFr:'enfant',phon:'dɔɔ dèk',word:'เด็ก',thaiFull:'ดอ เด็ก',audio:'audio/consonants/20_dor-dek.mp3'},
-  {th:'ต',rom:'dt / t',cls:'mid',mean:'turtle',meanFr:'tortue',phon:'dtɔɔ dtào',word:'เต่า',thaiFull:'ตอ เต่า',audio:'audio/consonants/21_tor-tao.mp3'},
-  {th:'บ',rom:'b',cls:'mid',mean:'leaf',meanFr:'feuille',phon:'bɔɔ bai máai',word:'ใบไม้',thaiFull:'บอ ใบไม้',audio:'audio/consonants/26_bor-baimaai.mp3'},
-  {th:'ป',rom:'bp / p',cls:'mid',mean:'fish',meanFr:'poisson',phon:'bpɔɔ bplaa',word:'ปลา',thaiFull:'ปอ ปลา',audio:'audio/consonants/27_por-plaa.mp3'},
-  {th:'พ',rom:'ph',cls:'mid',mean:'tray',meanFr:'plateau',phon:'phɔɔ phaan',word:'พาน',thaiFull:'พอ พาน',audio:'audio/consonants/30_phor-phaan.mp3'},
-  {th:'ฟ',rom:'f',cls:'mid',mean:'teeth',meanFr:'dents',phon:'fɔɔ fan',word:'ฟัน',thaiFull:'ฟอ ฟัน',audio:'audio/consonants/31_for-fan.mp3'},
-  {th:'อ',rom:'o / silent',cls:'mid',mean:'basin',meanFr:'bassine',phon:'ɔɔ àang',word:'อ่าง',thaiFull:'ออ อ่าง',audio:'audio/consonants/43_or-aang.mp3'},
-  {th:'ข',rom:'kh',cls:'high',mean:'egg',meanFr:'œuf',phon:'khɔɔ khài',word:'ไข่',thaiFull:'ขอ ไข่',audio:'audio/consonants/02_khor-khai.mp3'},
-  {th:'ฉ',rom:'ch',cls:'high',mean:'cymbals',meanFr:'cymbales',phon:'chɔɔ chìng',word:'ฉิ่ง',thaiFull:'ฉอ ฉิ่ง',audio:'audio/consonants/09_tchor-tching.mp3'},
-  {th:'ถ',rom:'th',cls:'high',mean:'bag',meanFr:'sac',phon:'thɔɔ thǔng',word:'ถุง',thaiFull:'ถอ ถุง',audio:'audio/consonants/22_thor-thung.mp3'},
-  {th:'ผ',rom:'ph',cls:'high',mean:'bee',meanFr:'abeille',phon:'phɔɔ phûeng',word:'ผึ้ง',thaiFull:'ผอ ผึ้ง',audio:'audio/consonants/28_phor-phung.mp3'},
-  {th:'ฝ',rom:'f',cls:'high',mean:'lid',meanFr:'couvercle',phon:'fɔɔ fǎa',word:'ฝา',thaiFull:'ฝอ ฝา',audio:'audio/consonants/29_for-faa.mp3'},
-  {th:'ศ',rom:'s',cls:'high',mean:'hermit',meanFr:'ermite',phon:'sɔɔ sǎalaa',word:'ศาลา',thaiFull:'ศอ ศาลา',audio:'audio/consonants/38_sor-saalaa.mp3'},
-  {th:'ษ',rom:'s',cls:'high',mean:'sage',meanFr:'sage',phon:'sɔɔ rʉʉsǐi',word:'ฤๅษี',thaiFull:'ษอ ฤๅษี',audio:'audio/consonants/39_sor-ruusii.mp3'},
-  {th:'ส',rom:'s',cls:'high',mean:'tiger',meanFr:'tigre',phon:'sɔɔ sʉʉa',word:'เสือ',thaiFull:'สอ เสือ',audio:'audio/consonants/40_sor-sua.mp3'},
-  {th:'ห',rom:'h',cls:'high',mean:'chest',meanFr:'coffre',phon:'hɔɔ hìip',word:'หีบ',thaiFull:'หอ หีบ',audio:'audio/consonants/41_hor-hiip.mp3'},
-  {th:'ฐ',rom:'th',cls:'high',mean:'pedestal',meanFr:'socle',phon:'thɔɔ thǎan',word:'ฐาน',thaiFull:'ฐอ ฐาน',audio:'audio/consonants/16_thor-santhaan.mp3'},
-  {th:'ค',rom:'kh',cls:'low',mean:'buffalo',meanFr:'buffle',phon:'khɔɔ khwaai',word:'ควาย',thaiFull:'คอ ควาย',audio:'audio/consonants/04_khor-khwaay.mp3'},
-  {th:'ง',rom:'ng',cls:'low',mean:'snake',meanFr:'serpent',phon:'ngɔɔ nguu',word:'งู',thaiFull:'งอ งู',audio:'audio/consonants/07_ngor-ngu.mp3'},
-  {th:'ช',rom:'ch',cls:'low',mean:'elephant',meanFr:'éléphant',phon:'chɔɔ cháang',word:'ช้าง',thaiFull:'ชอ ช้าง',audio:'audio/consonants/10_tchor-tchaang.mp3'},
-  {th:'ซ',rom:'s',cls:'low',mean:'chain',meanFr:'chaîne',phon:'sɔɔ sôo',word:'โซ่',thaiFull:'ซอ โซ่',audio:'audio/consonants/11_sor-so.mp3'},
-  {th:'ญ',rom:'y',cls:'low',mean:'woman',meanFr:'femme',phon:'yɔɔ yǐng',word:'หญิง',thaiFull:'ญอ หญิง',audio:'audio/consonants/13_yor-ying.mp3'},
-  {th:'ณ',rom:'n',cls:'low',mean:'person',meanFr:'personne',phon:'nɔɔ neen',word:'เณร',thaiFull:'ณอ เณร',audio:'audio/consonants/19_nor-neen.mp3'},
-  {th:'น',rom:'n',cls:'low',mean:'mouse',meanFr:'souris',phon:'nɔɔ nǔu',word:'หนู',thaiFull:'นอ หนู',audio:'audio/consonants/25_nor-nuu.mp3'},
-  {th:'ม',rom:'m',cls:'low',mean:'horse',meanFr:'cheval',phon:'mɔɔ máa',word:'ม้า',thaiFull:'มอ ม้า',audio:'audio/consonants/33_mor-maa.mp3'},
-  {th:'ย',rom:'y',cls:'low',mean:'giant',meanFr:'géant',phon:'yɔɔ yâak',word:'ยักษ์',thaiFull:'ยอ ยักษ์',audio:'audio/consonants/34_yor-yak.mp3'},
-  {th:'ร',rom:'r',cls:'low',mean:'boat',meanFr:'bateau',phon:'rɔɔ reua',word:'เรือ',thaiFull:'รอ เรือ',audio:'audio/consonants/35_ror-ruua.mp3'},
-  {th:'ล',rom:'l',cls:'low',mean:'monkey',meanFr:'singe',phon:'lɔɔ ling',word:'ลิง',thaiFull:'ลอ ลิง',audio:'audio/consonants/36_lor-ling.mp3'},
-  {th:'ว',rom:'w',cls:'low',mean:'ring',meanFr:'bague',phon:'wɔɔ wɛɛn',word:'แหวน',thaiFull:'วอ แหวน',audio:'audio/consonants/37_wor-ween.mp3'},
-  {th:'ท',rom:'th',cls:'low',mean:'soldier',meanFr:'soldat',phon:'thɔɔ tháhǎan',word:'ทหาร',thaiFull:'ทอ ทหาร',audio:'audio/consonants/23_thor-thahaan.mp3'},
-  {th:'ธ',rom:'th',cls:'low',mean:'flag',meanFr:'drapeau',phon:'thɔɔ thong',word:'ธง',thaiFull:'ธอ ธง',audio:'audio/consonants/24_thor-thong.mp3'},
-  {th:'ภ',rom:'ph',cls:'low',mean:'mountain',meanFr:'montagne',phon:'phɔɔ phukhǎo',word:'ภูเขา',thaiFull:'ภอ สำเภา',audio:'audio/consonants/32_phor-samphao.mp3'},
-  {th:'ฆ',rom:'kh',cls:'low',mean:'bell',meanFr:'cloche',phon:'khɔɔ rakhang',word:'ระฆัง',thaiFull:'ฆอ ระฆัง',audio:'audio/consonants/06_khor-rakhang.mp3'},
-  {th:'ฌ',rom:'ch',cls:'low',mean:'tree',meanFr:'arbre',phon:'chɔɔ chə̂ə',word:'เฌอ',thaiFull:'ฌอ เฌอ',audio:'audio/consonants/12_tchor-tchoe.mp3'},
-  {th:'ฬ',rom:'l',cls:'low',mean:'kite',meanFr:'cerf-volant',phon:'lɔɔ julaa',word:'จุฬา',thaiFull:'ฬอ จุฬา',audio:'audio/consonants/42_lor-djulaa.mp3'},
-  {th:'ฮ',rom:'h',cls:'low',mean:'owl',meanFr:'hibou',phon:'hɔɔ nók hûuk',word:'นกฮูก',thaiFull:'ฮอ นกฮูก',audio:'audio/consonants/44_hor-nokhuuk.mp3'},
-  {th:'ฎ',rom:'d',cls:'low',mean:'headdress',meanFr:'coiffe',phon:'dɔɔ chadaa',word:'ชฎา',thaiFull:'ฎอ ชฎา',audio:'audio/consonants/14_dor-tchada.mp3'},
-  {th:'ฏ',rom:'dt',cls:'low',mean:'crown',meanFr:'couronne',phon:'dtɔɔ bpatàk',word:'ปฏัก',thaiFull:'ฏอ ปฏัก',audio:'audio/consonants/15_tor-patak.mp3'},
-  {th:'ฑ',rom:'th / dt',cls:'low',mean:'old woman',meanFr:'vieille femme',phon:'thɔɔ montho',word:'มณโฑ',thaiFull:'ฑอ มณโฑ',audio:'audio/consonants/17_thor-nangmonthoo.mp3'},
-  {th:'ฒ',rom:'th',cls:'low',mean:'elder',meanFr:'ancien',phon:'thɔɔ phûu thâo',word:'ผู้เฒ่า',thaiFull:'ฒอ ผู้เฒ่า',audio:'audio/consonants/18_thor-phuuthao.mp3'},
-  {th:'ฃ',rom:'kh',cls:'high',mean:'bottle',meanFr:'bouteille',phon:'khɔɔ khùat',word:'ขวด',thaiFull:'ฃอ ขวด',audio:'audio/consonants/03_khor-khuat.mp3'},
-  {th:'ฅ',rom:'kh',cls:'low',mean:'person',meanFr:'personne',phon:'khɔɔ khon',word:'คน',thaiFull:'ฅอ คน',audio:'audio/consonants/05_khor-khon.mp3'},
+  {th:'ก',rom:'g / k',cls:'mid',mean:'chicken',meanFr:'poulet',phonFr:'kɔɔ kàì',phon:'gɔɔ gài',word:'ไก่',thaiFull:'กอ ไก่',audio:'audio/consonants/01_kor-kai.mp3'},
+  {th:'จ',rom:'j',cls:'mid',mean:'plate',meanFr:'assiette',phonFr:'djɔɔ djaan',phon:'jɔɔ jaan',word:'จาน',thaiFull:'จอ จาน',audio:'audio/consonants/08_djor-djaan.mp3'},
+  {th:'ด',rom:'d',cls:'mid',mean:'child',meanFr:'enfant',phonFr:'dɔɔ dèk',phon:'dɔɔ dèk',word:'เด็ก',thaiFull:'ดอ เด็ก',audio:'audio/consonants/20_dor-dek.mp3'},
+  {th:'ต',rom:'dt / t',cls:'mid',mean:'turtle',meanFr:'tortue',phonFr:'tɔɔ tào',phon:'dtɔɔ dtào',word:'เต่า',thaiFull:'ตอ เต่า',audio:'audio/consonants/21_tor-tao.mp3'},
+  {th:'บ',rom:'b',cls:'mid',mean:'leaf',meanFr:'feuille',phonFr:'bɔɔ baïmáï',phon:'bɔɔ bai máai',word:'ใบไม้',thaiFull:'บอ ใบไม้',audio:'audio/consonants/26_bor-baimaai.mp3'},
+  {th:'ป',rom:'bp / p',cls:'mid',mean:'fish',meanFr:'poisson',phonFr:'pɔɔ plaa',phon:'bpɔɔ bplaa',word:'ปลา',thaiFull:'ปอ ปลา',audio:'audio/consonants/27_por-plaa.mp3'},
+  {th:'พ',rom:'ph',cls:'mid',mean:'tray',meanFr:'coupe',phonFr:'pHɔɔ pHaan',phon:'phɔɔ phaan',word:'พาน',thaiFull:'พอ พาน',audio:'audio/consonants/30_phor-phaan.mp3'},
+  {th:'ฟ',rom:'f',cls:'mid',mean:'teeth',meanFr:'dent',phonFr:'fɔɔ fan',phon:'fɔɔ fan',word:'ฟัน',thaiFull:'ฟอ ฟัน',audio:'audio/consonants/31_for-fan.mp3'},
+  {th:'อ',rom:'o / silent',cls:'mid',mean:'basin',meanFr:'bassine',phonFr:'ɔɔ àang',phon:'ɔɔ àang',word:'อ่าง',thaiFull:'ออ อ่าง',audio:'audio/consonants/43_or-aang.mp3'},
+  {th:'ข',rom:'kh',cls:'high',mean:'egg',meanFr:'œuf',phonFr:'kHɔ̌ɔ kHàǐ',phon:'khɔɔ khài',word:'ไข่',thaiFull:'ขอ ไข่',audio:'audio/consonants/02_khor-khai.mp3'},
+  {th:'ฉ',rom:'ch',cls:'high',mean:'cymbals',meanFr:'cymbale',phonFr:'tchɔ̌ɔ tchìng',phon:'chɔɔ chìng',word:'ฉิ่ง',thaiFull:'ฉอ ฉิ่ง',audio:'audio/consonants/09_tchor-tching.mp3'},
+  {th:'ถ',rom:'th',cls:'high',mean:'bag',meanFr:'sac',phonFr:'tHɔ̌ɔ tHǒung',phon:'thɔɔ thǔng',word:'ถุง',thaiFull:'ถอ ถุง',audio:'audio/consonants/22_thor-thung.mp3'},
+  {th:'ผ',rom:'ph',cls:'high',mean:'bee',meanFr:'abeille',phonFr:'pHɔ̌ɔ pHûng',phon:'phɔɔ phûeng',word:'ผึ้ง',thaiFull:'ผอ ผึ้ง',audio:'audio/consonants/28_phor-phung.mp3'},
+  {th:'ฝ',rom:'f',cls:'high',mean:'lid',meanFr:'couvercle',phonFr:'fɔ̌ɔ fǎa',phon:'fɔɔ fǎa',word:'ฝา',thaiFull:'ฝอ ฝา',audio:'audio/consonants/29_for-faa.mp3'},
+  {th:'ศ',rom:'s',cls:'high',mean:'hermit',meanFr:'pavillon',phonFr:'sɔ̌ɔ sǎa-laa',phon:'sɔɔ sǎalaa',word:'ศาลา',thaiFull:'ศอ ศาลา',audio:'audio/consonants/38_sor-saalaa.mp3'},
+  {th:'ษ',rom:'s',cls:'high',mean:'sage',meanFr:'ermite',phonFr:'sɔ̌ɔ ruu-sǐi',phon:'sɔɔ rʉʉsǐi',word:'ฤๅษี',thaiFull:'ษอ ฤๅษี',audio:'audio/consonants/39_sor-ruusii.mp3'},
+  {th:'ส',rom:'s',cls:'high',mean:'tiger',meanFr:'tigre',phonFr:'sɔ̌ɔ sǔua',phon:'sɔɔ sʉʉa',word:'เสือ',thaiFull:'สอ เสือ',audio:'audio/consonants/40_sor-sua.mp3'},
+  {th:'ห',rom:'h',cls:'high',mean:'chest',meanFr:'coffre',phonFr:'Hɔ̌ɔ Hìip',phon:'hɔɔ hìip',word:'หีบ',thaiFull:'หอ หีบ',audio:'audio/consonants/41_hor-hiip.mp3'},
+  {th:'ฐ',rom:'th',cls:'high',mean:'pedestal',meanFr:'socle',phonFr:'tHɔ̌ɔ sǎn-tHǎan',phon:'thɔɔ thǎan',word:'ฐาน',thaiFull:'ฐอ ฐาน',audio:'audio/consonants/16_thor-santhaan.mp3'},
+  {th:'ค',rom:'kh',cls:'low',mean:'buffalo',meanFr:'buffle (d’eau)',phonFr:'kHɔɔ kHwaay',phon:'khɔɔ khwaai',word:'ควาย',thaiFull:'คอ ควาย',audio:'audio/consonants/04_khor-khwaay.mp3'},
+  {th:'ง',rom:'ng',cls:'low',mean:'snake',meanFr:'serpent',phonFr:'ngɔɔ ngouu',phon:'ngɔɔ nguu',word:'งู',thaiFull:'งอ งู',audio:'audio/consonants/07_ngor-ngu.mp3'},
+  {th:'ช',rom:'ch',cls:'low',mean:'elephant',meanFr:'éléphant',phonFr:'tchɔɔ tcháang',phon:'chɔɔ cháang',word:'ช้าง',thaiFull:'ชอ ช้าง',audio:'audio/consonants/10_tchor-tchaang.mp3'},
+  {th:'ซ',rom:'s',cls:'low',mean:'chain',meanFr:'chaîne',phonFr:'sɔɔ sôo',phon:'sɔɔ sôo',word:'โซ่',thaiFull:'ซอ โซ่',audio:'audio/consonants/11_sor-so.mp3'},
+  {th:'ญ',rom:'y',cls:'low',mean:'woman',meanFr:'femme',phonFr:'yɔɔ yǐng',phon:'yɔɔ yǐng',word:'หญิง',thaiFull:'ญอ หญิง',audio:'audio/consonants/13_yor-ying.mp3'},
+  {th:'ณ',rom:'n',cls:'low',mean:'person',meanFr:'moine novice',phonFr:'nɔɔ neen',phon:'nɔɔ neen',word:'เณร',thaiFull:'ณอ เณร',audio:'audio/consonants/19_nor-neen.mp3'},
+  {th:'น',rom:'n',cls:'low',mean:'mouse',meanFr:'souris',phonFr:'nɔɔ nǒuu',phon:'nɔɔ nǔu',word:'หนู',thaiFull:'นอ หนู',audio:'audio/consonants/25_nor-nuu.mp3'},
+  {th:'ม',rom:'m',cls:'low',mean:'horse',meanFr:'cheval',phonFr:'mɔɔ máa',phon:'mɔɔ máa',word:'ม้า',thaiFull:'มอ ม้า',audio:'audio/consonants/33_mor-maa.mp3'},
+  {th:'ย',rom:'y',cls:'low',mean:'giant',meanFr:'ogre',phonFr:'yɔɔ yák',phon:'yɔɔ yâak',word:'ยักษ์',thaiFull:'ยอ ยักษ์',audio:'audio/consonants/34_yor-yak.mp3'},
+  {th:'ร',rom:'r',cls:'low',mean:'boat',meanFr:'pirogue',phonFr:'rɔɔ ruua',phon:'rɔɔ reua',word:'เรือ',thaiFull:'รอ เรือ',audio:'audio/consonants/35_ror-ruua.mp3'},
+  {th:'ล',rom:'l',cls:'low',mean:'monkey',meanFr:'singe',phonFr:'lɔɔ ling',phon:'lɔɔ ling',word:'ลิง',thaiFull:'ลอ ลิง',audio:'audio/consonants/36_lor-ling.mp3'},
+  {th:'ว',rom:'w',cls:'low',mean:'ring',meanFr:'bague',phonFr:'wɔɔ wěen',phon:'wɔɔ wɛɛn',word:'แหวน',thaiFull:'วอ แหวน',audio:'audio/consonants/37_wor-ween.mp3'},
+  {th:'ท',rom:'th',cls:'low',mean:'soldier',meanFr:'soldat',phonFr:'tHɔɔ tHa-Hǎan',phon:'thɔɔ tháhǎan',word:'ทหาร',thaiFull:'ทอ ทหาร',audio:'audio/consonants/23_thor-thahaan.mp3'},
+  {th:'ธ',rom:'th',cls:'low',mean:'flag',meanFr:'drapeau',phonFr:'tHɔɔ tHong',phon:'thɔɔ thong',word:'ธง',thaiFull:'ธอ ธง',audio:'audio/consonants/24_thor-thong.mp3'},
+  {th:'ภ',rom:'ph',cls:'low',mean:'mountain',meanFr:'voilier',phonFr:'pHɔɔ sam-pHao',phon:'phɔɔ phukhǎo',word:'ภูเขา',thaiFull:'ภอ สำเภา',audio:'audio/consonants/32_phor-samphao.mp3'},
+  {th:'ฆ',rom:'kh',cls:'low',mean:'bell',meanFr:'cloche',phonFr:'kHɔɔ rá-kHang',phon:'khɔɔ rakhang',word:'ระฆัง',thaiFull:'ฆอ ระฆัง',audio:'audio/consonants/06_khor-rakhang.mp3'},
+  {th:'ฌ',rom:'ch',cls:'low',mean:'tree',meanFr:'arbuste',phonFr:'tchɔɔ tchoee',phon:'chɔɔ chə̂ə',word:'เฌอ',thaiFull:'ฌอ เฌอ',audio:'audio/consonants/12_tchor-tchoe.mp3'},
+  {th:'ฬ',rom:'l',cls:'low',mean:'kite',meanFr:'cerf-volant',phonFr:'lɔɔ djòu-laa',phon:'lɔɔ julaa',word:'จุฬา',thaiFull:'ฬอ จุฬา',audio:'audio/consonants/42_lor-djulaa.mp3'},
+  {th:'ฮ',rom:'h',cls:'low',mean:'owl',meanFr:'hibou',phonFr:'Hɔɔ nók-Hôuuk',phon:'hɔɔ nók hûuk',word:'นกฮูก',thaiFull:'ฮอ นกฮูก',audio:'audio/consonants/44_hor-nokhuuk.mp3'},
+  {th:'ฎ',rom:'d',cls:'low',mean:'headdress',meanFr:'diadème',phonFr:'dɔɔ tcha-daa',phon:'dɔɔ chadaa',word:'ชฎา',thaiFull:'ฎอ ชฎา',audio:'audio/consonants/14_dor-tchada.mp3'},
+  {th:'ฏ',rom:'dt',cls:'low',mean:'crown',meanFr:'lance',phonFr:'tɔɔ pa-tàk',phon:'dtɔɔ bpatàk',word:'ปฏัก',thaiFull:'ฏอ ปฏัก',audio:'audio/consonants/15_tor-patak.mp3'},
+  {th:'ฑ',rom:'th / dt',cls:'low',mean:'old woman',meanFr:'nom d’une princesse',phonFr:'tHɔɔ nang-mon-tHoo',phon:'thɔɔ montho',word:'มณโฑ',thaiFull:'ฑอ มณโฑ',audio:'audio/consonants/17_thor-nangmonthoo.mp3'},
+  {th:'ฒ',rom:'th',cls:'low',mean:'elder',meanFr:'vieillard',phonFr:'tHɔɔ pHôuu-tHâo',phon:'thɔɔ phûu thâo',word:'ผู้เฒ่า',thaiFull:'ฒอ ผู้เฒ่า',audio:'audio/consonants/18_thor-phuuthao.mp3'},
+  {th:'ฃ',rom:'kh',cls:'high',mean:'bottle',meanFr:'bouteille',phonFr:'kHɔ̌ɔ kHòuuat',phon:'khɔɔ khùat',word:'ขวด',thaiFull:'ฃอ ขวด',audio:'audio/consonants/03_khor-khuat.mp3'},
+  {th:'ฅ',rom:'kh',cls:'low',mean:'person',meanFr:'personne',phonFr:'kHɔɔ kHon',phon:'khɔɔ khon',word:'คน',thaiFull:'ฅอ คน',audio:'audio/consonants/05_khor-khon.mp3'},
 ];
 
 // Thai numerals ๐–๙. Same shape as CHARS so every game mode works unchanged:
@@ -1287,16 +1465,16 @@ const CHARS = [
 //   word = the number spelled out in Thai, shown and spoken in the feedback panel
 // Data matches REF.numerals / NUMS in kie/glyph.html — keep the two in step.
 const NUMS = [
-  {th:'๐',rom:'0',cls:'num',mean:'zero',meanFr:'zéro',phon:'sǔun',word:'ศูนย์',thaiFull:'ศูนย์',audio:''},
-  {th:'๑',rom:'1',cls:'num',mean:'one',meanFr:'un',phon:'nɯ̀ng',word:'หนึ่ง',thaiFull:'หนึ่ง',audio:''},
-  {th:'๒',rom:'2',cls:'num',mean:'two',meanFr:'deux',phon:'sɔ̌ɔng',word:'สอง',thaiFull:'สอง',audio:''},
-  {th:'๓',rom:'3',cls:'num',mean:'three',meanFr:'trois',phon:'sǎam',word:'สาม',thaiFull:'สาม',audio:''},
-  {th:'๔',rom:'4',cls:'num',mean:'four',meanFr:'quatre',phon:'sìi',word:'สี่',thaiFull:'สี่',audio:''},
-  {th:'๕',rom:'5',cls:'num',mean:'five',meanFr:'cinq',phon:'hâa',word:'ห้า',thaiFull:'ห้า',audio:''},
-  {th:'๖',rom:'6',cls:'num',mean:'six',meanFr:'six',phon:'hòk',word:'หก',thaiFull:'หก',audio:''},
-  {th:'๗',rom:'7',cls:'num',mean:'seven',meanFr:'sept',phon:'cèt',word:'เจ็ด',thaiFull:'เจ็ด',audio:''},
-  {th:'๘',rom:'8',cls:'num',mean:'eight',meanFr:'huit',phon:'pɛ̀ɛt',word:'แปด',thaiFull:'แปด',audio:''},
-  {th:'๙',rom:'9',cls:'num',mean:'nine',meanFr:'neuf',phon:'kâao',word:'เก้า',thaiFull:'เก้า',audio:''},
+  {th:'๐',rom:'0',cls:'num',mean:'zero',meanFr:'zéro',phonFr:'sǒun',phon:'sǔun',word:'ศูนย์',thaiFull:'ศูนย์',audio:''},
+  {th:'๑',rom:'1',cls:'num',mean:'one',meanFr:'un',phonFr:'nùng',phon:'nɯ̀ng',word:'หนึ่ง',thaiFull:'หนึ่ง',audio:''},
+  {th:'๒',rom:'2',cls:'num',mean:'two',meanFr:'deux',phonFr:'sɔ̌ɔng',phon:'sɔ̌ɔng',word:'สอง',thaiFull:'สอง',audio:''},
+  {th:'๓',rom:'3',cls:'num',mean:'three',meanFr:'trois',phonFr:'sǎam',phon:'sǎam',word:'สาม',thaiFull:'สาม',audio:''},
+  {th:'๔',rom:'4',cls:'num',mean:'four',meanFr:'quatre',phonFr:'sìi',phon:'sìi',word:'สี่',thaiFull:'สี่',audio:''},
+  {th:'๕',rom:'5',cls:'num',mean:'five',meanFr:'cinq',phonFr:'Hâa',phon:'hâa',word:'ห้า',thaiFull:'ห้า',audio:''},
+  {th:'๖',rom:'6',cls:'num',mean:'six',meanFr:'six',phonFr:'Hòk',phon:'hòk',word:'หก',thaiFull:'หก',audio:''},
+  {th:'๗',rom:'7',cls:'num',mean:'seven',meanFr:'sept',phonFr:'djèt',phon:'cèt',word:'เจ็ด',thaiFull:'เจ็ด',audio:''},
+  {th:'๘',rom:'8',cls:'num',mean:'eight',meanFr:'huit',phonFr:'pɛ̀ɛt',phon:'pɛ̀ɛt',word:'แปด',thaiFull:'แปด',audio:''},
+  {th:'๙',rom:'9',cls:'num',mean:'nine',meanFr:'neuf',phonFr:'kâo',phon:'kâao',word:'เก้า',thaiFull:'เก้า',audio:''},
 ];
 
 // true when an entry is a numeral rather than a consonant
@@ -1422,12 +1600,13 @@ function setQuestionMode(mode) {
   if (currentChar && !answered) renderQuestion();
 }
 
-// Which clue the Draw-mode prompt shows: sound / en / fr / both / audio
+// Which clue the Draw-mode prompt shows: sound / word / both / audio.
+// "word" is the meaning in the page's language — there is no second language here.
 let clueMode = 'sound';
 
 function setClue(mode) {
   clueMode = mode;
-  const map = {sound:'clueSound', en:'clueEn', fr:'clueFr', both:'clueBoth', audio:'clueAudio'};
+  const map = {sound:'clueSound', word:'clueWord', both:'clueBoth', audio:'clueAudio'};
   Object.values(map).forEach(id => document.getElementById(id).classList.remove('active'));
   document.getElementById(map[mode]).classList.add('active');
   if (currentChar && questionMode === 'draw' && !answered) renderPrompt();
@@ -1459,7 +1638,7 @@ function renderQuestion() {
 
   // Class pip — numerals have no consonant class, so label them plainly
   const pip = document.getElementById('classPip');
-  pip.textContent = isNum(c) ? 'numeral' : c.cls + ' class';
+  pip.textContent = t({mid:'clsMid', high:'clsHigh', low:'clsLow', num:'clsNum'}[c.cls]);
   pip.className = 'class-pip pip-' + c.cls;
 
   // Draw mode swaps the multiple-choice block for a canvas — handled separately
@@ -1484,17 +1663,15 @@ function renderQuestion() {
     display.style.fontFamily = "'Crimson Pro', Georgia, serif";
     display.style.fontSize = isNum(c) ? '96px' : '52px';
     display.textContent = c.rom;
-    hint.textContent = isNum(c)
-      ? 'Which Thai numeral is this?'
-      : 'Which Thai character makes this sound?';
+    hint.textContent = t(isNum(c) ? 'hintRomNum' : 'hintRomChar');
   } else {
     display.style.fontFamily = '"Noto Sans Thai","Leelawadee UI","Angsana New",serif';
     display.style.fontSize = '120px';
     display.textContent = c.th;
     if (questionMode === 'char') {
-      hint.textContent = isNum(c) ? 'What is this numeral called?' : 'What is this character called?';
+      hint.textContent = t(isNum(c) ? 'hintNameNum' : 'hintNameChar');
     } else {
-      hint.textContent = isNum(c) ? 'What number is this?' : 'What does this character\'s name mean?';
+      hint.textContent = t(isNum(c) ? 'hintMeanNum' : 'hintMeanChar');
     }
   }
 
@@ -1517,11 +1694,11 @@ function renderQuestion() {
 
     let label, sub;
     if (questionMode === 'char') {
-      label = ch.phon;
+      label = phonOf(ch);
       sub = ch.rom;
     } else if (questionMode === 'meaning') {
-      label = ch.mean.charAt(0).toUpperCase() + ch.mean.slice(1);
-      sub = ch.phon;
+      label = cap(meaningOf(ch));
+      sub = phonOf(ch);
     } else {
       // romanize mode — show Thai char only (no English meaning, which would leak the sound)
       label = ch.th;
@@ -1570,22 +1747,22 @@ function applyResult(correct) {
     weights[currentChar.th] = Math.max(1, (weights[currentChar.th] || 3) - 1);
     history.push('correct');
     fb.className = 'feedback correct-fb';
-    fbMain.textContent = streak >= 3 ? `${streak}× streak! +${10 + 5} pts` : 'Correct ✓';
-    fbSub.textContent = `${currentChar.th} — ${currentChar.phon} — "${currentChar.mean}"`;
+    fbMain.textContent = streak >= 3 ? t('fbStreak', {n: streak, p: 15}) : t('fbCorrect');
+    fbSub.textContent = `${currentChar.th} — ${phonOf(currentChar)} — "${meaningOf(currentChar)}"`;
   } else {
     streak = 0;
     weights[currentChar.th] = Math.min(8, (weights[currentChar.th] || 3) + 2);
     history.push('wrong');
     if (!missed.find(m => m.th === currentChar.th)) missed.push(currentChar);
     fb.className = 'feedback wrong-fb';
-    fbMain.textContent = `That was ${currentChar.th}`;
-    fbSub.textContent = `${currentChar.phon} · "${currentChar.mean}"`;
+    fbMain.textContent = t('fbThatWas', {c: currentChar.th});
+    fbSub.textContent = `${phonOf(currentChar)} · "${meaningOf(currentChar)}"`;
   }
 
   // Show the full recited name with its speaker, so the text matches the audio
   const exEl = document.getElementById('feedbackExample');
   document.getElementById('exampleWord').textContent = currentChar.thaiFull;
-  document.getElementById('exampleLabel').textContent = '· ' + currentChar.mean;
+  document.getElementById('exampleLabel').textContent = '· ' + meaningOf(currentChar);
   exEl.style.display = 'flex';
   document.getElementById('exampleSpeakBtn').classList.remove('speaking');
 
@@ -1594,7 +1771,7 @@ function applyResult(correct) {
   // button sits just under the prompt instead of below everything.
   placeNextBtn(questionMode === 'draw');
   document.getElementById('nextBtn').classList.add('visible');
-  document.getElementById('nextBtn').textContent = qNum >= TOTAL_Q ? 'See results →' : 'Next →';
+  document.getElementById('nextBtn').textContent = t(qNum >= TOTAL_Q ? 'seeResults' : 'next');
   syncTopSlot();
   showSpeakerBtn();
 }
@@ -1653,21 +1830,17 @@ function renderPrompt() {
   main.classList.remove('small');
 
   if (clueMode === 'sound') {
-    main.textContent = c.phon;
+    main.textContent = phonOf(c);
     second.textContent = '';
     second.style.display = 'none';
-  } else if (clueMode === 'en') {
-    main.textContent = cap(c.mean);
-    second.textContent = '';
-    second.style.display = 'none';
-  } else if (clueMode === 'fr') {
-    main.textContent = cap(c.meanFr);
+  } else if (clueMode === 'word') {
+    main.textContent = cap(meaningOf(c));
     second.textContent = '';
     second.style.display = 'none';
   } else if (clueMode === 'both') {
     main.classList.add('small');
-    main.textContent = c.phon;
-    second.textContent = `${cap(c.mean)} · ${cap(c.meanFr)}`;
+    main.textContent = phonOf(c);
+    second.textContent = cap(meaningOf(c));
   } else { // audio — nothing written, listen and draw
     main.textContent = '';
     main.style.display = 'none';
@@ -1677,9 +1850,7 @@ function renderPrompt() {
     setTimeout(speakPrompt, 200);
   }
 
-  hint.textContent = isNum(c)
-    ? 'Draw this Thai numeral'
-    : 'Draw this Thai character';
+  hint.textContent = t(isNum(c) ? 'hintDrawNum' : 'hintDrawChar');
 
   sizeCanvases();
 }
@@ -1860,7 +2031,7 @@ function revealGlyph() {
     // cache-bust so the GIF restarts from stroke 1 every time it is revealed
     document.getElementById('strokeImg').src = gif + '?r=' + Date.now();
     document.getElementById('strokeText').innerHTML =
-      `<b>${currentChar.th}</b> — ${currentChar.phon}<br>${cap(currentChar.mean)} · ${cap(currentChar.meanFr)}`;
+      `<b>${currentChar.th}</b> — ${phonOf(currentChar)}<br>${cap(meaningOf(currentChar))}`;
     panel.classList.add('visible');
   } else {
     panel.classList.remove('visible');
@@ -1893,7 +2064,7 @@ function updateStats() {
 function updateProgress() {
   const pct = ((qNum - 1) / TOTAL_Q) * 100;
   document.getElementById('progressFill').style.width = pct + '%';
-  document.getElementById('progressLabel').textContent = `Question ${qNum} of ${TOTAL_Q}`;
+  document.getElementById('progressLabel').textContent = t('progress', {n: qNum, t: TOTAL_Q});
 }
 
 function updateReviewStrip() {
@@ -1916,11 +2087,12 @@ function showResults() {
   const correct = history.filter(h => h === 'correct').length;
   const pct = Math.round((correct / TOTAL_Q) * 100);
 
-  let title, sub, emoji;
-  if (pct === 100) { title = 'Perfect round!'; sub = 'Flawless — สุดยอด!'; emoji = 'ดี'; }
-  else if (pct >= 80) { title = 'Excellent!'; sub = 'You\'re getting it — เก่งมาก!'; emoji = 'ข'; }
-  else if (pct >= 60) { title = 'Good progress'; sub = 'Keep going — สู้ๆ!'; emoji = 'ก'; }
-  else { title = 'Keep practising'; sub = 'Every mistake is learning — ไม่เป็นไร'; emoji = 'ง'; }
+  let key, emoji;
+  if (pct === 100)     { key = 'res100'; emoji = 'ดี'; }
+  else if (pct >= 80)  { key = 'res80';  emoji = 'ข'; }
+  else if (pct >= 60)  { key = 'res60';  emoji = 'ก'; }
+  else                 { key = 'res0';   emoji = 'ง'; }
+  const title = t(key), sub = t(key + 'Sub');
 
   document.getElementById('resultsEmoji').textContent = emoji;
   document.getElementById('resultsTitle').textContent = title;
@@ -1933,7 +2105,7 @@ function showResults() {
     document.getElementById('missSection').style.display = 'block';
     document.getElementById('missChars').innerHTML = missed.map(c =>
       // plays the recording of the full name where there is one — see playName()
-      `<div class="miss-char" onclick="playByChar('${c.th}')" title="Tap to hear">${c.th} <small>${c.phon}</small></div>`
+      `<div class="miss-char" onclick="playByChar('${c.th}')" title="${t('tapToHear')}">${c.th} <small>${phonOf(c)}</small></div>`
     ).join('');
   } else {
     document.getElementById('missSection').style.display = 'none';
@@ -1943,6 +2115,7 @@ function showResults() {
 }
 
 function init() {
+  applyLang();
   initTTS();
   initCanvases();
   // Warm the local Thai face so the first ghost letterform is not drawn with a fallback
