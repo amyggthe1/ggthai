@@ -137,7 +137,7 @@ body {
 
 .streak-val { color: var(--gold); }
 
-/* ── PROGRESS BAR ── */
+/* ── PROGRESS BAR (removed from markup 18 Aug 2026 - styles kept unused) ── */
 .progress-wrap {
   margin-bottom: 1.5rem;
   flex-shrink: 0;
@@ -481,6 +481,32 @@ body {
   border-color: var(--gold);
   color: #7a5410;
 }
+
+/* Sound on/off switch — Draw mode only (added 18 Aug 2026).
+   Sits right under the prompt card so it can be flipped mid-round when you are
+   practising somewhere quiet. */
+.sound-toggle-row {
+  display: flex;
+  justify-content: center;
+  margin: -0.4rem 0 1rem;
+  flex-shrink: 0;
+}
+.sound-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 5px 14px;
+  border-radius: 20px;
+  border: 0.5px solid var(--paper3);
+  background: var(--paper2);
+  font-family: 'Crimson Pro', serif;
+  font-size: 12px;
+  color: #7a5410;
+  cursor: pointer;
+  transition: all 0.12s;
+}
+.sound-toggle:hover { border-color: var(--gold); }
+.sound-toggle.muted { color: var(--ink3); background: var(--paper2); }
 
 /* Canvas */
 .draw-wrap { margin-bottom: 1rem; }
@@ -1010,10 +1036,12 @@ body {
     </div>
   </div>
 
+  <!-- Progress bar removed (18 Aug 2026) - previous version:
   <div class="progress-wrap">
     <div class="progress-track"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
     <div class="progress-label" id="progressLabel">Question 1 of 20</div>
   </div>
+  -->
 
   <div class="mode-row">
     <div class="mode-pill active" id="modeChar" onclick="setQuestionMode('char')" data-i18n="modeChar">Thai → Name</div>
@@ -1056,6 +1084,24 @@ body {
       <span data-i18n="hearIt">Hear it</span>
     </button>
     <div class="no-tts" id="noTts" data-i18n="noVoice">Thai voice not available on this device</div>
+  </div>
+
+  <!-- Draw mode only: sound on/off, for practising in a public place without
+       disturbing anyone (added 18 Aug 2026). Muting silences every playback,
+       including the automatic one on reveal. -->
+  <div class="sound-toggle-row" id="soundToggleRow" style="display:none">
+    <button class="sound-toggle" id="soundToggleBtn" onclick="toggleSound()" aria-pressed="true">
+      <svg id="iconSoundOn" width="15" height="15" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+        <path d="M3 7.5h3l4-4v13l-4-4H3v-5z" fill="currentColor" opacity="0.9"/>
+        <path d="M13 7a4 4 0 0 1 0 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        <path d="M15 4.5a7 7 0 0 1 0 11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" opacity="0.5"/>
+      </svg>
+      <svg id="iconSoundOff" width="15" height="15" viewBox="0 0 20 20" fill="none" aria-hidden="true" style="display:none">
+        <path d="M3 7.5h3l4-4v13l-4-4H3v-5z" fill="currentColor" opacity="0.9"/>
+        <path d="M13.5 8l4 4M17.5 8l-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
+      <span id="soundToggleLabel" data-i18n="soundOn">Sound on</span>
+    </button>
   </div>
 
   <!-- Draw mode parks its action buttons here, right under the prompt, so a full
@@ -1175,6 +1221,7 @@ const STR = {
     progress: 'Question {n} of {t}',
     modeChar: 'Thai → Name', modeMean: 'Thai → Meaning', modeRom: 'Sound → Thai', modeDraw: '✎ Draw it',
     clueSound: 'Sound', clueWord: 'English', clueBoth: 'Both', clueAudio: '🔊 only',
+    soundOn: 'Sound on', soundOff: 'Sound off',
     hearIt: 'Hear it',
     noVoice: 'Thai voice not available on this device',
     canvasHint: 'Draw the character with your finger, stylus or mouse',
@@ -1220,6 +1267,7 @@ const STR = {
     progress: 'Question {n} sur {t}',
     modeChar: 'Thaï → Nom', modeMean: 'Thaï → Sens', modeRom: 'Son → Thaï', modeDraw: '✎ Écriture',
     clueSound: 'Phonétique', clueWord: 'Français', clueBoth: 'Les deux', clueAudio: '🔊 Son',
+    soundOn: 'Son activé', soundOff: 'Son coupé',
     hearIt: 'Écouter',
     noVoice: 'Aucune voix thaïe sur cet appareil',
     canvasHint: 'Dessine le caractère au doigt, au stylet ou à la souris',
@@ -1335,9 +1383,15 @@ function speakText(text, btn) {
 // the case on this PC — see the project note on audio.
 let currentAudio = null;
 
+// Sound on/off (added 18 Aug 2026). Every playback goes through playName(), so
+// one guard here covers the speaker buttons, the audio clue and the automatic
+// playback on reveal. Session-only: it resets to "on" when the page reloads.
+let soundOn = true;
+
 function playName(c, btn) {
   if (!c) return;
   stopAudio();
+  if (!soundOn) return;   // muted — added 18 Aug 2026
   if (c.audio) {
     const a = new Audio(c.audio);
     currentAudio = a;
@@ -1363,6 +1417,23 @@ function stopAudio() {
 
 // true when this character can be heard at all on this device
 function canHear(c) { return !!(c && (c.audio || thaiVoice)); }
+
+// ── SOUND ON / OFF ── (added 18 Aug 2026)
+function toggleSound() { setSound(!soundOn); }
+
+function setSound(on) {
+  soundOn = on;
+  if (!soundOn) stopAudio();               // cut anything already playing
+  const btn = document.getElementById('soundToggleBtn');
+  const label = document.getElementById('soundToggleLabel');
+  btn.classList.toggle('muted', !soundOn);
+  btn.setAttribute('aria-pressed', soundOn ? 'true' : 'false');
+  document.getElementById('iconSoundOn').style.display = soundOn ? 'block' : 'none';
+  document.getElementById('iconSoundOff').style.display = soundOn ? 'none' : 'block';
+  // dataset.i18n so applyLang() keeps the right wording after a language switch
+  label.dataset.i18n = soundOn ? 'soundOn' : 'soundOff';
+  label.textContent = t(label.dataset.i18n);
+}
 
 function speakCurrent() {
   playName(currentChar, document.getElementById('speakerBtn'));
@@ -1607,6 +1678,9 @@ function setClue(mode) {
   const map = {sound:'clueSound', word:'clueWord', both:'clueBoth', audio:'clueAudio'};
   Object.values(map).forEach(id => document.getElementById(id).classList.remove('active'));
   document.getElementById(map[mode]).classList.add('active');
+  // The "🔊 only" clue is unusable while muted, and choosing it is an explicit
+  // request to hear something — so it turns the sound back on (18 Aug 2026).
+  if (mode === 'audio' && !soundOn) setSound(true);
   if (currentChar && questionMode === 'draw' && !answered) renderPrompt();
 }
 
@@ -1644,6 +1718,7 @@ function renderQuestion() {
   document.getElementById('choices').style.display = drawing ? 'none' : 'grid';
   document.getElementById('drawWrap').style.display = drawing ? 'block' : 'none';
   document.getElementById('clueRow').style.display = drawing ? 'flex' : 'none';
+  document.getElementById('soundToggleRow').style.display = drawing ? 'flex' : 'none';   // added 18 Aug 2026
   document.getElementById('charDisplay').style.display = drawing ? 'none' : 'block';
   document.getElementById('promptBlock').style.display = drawing ? 'block' : 'none';
   if (drawing) { renderPrompt(); return; }
@@ -2047,9 +2122,11 @@ function updateStats() {
 }
 
 function updateProgress() {
-  const pct = ((qNum - 1) / TOTAL_Q) * 100;
-  document.getElementById('progressFill').style.width = pct + '%';
-  document.getElementById('progressLabel').textContent = t('progress', {n: qNum, t: TOTAL_Q});
+  // Progress bar removed from the UI (18 Aug 2026). Kept as a no-op so all
+  // existing call sites keep working. Previous version:
+  //   const pct = ((qNum - 1) / TOTAL_Q) * 100;
+  //   document.getElementById('progressFill').style.width = pct + '%';
+  //   document.getElementById('progressLabel').textContent = t('progress', {n: qNum, t: TOTAL_Q});
 }
 
 function updateReviewStrip() {
