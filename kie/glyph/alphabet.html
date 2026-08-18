@@ -483,30 +483,43 @@ body {
 }
 
 /* Sound on/off switch — Draw mode only (added 18 Aug 2026).
-   Sits right under the prompt card so it can be flipped mid-round when you are
-   practising somewhere quiet. */
+   18 Aug 2026, second pass: moved from a centred pill under the card to a
+   compact button inside the card, top-right, just below the class pip.
+   Previous version:
+     .sound-toggle-row { display: flex; justify-content: center; margin: -0.4rem 0 1rem; flex-shrink: 0; }
+     .sound-toggle { display: inline-flex; align-items: center; gap: 7px; padding: 5px 14px;
+                     border-radius: 20px; border: 0.5px solid var(--paper3); background: var(--paper2);
+                     font-family: 'Crimson Pro', serif; font-size: 12px; color: #7a5410;
+                     cursor: pointer; transition: all 0.12s; } */
 .sound-toggle-row {
-  display: flex;
-  justify-content: center;
-  margin: -0.4rem 0 1rem;
-  flex-shrink: 0;
+  position: absolute;
+  top: 44px;
+  right: 14px;
+  z-index: 2;
 }
 .sound-toggle {
-  display: inline-flex;
+  display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 7px;
-  padding: 5px 14px;
-  border-radius: 20px;
+  gap: 2px;
+  width: 52px;
+  padding: 7px 4px;
+  border-radius: 12px;
   border: 0.5px solid var(--paper3);
   background: var(--paper2);
   font-family: 'Crimson Pro', serif;
-  font-size: 12px;
+  font-size: 10px;
+  line-height: 1.1;
+  text-align: center;
   color: #7a5410;
   cursor: pointer;
   transition: all 0.12s;
 }
 .sound-toggle:hover { border-color: var(--gold); }
-.sound-toggle.muted { color: var(--ink3); background: var(--paper2); }
+.sound-toggle.muted { color: var(--ink3); }
+
+/* Draw mode: keep the centred prompt clear of the switch on narrow screens */
+.char-card.has-sound-toggle { padding-left: 4.2rem; padding-right: 4.2rem; }
 
 /* Canvas */
 .draw-wrap { margin-bottom: 1rem; }
@@ -1061,6 +1074,25 @@ body {
 
   <div class="char-card" id="charCard">
     <div class="class-pip pip-mid" id="classPip">middle</div>
+    <!-- Draw mode only: sound on/off, for practising in a public place without
+         disturbing anyone (added 18 Aug 2026). Muting silences every playback,
+         including the automatic one on reveal. Sits inside the card, top-right
+         under the class pip (moved there 18 Aug 2026, second pass). -->
+    <div class="sound-toggle-row" id="soundToggleRow" style="display:none">
+      <button class="sound-toggle" id="soundToggleBtn" onclick="toggleSound()" aria-pressed="true">
+        <svg id="iconSoundOn" width="16" height="16" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+          <path d="M3 7.5h3l4-4v13l-4-4H3v-5z" fill="currentColor" opacity="0.9"/>
+          <path d="M13 7a4 4 0 0 1 0 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          <path d="M15 4.5a7 7 0 0 1 0 11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" opacity="0.5"/>
+        </svg>
+        <svg id="iconSoundOff" width="16" height="16" viewBox="0 0 20 20" fill="none" aria-hidden="true" style="display:none">
+          <path d="M3 7.5h3l4-4v13l-4-4H3v-5z" fill="currentColor" opacity="0.9"/>
+          <path d="M13.5 8l4 4M17.5 8l-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+        <span id="soundToggleLabel" data-i18n="soundOn">Sound on</span>
+      </button>
+    </div>
+
     <div class="char-display" id="charDisplay">ก</div>
     <!-- draw-mode prompt: text clue instead of a glyph -->
     <div id="promptBlock" style="display:none">
@@ -1084,24 +1116,6 @@ body {
       <span data-i18n="hearIt">Hear it</span>
     </button>
     <div class="no-tts" id="noTts" data-i18n="noVoice">Thai voice not available on this device</div>
-  </div>
-
-  <!-- Draw mode only: sound on/off, for practising in a public place without
-       disturbing anyone (added 18 Aug 2026). Muting silences every playback,
-       including the automatic one on reveal. -->
-  <div class="sound-toggle-row" id="soundToggleRow" style="display:none">
-    <button class="sound-toggle" id="soundToggleBtn" onclick="toggleSound()" aria-pressed="true">
-      <svg id="iconSoundOn" width="15" height="15" viewBox="0 0 20 20" fill="none" aria-hidden="true">
-        <path d="M3 7.5h3l4-4v13l-4-4H3v-5z" fill="currentColor" opacity="0.9"/>
-        <path d="M13 7a4 4 0 0 1 0 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-        <path d="M15 4.5a7 7 0 0 1 0 11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" opacity="0.5"/>
-      </svg>
-      <svg id="iconSoundOff" width="15" height="15" viewBox="0 0 20 20" fill="none" aria-hidden="true" style="display:none">
-        <path d="M3 7.5h3l4-4v13l-4-4H3v-5z" fill="currentColor" opacity="0.9"/>
-        <path d="M13.5 8l4 4M17.5 8l-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-      </svg>
-      <span id="soundToggleLabel" data-i18n="soundOn">Sound on</span>
-    </button>
   </div>
 
   <!-- Draw mode parks its action buttons here, right under the prompt, so a full
@@ -1718,7 +1732,8 @@ function renderQuestion() {
   document.getElementById('choices').style.display = drawing ? 'none' : 'grid';
   document.getElementById('drawWrap').style.display = drawing ? 'block' : 'none';
   document.getElementById('clueRow').style.display = drawing ? 'flex' : 'none';
-  document.getElementById('soundToggleRow').style.display = drawing ? 'flex' : 'none';   // added 18 Aug 2026
+  document.getElementById('soundToggleRow').style.display = drawing ? 'block' : 'none';   // added 18 Aug 2026
+  document.getElementById('charCard').classList.toggle('has-sound-toggle', drawing);      // added 18 Aug 2026
   document.getElementById('charDisplay').style.display = drawing ? 'none' : 'block';
   document.getElementById('promptBlock').style.display = drawing ? 'block' : 'none';
   if (drawing) { renderPrompt(); return; }
