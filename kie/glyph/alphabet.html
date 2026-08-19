@@ -434,6 +434,8 @@ body {
 }
 /* Draw mode's grade pair, and Next when it is alone, take the whole row */
 #nextSlotTop > .grade-row { grid-column: 1 / -1; width: 100%; }
+/* Reveal, lifted here by the first stroke (19 Aug 2026) */
+#nextSlotTop > .reveal-btn { grid-column: 1 / -1; width: 100%; margin-top: 0; }
 #nextSlotTop > .next-btn:only-child { grid-column: 1 / -1; width: 100%; }
 
 @media (max-width: 460px) {
@@ -1278,7 +1280,12 @@ body {
       <button class="tool-btn" id="undoBtn" onclick="undoStroke()" data-i18n="undo" disabled>↶ Undo</button>
       <button class="tool-btn" id="clearBtn" onclick="clearInk()" data-i18n="clear" disabled>Clear</button>
     </div>
-    <button class="reveal-btn" id="revealBtn" onclick="revealGlyph()" data-i18n="reveal">Reveal answer</button>
+    <!-- Home of Reveal while the canvas is still blank. The first stroke lifts it
+         to #nextSlotTop, between the prompt and the canvas (19 Aug 2026), so the
+         answer can be validated without scrolling past the drawing area. -->
+    <div id="revealSlotBottom">
+      <button class="reveal-btn" id="revealBtn" onclick="revealGlyph()" data-i18n="reveal">Reveal answer</button>
+    </div>
     <!-- Default home of the grade buttons; revealGlyph() lifts them to #nextSlotTop -->
     <div id="gradeSlotBottom">
       <div class="grade-row" id="gradeRow">
@@ -2211,6 +2218,15 @@ function redrawInk() {
   const has = strokes.length > 0;
   document.getElementById('undoBtn').disabled = !has;
   document.getElementById('clearBtn').disabled = !has;
+  // Reveal follows the ink: up under the prompt as soon as there is something to
+  // check, back under the canvas when the drawing is undone or cleared.
+  // Not while the answer is showing — the grade pair owns that slot. (19 Aug 2026)
+  if (!revealed) placeRevealBtn(has);
+}
+
+// Park Reveal under the prompt (atTop) or back under the canvas (19 Aug 2026)
+function placeRevealBtn(atTop) {
+  moveToSlot('revealBtn', atTop ? 'nextSlotTop' : 'revealSlotBottom');
 }
 
 function pointFromEvent(e) {
@@ -2256,6 +2272,7 @@ function resetDrawing() {
   if (ghostCtx) ghostCtx.clearRect(0, 0, ghostCanvas.width, ghostCanvas.height);
   ghostCanvas.style.opacity = '0';
   document.getElementById('revealBtn').style.display = 'block';
+  placeRevealBtn(false);   // blank canvas, so Reveal starts down there again
   document.getElementById('gradeRow').classList.remove('visible');
   placeGradeRow(false);   // back under the canvas while hidden
   document.getElementById('strokePanel').classList.remove('visible');
@@ -2269,6 +2286,7 @@ function revealGlyph() {
   drawGhost();
   ghostCanvas.style.opacity = '1';
   document.getElementById('revealBtn').style.display = 'none';
+  placeRevealBtn(false);   // frees the slot for the grade pair (19 Aug 2026)
   // Grade buttons sit under the prompt, not at the foot of a long page
   placeGradeRow(true);
   document.getElementById('gradeRow').classList.add('visible');
