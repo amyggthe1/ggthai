@@ -25,7 +25,3 @@ _to_delete/
 
 # Local backup zips of the whole project. Never publish these.
 backups/
-
-# Deployment copy for gerardlam.free.fr — a byte-for-byte duplicate of kie/,
-# rebuilt with:  rm -rf gl/kie && cp -r kie gl/kie   (19 Aug 2026)
-gl/
