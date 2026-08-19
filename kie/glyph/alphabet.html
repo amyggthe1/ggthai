@@ -207,9 +207,12 @@ body {
 }
 
 .class-pip {
+  /* was top-right (right: 16px) until 19 Aug 2026 — now centred on the card */
   position: absolute;
   top: 14px;
-  right: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
   font-size: 10px;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -492,8 +495,10 @@ body {
                      font-family: 'Crimson Pro', serif; font-size: 12px; color: #7a5410;
                      cursor: pointer; transition: all 0.12s; } */
 .sound-toggle-row {
+  /* was top: 44px, tucked under the class pip; the pip moved to the centre on
+     19 Aug 2026, so the switch takes the top-right corner itself */
   position: absolute;
-  top: 44px;
+  top: 12px;
   right: 14px;
   z-index: 2;
 }
@@ -680,7 +685,21 @@ body {
   display: flex;
   flex-direction: column;
   gap: 10px;
-  margin-bottom: 2rem;
+  /* was 2rem, when the Begin button sat below the list (until 19 Aug 2026) */
+  margin-bottom: 0.5rem;
+}
+
+/* One row per choice: the tile, plus the Begin button when that tile is the
+   selected one. Added 19 Aug 2026 — Begin used to sit at the foot of the list,
+   which meant scrolling down on a phone after every choice. */
+.option-row {
+  display: flex;
+  align-items: stretch;
+  gap: 10px;
+}
+.option-row > .option-card {
+  flex: 1;
+  min-width: 0;   /* let the tile shrink instead of pushing the button off-screen */
 }
 
 .option-card {
@@ -723,8 +742,10 @@ body {
 }
 
 .start-btn {
-  width: 100%;
-  padding: 16px;
+  /* was width:100%; padding:16px — full width under the list until 19 Aug 2026 */
+  flex-shrink: 0;
+  padding: 16px 20px;
+  white-space: nowrap;
   border-radius: var(--radius);
   border: none;
   background: var(--gold);
@@ -737,6 +758,28 @@ body {
   box-shadow: 0 4px 16px rgba(200,136,42,0.30);
 }
 .start-btn:hover { background: #b5761a; transform: translateY(-1px); box-shadow: 0 6px 20px rgba(200,136,42,0.35); }
+
+/* The selected tile is narrower, since Begin sits beside it — keep its two lines
+   from wrapping, so it stays the same height as the tiles around it rather than
+   growing taller (19 Aug 2026). */
+.option-row > .option-card.selected .option-text { min-width: 0; }
+.option-row > .option-card.selected .option-text strong,
+.option-row > .option-card.selected .option-text span {
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Narrow phones: trim the button, and drop the description line on the selected
+   tile only, so its name still fits on one line beside the button. */
+@media (max-width: 460px) {
+  .start-btn { padding: 13px 12px; font-size: 15px; }
+  .option-row > .option-card { padding: 12px 10px; gap: 8px; }
+  .option-row > .option-card .option-icon { width: 32px; font-size: 23px; }
+  .option-row > .option-card.selected .option-text strong { font-size: 15px; margin-bottom: 0; }
+  .option-row > .option-card.selected .option-text span { display: none; }
+}
 
 /* ── RESULTS SCREEN ── */
 #resultsScreen {
@@ -982,51 +1025,65 @@ body {
   <a class="flaglink start-flag" id="startFlag" href="#"></a>
 
   <div class="start-options">
-    <div class="option-card selected" data-mode="all" onclick="selectMode(this,'all')">
-      <div class="option-icon">ก–ฮ</div>
-      <div class="option-text">
-        <strong data-i18n="optAll">All consonants</strong>
-        <span data-i18n="optAllSub">All 44 characters · adaptive difficulty</span>
+    <div class="option-row">
+      <div class="option-card selected" data-mode="all" onclick="selectMode(this,'all')">
+        <div class="option-icon">ก–ฮ</div>
+        <div class="option-text">
+          <strong data-i18n="optAll">All consonants</strong>
+          <span data-i18n="optAllSub">All 44 characters · adaptive difficulty</span>
+        </div>
       </div>
     </div>
-    <div class="option-card" data-mode="mid" onclick="selectMode(this,'mid')">
-      <div class="option-icon">ก</div>
-      <div class="option-text">
-        <strong data-i18n="optMid">Middle class</strong>
-        <span data-i18n="optMidSub">9 characters · start here</span>
+    <div class="option-row">
+      <div class="option-card" data-mode="mid" onclick="selectMode(this,'mid')">
+        <div class="option-icon">ก</div>
+        <div class="option-text">
+          <strong data-i18n="optMid">Middle class</strong>
+          <span data-i18n="optMidSub">9 characters · start here</span>
+        </div>
       </div>
     </div>
-    <div class="option-card" data-mode="high" onclick="selectMode(this,'high')">
-      <div class="option-icon">ข</div>
-      <div class="option-text">
-        <strong data-i18n="optHigh">High class</strong>
-        <span data-i18n="optHighSub">11 characters</span>
+    <div class="option-row">
+      <div class="option-card" data-mode="high" onclick="selectMode(this,'high')">
+        <div class="option-icon">ข</div>
+        <div class="option-text">
+          <strong data-i18n="optHigh">High class</strong>
+          <span data-i18n="optHighSub">11 characters</span>
+        </div>
       </div>
     </div>
-    <div class="option-card" data-mode="low" onclick="selectMode(this,'low')">
-      <div class="option-icon">ค</div>
-      <div class="option-text">
-        <strong data-i18n="optLow">Low class</strong>
-        <span data-i18n="optLowSub">24 characters</span>
+    <div class="option-row">
+      <div class="option-card" data-mode="low" onclick="selectMode(this,'low')">
+        <div class="option-icon">ค</div>
+        <div class="option-text">
+          <strong data-i18n="optLow">Low class</strong>
+          <span data-i18n="optLowSub">24 characters</span>
+        </div>
       </div>
     </div>
-    <div class="option-card" data-mode="num" onclick="selectMode(this,'num')">
-      <div class="option-icon">๓</div>
-      <div class="option-text">
-        <strong data-i18n="optNum">Numerals ๐–๙</strong>
-        <span data-i18n="optNumSub">10 characters · digits and their names</span>
+    <div class="option-row">
+      <div class="option-card" data-mode="num" onclick="selectMode(this,'num')">
+        <div class="option-icon">๓</div>
+        <div class="option-text">
+          <strong data-i18n="optNum">Numerals ๐–๙</strong>
+          <span data-i18n="optNumSub">10 characters · digits and their names</span>
+        </div>
       </div>
     </div>
-    <div class="option-card" data-mode="everything" onclick="selectMode(this,'everything')">
-      <div class="option-icon icon-pair">ก๙</div>
-      <div class="option-text">
-        <strong data-i18n="optEvery">Everything</strong>
-        <span data-i18n="optEverySub">All 54 characters · consonants and numerals</span>
+    <div class="option-row">
+      <div class="option-card" data-mode="everything" onclick="selectMode(this,'everything')">
+        <div class="option-icon icon-pair">ก๙</div>
+        <div class="option-text">
+          <strong data-i18n="optEvery">Everything</strong>
+          <span data-i18n="optEverySub">All 54 characters · consonants and numerals</span>
+        </div>
       </div>
     </div>
   </div>
 
-  <button class="start-btn" onclick="startGame()" data-i18n="begin">Begin →</button>
+  <!-- placeStartBtn() moves this next to the selected tile (19 Aug 2026); it only
+       sits here in the markup as its parking spot before the first placement -->
+  <button class="start-btn" id="startBtn" onclick="startGame()" data-i18n="begin">Begin →</button>
 </div>
 
 <!-- GAME SCREEN -->
@@ -1638,6 +1695,15 @@ function selectMode(el, mode) {
   document.querySelectorAll('.option-card').forEach(c => c.classList.remove('selected'));
   el.classList.add('selected');
   selectedSet = mode;
+  placeStartBtn(el);   // added 19 Aug 2026
+}
+
+// Begin sits on the same row as the selected tile, so there is nothing to
+// scroll to on a phone after picking a set (19 Aug 2026).
+function placeStartBtn(card) {
+  const btn = document.getElementById('startBtn');
+  const row = card && card.closest('.option-row');
+  if (row && btn.parentNode !== row) row.appendChild(btn);
 }
 
 function getPool() {
@@ -2199,6 +2265,7 @@ function showResults() {
 
 function init() {
   applyLang();
+  placeStartBtn(document.querySelector('.option-card.selected'));   // added 19 Aug 2026
   initTTS();
   initCanvases();
   // Warm the local Thai face so the first ghost letterform is not drawn with a fallback
