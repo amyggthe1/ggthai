@@ -710,7 +710,13 @@ body {
   justify-content: center;
 }
 #strokeSlotCard .stroke-panel img { width: 96px; height: 96px; }
-#strokeSlotCard .stroke-text { font-size: 15px; text-align: left; }
+/* 19 Aug 2026: the animation carries the tile on its own — the name and meaning
+   arrive with the example chip after grading, so this line would repeat them.
+   Was: #strokeSlotCard .stroke-text { font-size: 15px; text-align: left; } */
+#strokeSlotCard .stroke-text { display: none; }
+/* The spoken-name chip, lifted up from the feedback panel to sit on the right
+   of the animation once the answer has been graded (19 Aug 2026) */
+#strokePanel > .feedback-example { margin-top: 0; }
 .stroke-text b { font-weight: 400; font-style: italic; color: var(--ink); }
 
 /* ── START SCREEN ── */
@@ -1901,6 +1907,7 @@ function nextQuestion() {
   document.getElementById('feedbackMain').textContent = '';
   document.getElementById('feedbackSub').textContent = '';
   document.getElementById('feedbackExample').style.display = 'none';
+  moveToSlot('feedbackExample', 'feedback');   // back inside the panel (19 Aug 2026)
   autoSpoken = false;   // a new question may speak once again (19 Aug 2026)
   hideSpeakerBtn();
   resetDrawing();
@@ -2058,6 +2065,9 @@ function applyResult(correct) {
   // worked this way since 16 Aug 2026; the three multiple-choice modes joined
   // it on 19 Aug 2026. Previous version:
   //   placeNextBtn(questionMode === 'draw');
+  // Draw mode: the spoken-name chip joins the animation inside the tile, to the
+  // right of it, instead of staying down in the feedback panel (19 Aug 2026).
+  if (questionMode === 'draw') moveToSlot('feedbackExample', 'strokePanel');
   // Feedback first, then Next — that order puts the small Next on the right.
   placeFeedback(true);   // added 19 Aug 2026
   placeNextBtn(true);
