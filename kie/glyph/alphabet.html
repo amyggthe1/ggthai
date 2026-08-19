@@ -415,8 +415,13 @@ body {
   min-width: 0;
   margin-bottom: 0;
 }
+/* both halves are filled by their content, so stretch rather than centre */
+#nextSlotTop > .feedback,
+#nextSlotTop > .next-btn { justify-self: stretch; }
 #nextSlotTop > .next-btn {
-  width: auto;
+  /* 19 Aug 2026: fills its half of the row (was width:auto, a compact button
+     centred in the half) — a bigger tap target for a thumb on a phone */
+  width: 100%;
   padding: 14px 20px;
   white-space: nowrap;
 }
