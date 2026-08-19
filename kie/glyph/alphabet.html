@@ -700,6 +700,17 @@ body {
   flex-shrink: 0;
 }
 .stroke-text { font-size: 13px; color: var(--ink2); line-height: 1.45; }
+
+/* Inside the tile (19 Aug 2026) the panel is the tile's own content, so it drops
+   the card-on-card background and centres itself. */
+#strokeSlotCard .stroke-panel {
+  background: transparent;
+  border: none;
+  margin-top: 0;
+  justify-content: center;
+}
+#strokeSlotCard .stroke-panel img { width: 96px; height: 96px; }
+#strokeSlotCard .stroke-text { font-size: 15px; text-align: left; }
 .stroke-text b { font-weight: 400; font-style: italic; color: var(--ink); }
 
 /* ── START SCREEN ── */
@@ -1249,6 +1260,11 @@ body {
         </svg>
       </button>
     </div>
+    <!-- Draw mode: on reveal, the stroke panel (animation + name + meaning) is
+         lifted in here and the clue above is hidden, so the answer lands in the
+         tile instead of at the foot of the page (19 Aug 2026). -->
+    <div id="strokeSlotCard"></div>
+
     <div class="char-hint" id="charHint"></div>
     <button class="speaker-btn" id="speakerBtn" onclick="speakCurrent()" aria-label="Hear pronunciation">
       <svg class="speaker-icon" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -1293,9 +1309,11 @@ body {
         <button class="grade-btn bad" onclick="gradeDrawing(false)" data-i18n="missedIt">✗ Missed it</button>
       </div>
     </div>
-    <div class="stroke-panel" id="strokePanel">
-      <img id="strokeImg" alt="" data-i18n-alt="altStroke">
-      <div class="stroke-text" id="strokeText"></div>
+    <div id="strokeSlotBottom">
+      <div class="stroke-panel" id="strokePanel">
+        <img id="strokeImg" alt="" data-i18n-alt="altStroke">
+        <div class="stroke-text" id="strokeText"></div>
+      </div>
     </div>
   </div>
 
@@ -1589,6 +1607,11 @@ function stopAudio() {
 // true when this character can be heard at all on this device
 function canHear(c) { return !!(c && (c.audio || thaiVoice)); }
 
+// One automatic playback per question. Draw mode speaks on reveal, so grading
+// afterwards must not say the name a second time (19 Aug 2026). Manual taps on
+// a speaker button are never affected.
+let autoSpoken = false;
+
 // ── SOUND ON / OFF ── (added 18 Aug 2026)
 function toggleSound() { setSound(!soundOn); }
 
@@ -1627,8 +1650,11 @@ function showSpeakerBtn() {
   if (ttsReady && !canHear(currentChar)) {
     noTts.style.display = 'block';
   }
-  // Auto-speak on reveal
-  setTimeout(() => speakCurrent(), 120);
+  // Auto-speak, but only once per question — Draw mode already spoke on reveal
+  if (!autoSpoken) {
+    autoSpoken = true;
+    setTimeout(() => speakCurrent(), 120);
+  }
 }
 
 function hideSpeakerBtn() {
@@ -1875,6 +1901,7 @@ function nextQuestion() {
   document.getElementById('feedbackMain').textContent = '';
   document.getElementById('feedbackSub').textContent = '';
   document.getElementById('feedbackExample').style.display = 'none';
+  autoSpoken = false;   // a new question may speak once again (19 Aug 2026)
   hideSpeakerBtn();
   resetDrawing();
 
@@ -2273,6 +2300,10 @@ function resetDrawing() {
   ghostCanvas.style.opacity = '0';
   document.getElementById('revealBtn').style.display = 'block';
   placeRevealBtn(false);   // blank canvas, so Reveal starts down there again
+  // Give the tile its clue back and send the stroke panel home (19 Aug 2026)
+  moveToSlot('strokePanel', 'strokeSlotBottom');
+  document.getElementById('charHint').style.display = '';
+  if (questionMode === 'draw') document.getElementById('promptBlock').style.display = 'block';
   document.getElementById('gradeRow').classList.remove('visible');
   placeGradeRow(false);   // back under the canvas while hidden
   document.getElementById('strokePanel').classList.remove('visible');
@@ -2304,6 +2335,12 @@ function revealGlyph() {
   } else {
     panel.classList.remove('visible');
   }
+  // The revealed answer takes over the tile: the clue and the "Draw this…" hint
+  // step aside and the panel moves up into the card (19 Aug 2026).
+  document.getElementById('promptBlock').style.display = 'none';
+  document.getElementById('charHint').style.display = 'none';
+  moveToSlot('strokePanel', 'strokeSlotCard');
+  autoSpoken = true;       // the reveal is the one automatic playback per question
   speakCurrent();
   // Reveal is clicked from down by the canvas — bring the prompt, the grade
   // buttons and the revealed letterform back into view together.
