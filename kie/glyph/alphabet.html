@@ -587,6 +587,9 @@ body {
 /* Keep the centred prompt / glyph clear of the switch on narrow screens.
    Draw mode only until 19 Aug 2026; now applied in every question mode. */
 .char-card.has-sound-toggle { padding-left: 4.2rem; padding-right: 4.2rem; }
+/* …but the revealed answer needs that room back — it sits below the switch, so it
+   can use the full width of the tile (19 Aug 2026) */
+.char-card.has-sound-toggle #strokeSlotCard { margin-left: -3.4rem; margin-right: -3.4rem; }
 
 /* Canvas */
 .draw-wrap { margin-bottom: 1rem; }
@@ -717,9 +720,15 @@ body {
    arrive with the example chip after grading, so this line would repeat them.
    Was: #strokeSlotCard .stroke-text { font-size: 15px; text-align: left; } */
 #strokeSlotCard .stroke-text { display: none; }
-/* The spoken-name chip, lifted up from the feedback panel to sit on the right
-   of the animation once the answer has been graded (19 Aug 2026) */
-#strokePanel > .feedback-example { margin-top: 0; }
+/* The feedback block, lifted up from below the tile to sit on the right of the
+   animation once the answer has been graded (19 Aug 2026). It wraps under the
+   animation when the tile is too narrow for both — the case on a phone. */
+#strokePanel { flex-wrap: wrap; justify-content: center; }
+#strokePanel > .feedback {
+  margin-bottom: 0;
+  min-height: 0;
+  min-width: 0;
+}
 .stroke-text b { font-weight: 400; font-style: italic; color: var(--ink); }
 
 /* ── START SCREEN ── */
@@ -1910,7 +1919,6 @@ function nextQuestion() {
   document.getElementById('feedbackMain').textContent = '';
   document.getElementById('feedbackSub').textContent = '';
   document.getElementById('feedbackExample').style.display = 'none';
-  moveToSlot('feedbackExample', 'feedback');   // back inside the panel (19 Aug 2026)
   autoSpoken = false;   // a new question may speak once again (19 Aug 2026)
   hideSpeakerBtn();
   resetDrawing();
@@ -2068,11 +2076,12 @@ function applyResult(correct) {
   // worked this way since 16 Aug 2026; the three multiple-choice modes joined
   // it on 19 Aug 2026. Previous version:
   //   placeNextBtn(questionMode === 'draw');
-  // Draw mode: the spoken-name chip joins the animation inside the tile, to the
-  // right of it, instead of staying down in the feedback panel (19 Aug 2026).
-  if (questionMode === 'draw') moveToSlot('feedbackExample', 'strokePanel');
-  // Feedback first, then Next — that order puts the small Next on the right.
-  placeFeedback(true);   // added 19 Aug 2026
+  // Draw mode: the whole feedback block — verdict, name, meaning and the spoken
+  // name chip — sits inside the tile, to the right of the animation. The three
+  // multiple-choice modes keep it in the row above Next.
+  // (19 Aug 2026; a first pass moved the chip alone, corrected to the whole block.)
+  if (questionMode === 'draw') moveToSlot('feedback', 'strokePanel');
+  else placeFeedback(true);
   placeNextBtn(true);
   document.getElementById('nextBtn').classList.add('visible');
   document.getElementById('nextBtn').textContent = t(qNum >= TOTAL_Q ? 'seeResults' : 'next');
