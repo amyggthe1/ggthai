@@ -399,25 +399,30 @@ body {
 /* 19 Aug 2026: the slot is a row. After an answer it holds the feedback panel
    on the left and a compact Next button on the right, so the result and the way
    forward are both right under the question — no scrolling past the answers. */
+/* 19 Aug 2026, second pass: two equal halves instead of a flex row, so the
+   feedback sits centred in the left half and Next centred in the right half.
+   Was: display:flex with .feedback{flex:1} and .next-btn{width:auto;flex-shrink:0},
+   which pushed Next hard against the right edge. */
 #nextSlotTop {
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   align-items: center;
+  justify-items: center;
   gap: 10px;
 }
 #nextSlotTop > .feedback {
-  flex: 1;
+  width: 100%;
   min-width: 0;
   margin-bottom: 0;
 }
-#nextSlotTop > .grade-row { flex: 1; }
 #nextSlotTop > .next-btn {
   width: auto;
-  flex-shrink: 0;
   padding: 14px 20px;
   white-space: nowrap;
 }
-/* Alone in the slot (no feedback beside it), Next keeps the full width */
-#nextSlotTop > .next-btn:only-child { flex: 1; }
+/* Draw mode's grade pair, and Next when it is alone, take the whole row */
+#nextSlotTop > .grade-row { grid-column: 1 / -1; width: 100%; }
+#nextSlotTop > .next-btn:only-child { grid-column: 1 / -1; width: 100%; }
 
 @media (max-width: 460px) {
   #nextSlotTop { gap: 8px; }
