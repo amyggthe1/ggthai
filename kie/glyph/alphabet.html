@@ -396,6 +396,34 @@ body {
    element between questions). */
 #nextSlotTop.filled { margin-bottom: 1.25rem; }
 
+/* 19 Aug 2026: the slot is a row. After an answer it holds the feedback panel
+   on the left and a compact Next button on the right, so the result and the way
+   forward are both right under the question — no scrolling past the answers. */
+#nextSlotTop {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+#nextSlotTop > .feedback {
+  flex: 1;
+  min-width: 0;
+  margin-bottom: 0;
+}
+#nextSlotTop > .grade-row { flex: 1; }
+#nextSlotTop > .next-btn {
+  width: auto;
+  flex-shrink: 0;
+  padding: 14px 20px;
+  white-space: nowrap;
+}
+/* Alone in the slot (no feedback beside it), Next keeps the full width */
+#nextSlotTop > .next-btn:only-child { flex: 1; }
+
+@media (max-width: 460px) {
+  #nextSlotTop { gap: 8px; }
+  #nextSlotTop > .next-btn { padding: 12px 12px; font-size: 15px; }
+}
+
 /* ── MODE PILLS ── */
 /* was a 3-up flex row; now a grid so the 4th "Draw it" pill fits without squashing */
 .mode-row {
@@ -1247,6 +1275,9 @@ body {
     </div>
   </div>
 
+  <!-- Home of the feedback panel between questions. On answering, it is lifted
+       into #nextSlotTop next to the Next button (19 Aug 2026). -->
+  <div id="feedbackSlotBottom">
   <div class="feedback" id="feedback">
     <div class="feedback-main" id="feedbackMain"></div>
     <div class="feedback-sub" id="feedbackSub"></div>
@@ -1260,6 +1291,7 @@ body {
       <span class="example-word" id="exampleWord"></span>
       <span class="example-label" id="exampleLabel"></span>
     </div>
+  </div>
   </div>
 
   <!-- Parking spot for the Next button while it is hidden between questions.
@@ -1813,6 +1845,7 @@ function nextQuestion() {
   answered = false;
   document.getElementById('nextBtn').classList.remove('visible');
   placeNextBtn(false);   // back to its default home while hidden
+  placeFeedback(false);  // idem for the feedback panel (19 Aug 2026)
   syncTopSlot();
   document.getElementById('feedback').className = 'feedback';
   document.getElementById('feedbackMain').textContent = '';
@@ -1974,6 +2007,8 @@ function applyResult(correct) {
   // worked this way since 16 Aug 2026; the three multiple-choice modes joined
   // it on 19 Aug 2026. Previous version:
   //   placeNextBtn(questionMode === 'draw');
+  // Feedback first, then Next — that order puts the small Next on the right.
+  placeFeedback(true);   // added 19 Aug 2026
   placeNextBtn(true);
   document.getElementById('nextBtn').classList.add('visible');
   document.getElementById('nextBtn').textContent = t(qNum >= TOTAL_Q ? 'seeResults' : 'next');
@@ -1984,6 +2019,12 @@ function applyResult(correct) {
 // Park the Next button under the prompt (atTop) or back below the feedback panel
 function placeNextBtn(atTop) {
   moveToSlot('nextBtn', atTop ? 'nextSlotTop' : 'nextSlotBottom');
+}
+
+// Park the feedback panel next to Next under the prompt (atTop), or back at the
+// foot of the page while the next question is being answered (19 Aug 2026)
+function placeFeedback(atTop) {
+  moveToSlot('feedback', atTop ? 'nextSlotTop' : 'feedbackSlotBottom');
 }
 
 // Park the Got it / Missed it pair under the prompt (atTop) or back under the canvas
