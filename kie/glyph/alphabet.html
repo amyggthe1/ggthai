@@ -407,6 +407,12 @@ body {
 }
 
 .mode-pill {
+  /* 19 Aug 2026: flex-centred. The grid stretches every pill to the height of
+     the tallest one, so a one-line label used to sit at the top of a pill made
+     two lines high by its neighbour. Was a plain block with text-align only. */
+  display: flex;
+  align-items: center;
+  justify-content: center;
   padding: 8px 4px;
   border-radius: 10px;
   border: 0.5px solid var(--paper3);
@@ -468,6 +474,10 @@ body {
   flex-shrink: 0;
 }
 .clue-chip {
+  /* 19 Aug 2026: flex-centred, same reason as .mode-pill above */
+  display: flex;
+  align-items: center;
+  justify-content: center;
   flex: 1;
   padding: 5px 4px;
   border-radius: 20px;
