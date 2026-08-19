@@ -518,7 +518,8 @@ body {
 .sound-toggle:hover { border-color: var(--gold); }
 .sound-toggle.muted { color: var(--ink3); }
 
-/* Draw mode: keep the centred prompt clear of the switch on narrow screens */
+/* Keep the centred prompt / glyph clear of the switch on narrow screens.
+   Draw mode only until 19 Aug 2026; now applied in every question mode. */
 .char-card.has-sound-toggle { padding-left: 4.2rem; padding-right: 4.2rem; }
 
 /* Canvas */
@@ -1074,10 +1075,11 @@ body {
 
   <div class="char-card" id="charCard">
     <div class="class-pip pip-mid" id="classPip">middle</div>
-    <!-- Draw mode only: sound on/off, for practising in a public place without
-         disturbing anyone (added 18 Aug 2026). Muting silences every playback,
-         including the automatic one on reveal. Sits inside the card, top-right
-         under the class pip (moved there 18 Aug 2026, second pass). -->
+    <!-- Sound on/off, for practising in a public place without disturbing anyone
+         (added 18 Aug 2026; Draw mode only at first, shown in all four question
+         modes since 19 Aug 2026). Muting silences every playback, including the
+         automatic one on reveal. Sits inside the card, top-right under the class
+         pip (moved there 18 Aug 2026, second pass). -->
     <div class="sound-toggle-row" id="soundToggleRow" style="display:none">
       <button class="sound-toggle" id="soundToggleBtn" onclick="toggleSound()" aria-pressed="true">
         <svg id="iconSoundOn" width="16" height="16" viewBox="0 0 20 20" fill="none" aria-hidden="true">
@@ -1732,8 +1734,12 @@ function renderQuestion() {
   document.getElementById('choices').style.display = drawing ? 'none' : 'grid';
   document.getElementById('drawWrap').style.display = drawing ? 'block' : 'none';
   document.getElementById('clueRow').style.display = drawing ? 'flex' : 'none';
-  document.getElementById('soundToggleRow').style.display = drawing ? 'block' : 'none';   // added 18 Aug 2026
-  document.getElementById('charCard').classList.toggle('has-sound-toggle', drawing);      // added 18 Aug 2026
+  // Sound switch: Draw-mode only when added 18 Aug 2026, shown in all four modes
+  // since 19 Aug 2026. Previous version:
+  //   document.getElementById('soundToggleRow').style.display = drawing ? 'block' : 'none';
+  //   document.getElementById('charCard').classList.toggle('has-sound-toggle', drawing);
+  document.getElementById('soundToggleRow').style.display = 'block';
+  document.getElementById('charCard').classList.add('has-sound-toggle');
   document.getElementById('charDisplay').style.display = drawing ? 'none' : 'block';
   document.getElementById('promptBlock').style.display = drawing ? 'block' : 'none';
   if (drawing) { renderPrompt(); return; }
