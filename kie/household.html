@@ -141,30 +141,25 @@
      Takes the reader back to the landing page (home.html) from anywhere on the
      site. Self-contained on purpose: its own `th-home-*` class names and its own
      <style> block, so the identical snippet drops into every page without
-     touching that page's stylesheet. Traditional Thai house (เรือนไทย): steep
-     roof with the crossed gable finials. -->
+     touching that page's stylesheet. The icon is home-icon.png, Antoine's own
+     drawing of a traditional Thai house (เรือนไทย). -->
 <style>
 .th-home-btn{
   position:fixed; top:12px; left:12px; z-index:9999;
   width:42px; height:42px;
   display:flex; align-items:center; justify-content:center;
-  border-radius:50%; background:#fffdf9; border:1px solid #e6dfd5;
-  box-shadow:0 2px 8px rgba(0,0,0,.12); color:#b5761a; text-decoration:none;
+  border-radius:50%; background:#fff; border:1px solid #e6dfd5;
+  box-shadow:0 2px 8px rgba(0,0,0,.12); text-decoration:none;
   transition:transform .12s, box-shadow .12s, border-color .12s;
 }
 .th-home-btn:hover{transform:translateY(-1px); border-color:#d4a012; box-shadow:0 4px 14px rgba(212,160,18,.28)}
-.th-home-btn svg{width:26px; height:26px; display:block}
+.th-home-btn img{width:30px; height:30px; display:block}
 @media print{.th-home-btn{display:none}}
 </style>
 <a class="th-home-btn" href="home.html" title="Home — หน้าแรก" aria-label="Back to the main page">
-  <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.9"
-       stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-    <path d="M12.2 10.4 19.4 1.9M19.8 10.4 12.6 1.9" stroke-width="1.6"/>
-    <path d="M16 7.4 4.4 18.2h23.2L16 7.4z" fill="currentColor" fill-opacity="0.13"/>
-    <path d="M8.6 18.2v8.6h14.8v-8.6"/>
-    <path d="M6.2 26.8h19.6"/>
-    <path d="M13.9 26.8v-4.8h4.2v4.8"/>
-  </svg>
+  <!-- 19 Aug 2026: Antoine's own drawing (Home.png, trimmed and resized to
+       home-icon.png) replaces the inline SVG house that was here before -->
+  <img src="home-icon.png" alt="" width="30" height="30">
 </a>
 
 
