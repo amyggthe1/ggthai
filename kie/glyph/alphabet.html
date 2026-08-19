@@ -412,10 +412,13 @@ body {
    which pushed Next hard against the right edge. */
 #nextSlotTop {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  /* 19 Aug 2026, third pass: one full-width column, so Next is as wide as the
+     tile and the drawing area. The feedback line sits above it.
+     Was: grid-template-columns: 1fr 1fr — feedback left, Next right. */
+  grid-template-columns: 1fr;
   align-items: center;
   justify-items: center;
-  gap: 10px;
+  gap: 8px;
 }
 #nextSlotTop > .feedback {
   width: 100%;
