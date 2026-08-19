@@ -391,8 +391,9 @@ body {
 .next-btn.visible { display: block; }
 .next-btn:hover { background: var(--ink2); transform: translateY(-1px); }
 
-/* Draw mode lifts its action buttons up here; only claim the space when one is
-   actually showing (the slot can hold a hidden element between questions). */
+/* Every mode lifts its action buttons up here (Draw mode only until 19 Aug 2026);
+   only claim the space when one is actually showing (the slot can hold a hidden
+   element between questions). */
 #nextSlotTop.filled { margin-bottom: 1.25rem; }
 
 /* ── MODE PILLS ── */
@@ -1225,7 +1226,9 @@ body {
     </div>
   </div>
 
-  <!-- Home of the Next button in the three multiple-choice modes -->
+  <!-- Parking spot for the Next button while it is hidden between questions.
+       It was its visible home in the three multiple-choice modes until
+       19 Aug 2026, when Next moved up to #nextSlotTop in every mode. -->
   <div id="nextSlotBottom">
     <button class="next-btn" id="nextBtn" onclick="nextQuestion()">Next →</button>
   </div>
@@ -1927,9 +1930,12 @@ function applyResult(correct) {
   document.getElementById('exampleSpeakBtn').classList.remove('speaking');
 
   updateStats();
-  // In Draw mode the canvas and stroke panel push the page long, so the Next
-  // button sits just under the prompt instead of below everything.
-  placeNextBtn(questionMode === 'draw');
+  // The Next button always sits just under the prompt, between the question and
+  // the answers, so there is nothing to scroll to on a phone. Draw mode has
+  // worked this way since 16 Aug 2026; the three multiple-choice modes joined
+  // it on 19 Aug 2026. Previous version:
+  //   placeNextBtn(questionMode === 'draw');
+  placeNextBtn(true);
   document.getElementById('nextBtn').classList.add('visible');
   document.getElementById('nextBtn').textContent = t(qNum >= TOTAL_Q ? 'seeResults' : 'next');
   syncTopSlot();
