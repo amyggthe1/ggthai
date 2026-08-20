@@ -627,6 +627,9 @@ body {
   object-fit: contain;
   z-index: 2;
   pointer-events: none;
+  /* The artwork has an opaque white background; multiply lets the gold ghost
+     letterform underneath show through it (20 Aug 2026) */
+  mix-blend-mode: multiply;
 }
 
 .canvas-hint {
@@ -2331,6 +2334,19 @@ function redrawInk() {
   if (!revealed && !activeStroke) placeRevealBtn(has);
 }
 
+// The stroke-order artwork, played in the writing area after self-grading
+// (20 Aug 2026). The ghost letterform steps aside for it: same letter, different
+// scale, so only one of the two is ever on screen.
+function playStrokeAnimation() {
+  const gif = STROKE_GIF[currentChar && currentChar.th];
+  const anim = document.getElementById('strokeAnim');
+  if (!gif) return;                     // numerals have no artwork — ghost stays
+  ghostCanvas.classList.remove('show');
+  ghostCanvas.style.opacity = '0';
+  anim.src = gif + '?r=' + Date.now();  // cache-bust so it restarts at stroke 1
+  anim.style.display = 'block';
+}
+
 // Park Reveal under the prompt (atTop) or back under the canvas (19 Aug 2026)
 function placeRevealBtn(atTop) {
   moveToSlot('revealBtn', atTop ? 'nextSlotTop' : 'revealSlotBottom');
@@ -2411,22 +2427,19 @@ function revealGlyph() {
   syncTopSlot();
 
   // Stroke-order animation for this character, if we have artwork for it
+  // Two stages in the writing area (20 Aug 2026). On reveal: the gold ghost
+  // letterform only, over your ink, so you can compare the two shapes. The stroke
+  // animation waits — it is drawn at a different scale from the ghost, so showing
+  // both at once never lined up. playStrokeAnimation() starts it after grading,
+  // once the ink is wiped and the ghost is out of the way.
   const gif = STROKE_GIF[currentChar.th];
   const panel = document.getElementById('strokePanel');
-  const anim = document.getElementById('strokeAnim');
+  document.getElementById('strokeAnim').style.display = 'none';
   if (gif) {
-    // cache-bust so the GIF restarts from stroke 1 every time it is revealed
-    anim.src = gif + '?r=' + Date.now();
-    anim.style.display = 'block';
-    // the animation already draws the letterform, so the static ghost stands down
-    ghostCanvas.classList.remove('show');
-    ghostCanvas.style.opacity = '0';
     document.getElementById('strokeText').innerHTML =
       `<b>${currentChar.th}</b> — ${phonOf(currentChar)}<br>${cap(meaningOf(currentChar))}`;
     panel.classList.add('visible');
   } else {
-    // no artwork for this one (the numerals): fall back to the ghost outline
-    anim.style.display = 'none';
     panel.classList.remove('visible');
   }
   // The revealed answer takes over the tile: the clue and the "Draw this…" hint
@@ -2455,10 +2468,11 @@ function gradeDrawing(ok) {
   placeGradeRow(false);           // frees the slot for the Next button
   applyResult(ok);
   // Once you have judged your own attempt, your ink has done its job — wipe it so
-  // the stroke animation underneath is left clear to study (20 Aug 2026).
+  // the writing area is left clear (20 Aug 2026).
   // redrawInk() also greys out Undo and Clear, since there is nothing left to undo.
   strokes = [];
   redrawInk();
+  playStrokeAnimation();   // …and the stroke order plays out in the empty box
   // The grade buttons sit low on the page — bring the prompt, the Next button and
   // the revealed letterform back into view instead of leaving the user down there.
   document.getElementById('charCard').scrollIntoView({ behavior: 'smooth', block: 'start' });
