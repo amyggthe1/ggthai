@@ -1154,6 +1154,132 @@ body {
 }
 .th-home-btn:hover{transform:translateY(-1px); border-color:#d4a012; box-shadow:0 4px 14px rgba(212,160,18,.28)}
 .th-home-btn img{width:30px; height:30px; display:block}
+
+/* Keyboard shortcut legend. Hidden by default — the desktop block below is the
+   only thing that shows it, so it must come BEFORE that block: both rules have
+   the same specificity, so source order decides. */
+.kbd-legend {
+  display: none;
+  margin: -0.5rem 0 1.5rem;
+  font-size: 12px;
+  color: var(--ink3);
+  font-style: italic;
+  text-align: center;
+}
+.kbd-legend kbd {
+  font-family: 'DM Mono', monospace;
+  font-style: normal;
+  font-size: 11px;
+  border: 0.5px solid var(--paper3);
+  background: var(--paper2);
+  border-radius: 4px;
+  padding: 1px 5px;
+}
+
+/* ── DESKTOP LAYOUT ── added 20 Aug 2026 ─────────────────────────────────────
+   Everything above this point is the original phone-first design: one 520px
+   column, with the 460px and 420px blocks shrinking it further for small
+   handsets. None of it was changed. This block only ADDS rules, and it is
+   gated twice:
+       min-width: 900px  — the window is wide enough for two columns
+       pointer: fine     — the primary input is a mouse, trackpad or stylus
+   so every touch device keeps the layout it had before today. A phone never
+   matches. An iPad does not match either — not in landscape at 1024px, and
+   not with a keyboard attached, because iPadOS keeps touch as the primary
+   pointer. A 2-in-1 such as a Surface Pro matches while its Type Cover or a
+   mouse is attached and stops matching the moment it is used as a tablet;
+   the query is re-evaluated live, so the page follows the hardware.
+   `any-pointer: fine` was deliberately NOT used: it matches an iPad merely
+   because an Apple Pencil is paired.
+   ------------------------------------------------------------------------ */
+@media (min-width: 900px) and (pointer: fine) {
+
+  /* Start and results stay one centred column, just a roomier one */
+  #startScreen, #resultsScreen { max-width: 720px; }
+
+  /* The six sets, two per row instead of six stacked. placeStartBtn() still
+     appends Begin into the selected .option-row, so it keeps its place beside
+     the chosen tile. */
+  .start-options { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+  /* ── The game screen becomes two columns ──
+     Same DOM, re-placed with named areas: the character card takes the left
+     column and stays put while the answer controls stack on the right, so a
+     whole round is visible without scrolling. Any area whose element is
+     display:none (the clue row outside Draw mode, the canvas inside the three
+     multiple-choice modes) collapses to zero height on its own. */
+  #gameScreen.active {
+    display: grid;
+    max-width: 1120px;
+    column-gap: 2rem;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    grid-template-areas:
+      "bar    bar"
+      "modes  modes"
+      "clue   clue"
+      "card   slot"
+      "card   choices"
+      "card   legend"
+      "card   draw"
+      "card   feedback"
+      "card   next"
+      "strip  strip";
+    align-content: start;
+    padding-bottom: 3rem;
+  }
+  #gameScreen.active > .top-bar            { grid-area: bar; }
+  #gameScreen.active > .mode-row           { grid-area: modes; }
+  #gameScreen.active > .clue-row           { grid-area: clue; }
+  #gameScreen.active > .char-card          { grid-area: card; align-self: start;
+                                             position: sticky; top: 1.25rem;
+                                             margin-bottom: 0; }
+  #gameScreen.active > #nextSlotTop        { grid-area: slot; }
+  #gameScreen.active > .choices            { grid-area: choices; }
+  #gameScreen.active > .kbd-legend         { grid-area: legend; }
+  #gameScreen.active > .draw-wrap          { grid-area: draw; }
+  #gameScreen.active > #feedbackSlotBottom { grid-area: feedback; }
+  #gameScreen.active > #nextSlotBottom     { grid-area: next; }
+  #gameScreen.active > .review-strip       { grid-area: strip; }
+
+  /* renderQuestion() sets .char-display's font-size inline (120px, or 96/52px in
+     Sound → Thai), so no font-size rule here could ever win — and `transform`
+     is taken by the popIn animation. `zoom` multiplies whichever inline size the
+     JS picked, keeps the three modes in proportion, and leaves the animation
+     alone. A browser that ignores zoom simply shows the phone-sized glyph.
+     min-height stops the card looking squat beside the tall answer column. */
+  .char-card    { padding: 2.5rem 2rem 2rem; min-height: 360px; }
+  .char-display { zoom: 1.35; }
+  .prompt-main  { font-size: 44px; }
+  .prompt-main.small { font-size: 34px; }
+
+  /* One answer per line: faster to hit with a mouse than a 2x2 grid, and it
+     leaves room for the shortcut badge */
+  .choices    { grid-template-columns: 1fr; gap: 12px; }
+  .choice-btn { padding: 16px 18px; font-size: 18px; }
+
+  /* Keep the writing area square and make it bigger. sizeCanvases() rebuilds
+     the backing store from the CSS box on every resize, so nothing in the JS
+     needs to know this rule exists. */
+  .canvas-box { max-height: 420px; max-width: 420px; margin: 0 auto; }
+
+  /* Keyboard shortcut badge on each answer. The number comes from data-key,
+     set in renderQuestion(); the attribute is harmless on a phone, and this
+     is the only rule that ever renders it. */
+  .choice-btn[data-key] { position: relative; padding-right: 48px; }
+  .choice-btn[data-key]::after {
+    content: attr(data-key);
+    position: absolute; right: 14px; top: 50%; transform: translateY(-50%);
+    width: 22px; height: 22px; border-radius: 6px;
+    border: 0.5px solid var(--paper3); background: var(--paper2);
+    color: var(--ink3); font-family: 'DM Mono', monospace; font-size: 12px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .choice-btn[data-key]:disabled::after { opacity: 0.35; }
+
+  /* The shortcut legend under the answers — desktop only */
+  .kbd-legend { display: block; }
+}
+
 @media print{.th-home-btn{display:none}}
 </style>
 <a class="th-home-btn" href="../home.html" title="Home — หน้าแรก" aria-label="Back to the main page">
@@ -1336,6 +1462,11 @@ body {
 
   <div class="choices" id="choices"></div>
 
+  <!-- Keyboard shortcuts, added 20 Aug 2026. Hidden by default; only the
+       desktop CSS block (min-width 900px + a fine pointer) shows it, so a
+       phone or tablet never renders it. updateKbdLegend() fills it in. -->
+  <div class="kbd-legend" id="kbdLegend"></div>
+
   <!-- Draw mode only: canvas + tools -->
   <div class="draw-wrap" id="drawWrap" style="display:none">
     <div class="canvas-box">
@@ -1468,6 +1599,9 @@ const STR = {
     noVoice: 'Thai voice not available on this device',
     canvasHint: 'Draw the character with your finger, stylus or mouse',
     undo: '↶ Undo', clear: 'Clear',
+    // Keyboard shortcut legend, desktop only (20 Aug 2026)
+    kbdQuiz: '<kbd>1</kbd>–<kbd>4</kbd> answer · <kbd>Enter</kbd> next · <kbd>Space</kbd> replay sound',
+    kbdDraw: '<kbd>Enter</kbd> reveal, then next · <kbd>U</kbd> undo · <kbd>C</kbd> clear · <kbd>G</kbd> got it · <kbd>M</kbd> missed it · <kbd>Space</kbd> replay sound',
     reveal: 'Reveal answer', gotIt: '✓ Got it', missedIt: '✗ Missed it',
     next: 'Next →', seeResults: 'See results →',
     clsMid: 'middle class', clsHigh: 'high class', clsLow: 'low class', clsNum: 'numeral',
@@ -1515,6 +1649,9 @@ const STR = {
     noVoice: 'Aucune voix thaïe sur cet appareil',
     canvasHint: 'Dessine le caractère au doigt, au stylet ou à la souris',
     undo: '↶ Annuler', clear: 'Effacer',
+    // Légende des raccourcis clavier, ordinateur uniquement (20 août 2026)
+    kbdQuiz: '<kbd>1</kbd>–<kbd>4</kbd> répondre · <kbd>Entrée</kbd> suivant · <kbd>Espace</kbd> réécouter',
+    kbdDraw: '<kbd>Entrée</kbd> voir la réponse, puis suivant · <kbd>U</kbd> annuler · <kbd>C</kbd> effacer · <kbd>G</kbd> bonne réponse · <kbd>M</kbd> mauvaise réponse · <kbd>Espace</kbd> réécouter',
     reveal: 'Voir la réponse', gotIt: '✓ Bonne réponse', missedIt: '✗ Mauvaise réponse',
     next: 'Suivant →', seeResults: 'Voir les résultats →',
     clsMid: 'classe moyenne', clsHigh: 'classe haute', clsLow: 'classe basse', clsNum: 'chiffre',
@@ -1923,6 +2060,7 @@ function weightedRandom() {
 
 function setQuestionMode(mode) {
   questionMode = mode;
+  updateKbdLegend();   // 20 Aug 2026: Draw mode has its own shortcut list
   ['Char','Mean','Rom','Draw'].forEach(m => document.getElementById('mode'+m).classList.remove('active'));
   const map = {char:'Char', meaning:'Mean', romanize:'Rom', draw:'Draw'};
   document.getElementById('mode'+map[mode]).classList.add('active');
@@ -2052,6 +2190,9 @@ function renderQuestion() {
     btn.innerHTML = sub
       ? `<span>${label}</span><span class="choice-romanize">${sub}</span>`
       : `<span>${label}</span>`;
+    // 20 Aug 2026: the answer's number, 1-4. Feeds the keyboard shortcut badge,
+    // which only the desktop CSS block renders, and nothing else reads it.
+    btn.dataset.key = i + 1;
     btn.onclick = () => handleAnswer(ch, btn);
     container.appendChild(btn);
   });
@@ -2581,11 +2722,99 @@ function showResults() {
   showScreen('resultsScreen');
 }
 
+
+/* ── KEYBOARD SHORTCUTS ── added 20 Aug 2026 ──────────────────────────────────
+   Desktop in practice, because a touch device has no keyboard to press; the
+   matching legend and the 1-4 badges are shown only by the desktop CSS block.
+   The handler is deliberately conservative:
+     · it does nothing unless the game screen is the active one;
+     · it only ever clicks a control that is already visible and enabled, so it
+       can never trigger something the mouse could not;
+     · Ctrl / Alt / Cmd combinations are left to the browser;
+     · Enter and Space are ignored while a button or link has focus, so the
+       focused element is not activated twice;
+     · keys typed in a field are ignored (there is no field today — this is a
+       guard for later).
+   Both G and B grade a drawing "got it" (good / bonne réponse), M and N grade
+   it "missed" (missed / mauvaise), so the mnemonic works in either language.
+   -------------------------------------------------------------------------- */
+function kbdVisible(el) {
+  // offsetParent is null for anything display:none, itself or up the tree
+  return !!el && !el.disabled && el.offsetParent !== null;
+}
+
+function updateKbdLegend() {
+  const el = document.getElementById('kbdLegend');
+  if (el) el.innerHTML = t(questionMode === 'draw' ? 'kbdDraw' : 'kbdQuiz');
+}
+
+function initKeyboard() {
+  document.addEventListener('keydown', e => {
+    if (e.ctrlKey || e.altKey || e.metaKey) return;
+    if (!document.getElementById('gameScreen').classList.contains('active')) return;
+
+    const ae = document.activeElement;
+    const tag = ae ? ae.tagName : '';
+    if (tag === 'INPUT' || tag === 'TEXTAREA' || (ae && ae.isContentEditable)) return;
+    const onControl = tag === 'BUTTON' || tag === 'A';
+
+    const k = e.key;
+    const low = k.toLowerCase();
+
+    // 1-4 — pick that answer, while the question is still open
+    if (k >= '1' && k <= '4' && questionMode !== 'draw' && !answered) {
+      const btn = document.querySelectorAll('.choice-btn')[Number(k) - 1];
+      if (kbdVisible(btn)) { e.preventDefault(); btn.click(); }
+      return;
+    }
+
+    // Enter — Next if it is up, otherwise Reveal in Draw mode
+    if (k === 'Enter') {
+      if (onControl) return;              // let the focused button handle it
+      const next = document.getElementById('nextBtn');
+      if (kbdVisible(next) && next.classList.contains('visible')) {
+        e.preventDefault(); next.click(); return;
+      }
+      const reveal = document.getElementById('revealBtn');
+      if (kbdVisible(reveal)) { e.preventDefault(); reveal.click(); }
+      return;
+    }
+
+    // Space — replay the sound, without scrolling the page
+    if (k === ' ' || k === 'Spacebar') {
+      if (onControl) return;
+      const prompt = document.getElementById('promptAudioBtn');
+      const speaker = document.getElementById('speakerBtn');
+      if (questionMode === 'draw' && kbdVisible(prompt)) { e.preventDefault(); prompt.click(); }
+      else if (kbdVisible(speaker)) { e.preventDefault(); speaker.click(); }
+      return;
+    }
+
+    if (questionMode !== 'draw') return;
+
+    // Draw mode only, from here down
+    if (low === 'u' || low === 'c') {
+      const btn = document.getElementById(low === 'u' ? 'undoBtn' : 'clearBtn');
+      if (kbdVisible(btn)) { e.preventDefault(); btn.click(); }
+      return;
+    }
+    if (low === 'g' || low === 'b' || low === 'm' || low === 'n') {
+      const row = document.getElementById('gradeRow');
+      if (!row || row.offsetParent === null) return;
+      const good = low === 'g' || low === 'b';
+      const btn = row.querySelector(good ? '.grade-btn.good' : '.grade-btn.bad');
+      if (kbdVisible(btn)) { e.preventDefault(); btn.click(); }
+    }
+  });
+}
+
 function init() {
   applyLang();
   placeStartBtn(document.querySelector('.option-card.selected'));   // added 19 Aug 2026
   initTTS();
   initCanvases();
+  initKeyboard();      // 20 Aug 2026
+  updateKbdLegend();   // 20 Aug 2026
   // Warm the local Thai face so the first ghost letterform is not drawn with a fallback
   if (document.fonts && document.fonts.load) {
     document.fonts.load('40px SarabunLocal', 'ก')
