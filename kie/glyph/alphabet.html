@@ -1155,6 +1155,10 @@ body {
 .th-home-btn:hover{transform:translateY(-1px); border-color:#d4a012; box-shadow:0 4px 14px rgba(212,160,18,.28)}
 .th-home-btn img{width:30px; height:30px; display:block}
 
+/* The right-hand column wrapper is inert until the desktop block picks it up:
+   display:contents makes its children behave as if it were not there. */
+.game-left, .game-right { display: contents; }
+
 /* Keyboard shortcut legend. Hidden by default — the desktop block below is the
    only thing that shows it, so it must come BEFORE that block: both rules have
    the same specificity, so source order decides. */
@@ -1213,33 +1217,32 @@ body {
     max-width: 1120px;
     column-gap: 2rem;
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    /* Two wrappers, one row: each column stacks its own contents, so the card
+       and the answers (or the canvas) both start level at the top whatever
+       either side's height turns out to be. */
     grid-template-areas:
-      "bar    bar"
-      "modes  modes"
-      "clue   clue"
-      "card   slot"
-      "card   choices"
-      "card   legend"
-      "card   draw"
-      "card   feedback"
-      "card   next"
-      "strip  strip";
+      "bar   bar"
+      "modes modes"
+      "clue  clue"
+      "left  right"
+      "strip strip";
     align-content: start;
     padding-bottom: 3rem;
   }
-  #gameScreen.active > .top-bar            { grid-area: bar; }
-  #gameScreen.active > .mode-row           { grid-area: modes; }
-  #gameScreen.active > .clue-row           { grid-area: clue; }
-  #gameScreen.active > .char-card          { grid-area: card; align-self: start;
-                                             position: sticky; top: 1.25rem;
-                                             margin-bottom: 0; }
-  #gameScreen.active > #nextSlotTop        { grid-area: slot; }
-  #gameScreen.active > .choices            { grid-area: choices; }
-  #gameScreen.active > .kbd-legend         { grid-area: legend; }
-  #gameScreen.active > .draw-wrap          { grid-area: draw; }
-  #gameScreen.active > #feedbackSlotBottom { grid-area: feedback; }
-  #gameScreen.active > #nextSlotBottom     { grid-area: next; }
-  #gameScreen.active > .review-strip       { grid-area: strip; }
+  #gameScreen.active > .top-bar     { grid-area: bar; }
+  #gameScreen.active > .mode-row    { grid-area: modes; }
+  #gameScreen.active > .clue-row    { grid-area: clue; }
+  #gameScreen.active > .game-left   { grid-area: left; }
+  #gameScreen.active > .game-right  { grid-area: right; }
+  #gameScreen.active > .game-left,
+  #gameScreen.active > .game-right  { display: flex; flex-direction: column;
+                                      min-width: 0; }
+  .game-left > .char-card           { position: sticky; top: 1.25rem;
+                                      margin-bottom: 0; }
+  /* 20 Aug 2026, second pass: the shortcut list reads better under the glyph
+     card than wedged between the answers and the canvas. */
+  .game-left > .kbd-legend          { margin: 0.85rem 0 0; }
+  #gameScreen.active > .review-strip{ grid-area: strip; }
 
   /* renderQuestion() sets .char-display's font-size inline (120px, or 96/52px in
      Sound → Thai), so no font-size rule here could ever win — and `transform`
@@ -1403,6 +1406,12 @@ body {
     <div class="clue-chip" id="clueAudio" onclick="setClue('audio')" data-i18n="clueAudio">🔊 only</div>
   </div>
 
+  <!-- Left-hand column on a desktop: the character card and, under it, the
+       keyboard shortcuts. Like .game-right this wrapper is display:contents
+       everywhere else, so on a phone the card stays a direct child of the flex
+       column and the old layout is untouched. (20 Aug 2026) -->
+  <div class="game-left">
+
   <div class="char-card" id="charCard">
     <div class="class-pip pip-mid" id="classPip">middle</div>
     <!-- Sound on/off, for practising in a public place without disturbing anyone
@@ -1455,17 +1464,26 @@ body {
     <div class="no-tts" id="noTts" data-i18n="noVoice">Thai voice not available on this device</div>
   </div>
 
+  <!-- Keyboard shortcuts, added 20 Aug 2026, moved under the card on 20 Aug
+       (second pass). Hidden by default; only the desktop CSS block (min-width
+       900px + a fine pointer) shows it, so a phone or tablet never renders it.
+       updateKbdLegend() fills it in. -->
+  <div class="kbd-legend" id="kbdLegend"></div>
+
+  </div><!-- /.game-left -->
+
+  <!-- Everything from here to the review strip is the right-hand column on a
+       desktop. The wrapper is display:contents everywhere else, so on a phone
+       these blocks stay direct children of the flex column exactly as before
+       and nothing about the old layout changes. (20 Aug 2026) -->
+  <div class="game-right">
+
   <!-- Draw mode parks its action buttons here, right under the prompt, so a full
        round needs no scrolling back down to the bottom of the page: first the
        Got it / Missed it pair on reveal, then Next once graded. -->
   <div id="nextSlotTop"></div>
 
   <div class="choices" id="choices"></div>
-
-  <!-- Keyboard shortcuts, added 20 Aug 2026. Hidden by default; only the
-       desktop CSS block (min-width 900px + a fine pointer) shows it, so a
-       phone or tablet never renders it. updateKbdLegend() fills it in. -->
-  <div class="kbd-legend" id="kbdLegend"></div>
 
   <!-- Draw mode only: canvas + tools -->
   <div class="draw-wrap" id="drawWrap" style="display:none">
@@ -1529,6 +1547,8 @@ body {
   <div id="nextSlotBottom">
     <button class="next-btn" id="nextBtn" onclick="nextQuestion()">Next →</button>
   </div>
+
+  </div><!-- /.game-right -->
 
   <div class="review-strip" id="reviewStrip"></div>
 </div>
