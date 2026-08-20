@@ -2187,6 +2187,23 @@ function renderPrompt() {
 
 function cap(s) { return s ? s.charAt(0).toUpperCase() + s.slice(1) : ''; }
 
+// Fill the feedback block with the answer and park it in the tile, verdict left
+// blank until the reader grades themselves (20 Aug 2026). applyResult() writes
+// the verdict into the same #feedbackMain afterwards.
+function showAnswerBlock() {
+  const c = currentChar;
+  const fb = document.getElementById('feedback');
+  fb.className = 'feedback';
+  document.getElementById('feedbackMain').textContent = '';
+  document.getElementById('feedbackSub').textContent =
+    `${c.th} — ${phonOf(c)} — "${meaningOf(c)}"`;
+  document.getElementById('exampleWord').textContent = c.thaiFull;
+  document.getElementById('exampleLabel').textContent = '· ' + meaningOf(c);
+  document.getElementById('feedbackExample').style.display = 'flex';
+  document.getElementById('exampleSpeakBtn').classList.remove('speaking');
+  moveToSlot('feedback', 'strokePanel');
+}
+
 // Audio clue in Draw mode: the full recited name, e.g. "บอ ใบไม้"
 function speakPrompt() {
   playName(currentChar, document.getElementById('promptAudioBtn'));
@@ -2381,6 +2398,11 @@ function revealGlyph() {
   document.getElementById('promptBlock').style.display = 'none';
   document.getElementById('charHint').style.display = 'none';
   moveToSlot('strokePanel', 'strokeSlotCard');
+  // Everything the reader needs is on screen in one step (20 Aug 2026): the
+  // answer block is filled in and moved into the tile right now, beside the
+  // animation, at the same moment as the Got it / Missed it question. Grading
+  // then only adds its verdict line above — nothing else moves or appears.
+  showAnswerBlock();
   autoSpoken = true;       // the reveal is the one automatic playback per question
   speakCurrent();
   // Reveal is clicked from down by the canvas — bring the prompt, the grade
