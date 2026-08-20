@@ -617,6 +617,17 @@ body {
 #ghostCanvas { z-index: 2; opacity: 0; transition: opacity 0.25s ease; }
 #ghostCanvas.show { opacity: 1; }
 #guideCanvas { z-index: 1; }
+/* The stroke animation shares the ghost's layer: same place, same purpose, and
+   only one of the two is ever shown (20 Aug 2026) */
+#strokeAnim {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  z-index: 2;
+  pointer-events: none;
+}
 
 .canvas-hint {
   font-size: 11px;
@@ -715,7 +726,9 @@ body {
   margin-top: 0;
   justify-content: center;
 }
-#strokeSlotCard .stroke-panel img { width: 96px; height: 96px; }
+/* 20 Aug 2026: the animation plays in the writing area instead, so the copy that
+   used to sit in the tile is gone. Was: width: 96px; height: 96px; */
+#strokeSlotCard .stroke-panel img { display: none; }
 /* 19 Aug 2026: the animation carries the tile on its own — the name and meaning
    arrive with the example chip after grading, so this line would repeat them.
    Was: #strokeSlotCard .stroke-text { font-size: 15px; text-align: left; } */
@@ -1323,6 +1336,10 @@ body {
     <div class="canvas-box">
       <canvas id="guideCanvas"></canvas>
       <canvas id="ghostCanvas"></canvas>
+      <!-- Stroke-order animation, played inside the writing area on reveal so the
+           model is where the drawing is. Under the ink layer, so your own strokes
+           stay on top of it. (20 Aug 2026 — it used to sit in the tile.) -->
+      <img id="strokeAnim" alt="" data-i18n-alt="altStroke" style="display:none">
       <canvas id="inkCanvas"></canvas>
     </div>
     <div class="canvas-hint" data-i18n="canvasHint">Draw the character with your finger, stylus or mouse</div>
@@ -2365,6 +2382,9 @@ function resetDrawing() {
   if (inkCtx) inkCtx.clearRect(0, 0, inkCanvas.width, inkCanvas.height);
   if (ghostCtx) ghostCtx.clearRect(0, 0, ghostCanvas.width, ghostCanvas.height);
   ghostCanvas.style.opacity = '0';
+  const anim = document.getElementById('strokeAnim');   // added 20 Aug 2026
+  anim.style.display = 'none';
+  anim.removeAttribute('src');
   document.getElementById('revealBtn').style.display = 'block';
   placeRevealBtn(false);   // blank canvas, so Reveal starts down there again
   // Give the tile its clue back and send the stroke panel home (19 Aug 2026)
@@ -2393,13 +2413,20 @@ function revealGlyph() {
   // Stroke-order animation for this character, if we have artwork for it
   const gif = STROKE_GIF[currentChar.th];
   const panel = document.getElementById('strokePanel');
+  const anim = document.getElementById('strokeAnim');
   if (gif) {
     // cache-bust so the GIF restarts from stroke 1 every time it is revealed
-    document.getElementById('strokeImg').src = gif + '?r=' + Date.now();
+    anim.src = gif + '?r=' + Date.now();
+    anim.style.display = 'block';
+    // the animation already draws the letterform, so the static ghost stands down
+    ghostCanvas.classList.remove('show');
+    ghostCanvas.style.opacity = '0';
     document.getElementById('strokeText').innerHTML =
       `<b>${currentChar.th}</b> — ${phonOf(currentChar)}<br>${cap(meaningOf(currentChar))}`;
     panel.classList.add('visible');
   } else {
+    // no artwork for this one (the numerals): fall back to the ghost outline
+    anim.style.display = 'none';
     panel.classList.remove('visible');
   }
   // The revealed answer takes over the tile: the clue and the "Draw this…" hint
