@@ -729,6 +729,18 @@ body {
   min-height: 0;
   min-width: 0;
 }
+/* Inside the tile the chip keeps the Thai name only (19 Aug 2026): its speaker
+   repeats the Hear it button below, and its gloss repeats the meaning on the
+   line above. No box either, so the tile reads as one white surface.
+   The multiple-choice modes keep the full chip, where it sits on the page. */
+#strokePanel .feedback-example {
+  background: transparent;
+  border: none;
+  padding: 2px 0;
+  margin-top: 4px;
+}
+#strokePanel .example-speak-btn,
+#strokePanel .example-label { display: none; }
 .stroke-text b { font-weight: 400; font-style: italic; color: var(--ink); }
 
 /* ── START SCREEN ── */
