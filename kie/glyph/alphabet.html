@@ -2454,6 +2454,11 @@ function gradeDrawing(ok) {
   document.getElementById('gradeRow').classList.remove('visible');
   placeGradeRow(false);           // frees the slot for the Next button
   applyResult(ok);
+  // Once you have judged your own attempt, your ink has done its job — wipe it so
+  // the stroke animation underneath is left clear to study (20 Aug 2026).
+  // redrawInk() also greys out Undo and Clear, since there is nothing left to undo.
+  strokes = [];
+  redrawInk();
   // The grade buttons sit low on the page — bring the prompt, the Next button and
   // the revealed letterform back into view instead of leaving the user down there.
   document.getElementById('charCard').scrollIntoView({ behavior: 'smooth', block: 'start' });
