@@ -2255,6 +2255,11 @@ function initCanvases() {
   inkCanvas.addEventListener('pointerleave', onPointerUp);
 
   window.addEventListener('resize', () => { if (questionMode === 'draw') sizeCanvases(); });
+  // orientationchange fires before the new size settles on some phones, hence the
+  // short delay; sizeCanvases() repaints the guides, the ink and the ghost.
+  window.addEventListener('orientationchange', () => {
+    setTimeout(() => { if (questionMode === 'draw') sizeCanvases(); }, 250);
+  });
 }
 
 // Match the backing store to the CSS box (and the device pixel ratio) so the
@@ -2292,19 +2297,41 @@ function drawGuides() {
   guideCtx.setLineDash([]);
 }
 
-// The model letterform, drawn from the same Sarabun face as the stroke artwork
+// The model letterform, drawn from the same Sarabun face as the stroke artwork.
+//
+// 20 Aug 2026 — centred on the glyph's own ink, not on the font's box. Antoine saw
+// the ghost sitting low and to the right on his phone: textAlign 'center' plus
+// textBaseline 'middle' centre the em box and the advance width, which only lands
+// on the ink when the intended face is in use. If Sarabun.ttf has not loaded (or a
+// mobile browser refuses it) the fallback face's side bearings push the shape off.
+// measureText's actualBoundingBox* gives the real ink box, so the glyph is centred
+// whatever face ends up drawing it. The old centring is kept as the fallback for
+// any engine that does not report those metrics.
 function drawGhost() {
   const w = ghostCanvas.width, h = ghostCanvas.height;
+  const cx = w / 2, cy = h * 0.51;
   ghostCtx.clearRect(0, 0, w, h);
-  const size = h * 0.70;
-  ghostCtx.font = size + 'px ' + GHOST_FONT;
-  ghostCtx.textAlign = 'center';
-  ghostCtx.textBaseline = 'middle';
+  ghostCtx.font = (h * 0.70) + 'px ' + GHOST_FONT;
   ghostCtx.fillStyle = 'rgba(200,136,42,0.16)';
-  ghostCtx.fillText(currentChar.th, w / 2, h * 0.51);
   ghostCtx.lineWidth = Math.max(1.5, w / 260);
   ghostCtx.strokeStyle = 'rgba(200,136,42,0.62)';
-  ghostCtx.strokeText(currentChar.th, w / 2, h * 0.51);
+
+  ghostCtx.textAlign = 'left';
+  ghostCtx.textBaseline = 'alphabetic';
+  const m = ghostCtx.measureText(currentChar.th);
+  const ink = [m.actualBoundingBoxLeft, m.actualBoundingBoxRight,
+               m.actualBoundingBoxAscent, m.actualBoundingBoxDescent];
+  let x = cx, y = cy;
+  if (ink.every(v => typeof v === 'number' && isFinite(v))) {
+    // pen position that puts the middle of the ink box on (cx, cy)
+    x = cx - (m.actualBoundingBoxRight - m.actualBoundingBoxLeft) / 2;
+    y = cy + (m.actualBoundingBoxAscent - m.actualBoundingBoxDescent) / 2;
+  } else {
+    ghostCtx.textAlign = 'center';
+    ghostCtx.textBaseline = 'middle';
+  }
+  ghostCtx.fillText(currentChar.th, x, y);
+  ghostCtx.strokeText(currentChar.th, x, y);
 }
 
 function redrawInk() {
@@ -2546,7 +2573,10 @@ function init() {
   initCanvases();
   // Warm the local Thai face so the first ghost letterform is not drawn with a fallback
   if (document.fonts && document.fonts.load) {
-    document.fonts.load('40px SarabunLocal', 'ก').catch(() => {});
+    document.fonts.load('40px SarabunLocal', 'ก')
+      // redraw with the real metrics once the face is in (20 Aug 2026)
+      .then(() => { if (revealed && questionMode === 'draw') drawGhost(); })
+      .catch(() => {});
   }
 }
 
