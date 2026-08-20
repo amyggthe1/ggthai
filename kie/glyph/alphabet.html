@@ -2311,13 +2311,26 @@ function drawGhost() {
   const w = ghostCanvas.width, h = ghostCanvas.height;
   const cx = w / 2, cy = h * 0.51;
   ghostCtx.clearRect(0, 0, w, h);
-  ghostCtx.font = (h * 0.70) + 'px ' + GHOST_FONT;
   ghostCtx.fillStyle = 'rgba(200,136,42,0.16)';
   ghostCtx.lineWidth = Math.max(1.5, w / 260);
   ghostCtx.strokeStyle = 'rgba(200,136,42,0.62)';
-
   ghostCtx.textAlign = 'left';
   ghostCtx.textBaseline = 'alphabetic';
+
+  // Size from the measured ink rather than from the em size (20 Aug 2026, asked
+  // for bigger): fill INK_H of the box's height, capped at INK_W of its width, so
+  // every letter comes out the same visual size whatever its ascenders and
+  // descenders do. Was a flat font size of h * 0.70, which drew about 0.60h of ink.
+  const INK_H = 0.80, INK_W = 0.82;
+  let size = h * 0.70;
+  ghostCtx.font = size + 'px ' + GHOST_FONT;
+  let m0 = ghostCtx.measureText(currentChar.th);
+  const inkH0 = m0.actualBoundingBoxAscent + m0.actualBoundingBoxDescent;
+  const inkW0 = m0.actualBoundingBoxRight - m0.actualBoundingBoxLeft;
+  if (isFinite(inkH0) && isFinite(inkW0) && inkH0 > 0 && inkW0 > 0) {
+    size *= Math.min((h * INK_H) / inkH0, (w * INK_W) / inkW0);
+    ghostCtx.font = size + 'px ' + GHOST_FONT;
+  }
   const m = ghostCtx.measureText(currentChar.th);
   const ink = [m.actualBoundingBoxLeft, m.actualBoundingBoxRight,
                m.actualBoundingBoxAscent, m.actualBoundingBoxDescent];
