@@ -2279,10 +2279,13 @@ function redrawInk() {
   const has = strokes.length > 0;
   document.getElementById('undoBtn').disabled = !has;
   document.getElementById('clearBtn').disabled = !has;
-  // Reveal follows the ink: up under the prompt as soon as there is something to
-  // check, back under the canvas when the drawing is undone or cleared.
-  // Not while the answer is showing — the grade pair owns that slot. (19 Aug 2026)
-  if (!revealed) placeRevealBtn(has);
+  // Reveal follows the ink: up under the prompt once there is something to check,
+  // back under the canvas when the drawing is undone or cleared.
+  // Not while the answer is showing — the grade pair owns that slot.
+  // Not mid-stroke either (activeStroke): moving it while the pen is down shifts
+  // the page under the drawing hand. onPointerUp does that move instead.
+  // (19 Aug 2026; the mid-stroke guard added the same day.)
+  if (!revealed && !activeStroke) placeRevealBtn(has);
 }
 
 // Park Reveal under the prompt (atTop) or back under the canvas (19 Aug 2026)
@@ -2311,7 +2314,11 @@ function onPointerMove(e) {
   redrawInk();
 }
 
-function onPointerUp() { activeStroke = null; }
+function onPointerUp() {
+  activeStroke = null;
+  // The stroke is finished — now Reveal may come up (19 Aug 2026)
+  if (!revealed) placeRevealBtn(strokes.length > 0);
+}
 
 function undoStroke() {
   strokes.pop();
