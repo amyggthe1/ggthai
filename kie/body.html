@@ -265,12 +265,14 @@
 <style>
 /* The plate is a positioning context: each speaker sits at the exact spot the
    printed answer box used to occupy (percentages, so it stays aligned at any
-   width). Sizes are percentages of the plate too — 5.8% wide and 2.95% tall is
-   the footprint of the old box in the scan. */
+   width). Sizes are percentages of the plate too — the footprint of the old box
+   in the scan. 22 Aug 2026: the width dropped 5.8% -> 4.80% (and 7% -> 5.80% on
+   phones) when the canvas was widened by 120px each side for the Thai — the box
+   is still 67px, but the plate it is a percentage of is now 1395px, not 1156. */
 .th-plate{position:relative; display:inline-block; width:100%; max-width:770px; line-height:0}
 .th-plate img{display:block; width:100%; height:auto}
 .th-hot{
-  position:absolute; width:5.8%; height:2.95%; transform:translate(-50%,-50%);
+  position:absolute; width:4.80%; height:2.95%; transform:translate(-50%,-50%);
   display:flex; align-items:center; justify-content:center; padding:0;
   border:none; border-radius:5px; cursor:pointer; color:#1a7a6e;
   background:rgba(26,122,110,.09); opacity:.85;
@@ -305,7 +307,7 @@
 .th-readout .hint{font-size:.78rem; font-style:italic; opacity:.6; letter-spacing:.04em}
 .th-fig{margin:30px auto 6px; padding:0 40px; max-width:890px; text-align:center}
 @media (max-width:600px){.th-fig{margin:22px auto 4px; padding:0 14px}
-  .th-hot{width:7%; height:3.4%}}
+  .th-hot{width:5.80%; height:3.4%}}
 @media print{.th-hot{display:none}}
 </style>
 <figure class="th-fig">
