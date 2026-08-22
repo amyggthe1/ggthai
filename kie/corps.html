@@ -287,6 +287,16 @@
   from{transform:translate(-50%,-50%) scale(1)}
   to{transform:translate(-50%,-50%) scale(1.18)}
 }
+/* 22 Aug 2026 — the Thai words are no longer part of the scan: they were
+   erased from the PNG and are drawn here as real text, so they use the page's
+   own font stack (and therefore the same Thai face as the vocabulary tables
+   below, whatever the device falls back to). Sizes are in cqw = percent of the
+   plate width, so the words scale with the drawing; `right` anchors each word
+   to where the printed one ended, and top is its baseline. */
+.th-plate{container-type:inline-size}
+.th-thai{position:absolute; transform:translateY(-0.80em); white-space:nowrap;
+  font-size:2.7cqw; font-weight:600; line-height:1; color:#1a1a1a;
+  pointer-events:none; user-select:none}
 .th-readout{font-family:'Source Sans 3',sans-serif; font-size:.92rem; line-height:1.5;
   color:#2c3e50; margin-top:10px; min-height:1.5em}
 .th-readout .w{font-size:1.15rem; font-weight:600; color:#1a7a6e}
@@ -339,6 +349,25 @@
     data-say="ขา" data-ph="(kha) kʰǎː" data-tr="la jambe" title="ขา · (kha) kʰǎː — la jambe" aria-label="Écouter : ขา, la jambe"></button>
   <button type="button" class="th-hot" style="left:14.36%;top:96.30%"
     data-say="เท้า" data-ph="(Thǎo) tʰâːw" data-tr="le pied" title="เท้า · (Thǎo) tʰâːw — le pied" aria-label="Écouter : เท้า, le pied"></button>
+    <span class="th-thai" style="right:11.16%;top:14.89%">ผม</span>
+    <span class="th-thai" style="right:96.02%;top:16.78%">หัว</span>
+    <span class="th-thai" style="right:8.91%;top:20.41%">หู</span>
+    <span class="th-thai" style="right:95.93%;top:21.69%">คิ้ว</span>
+    <span class="th-thai" style="right:5.97%;top:24.79%">จมูก</span>
+    <span class="th-thai" style="right:96.19%;top:25.85%">ตา</span>
+    <span class="th-thai" style="right:10.38%;top:28.50%">ปาก</span>
+    <span class="th-thai" style="right:95.50%;top:30.01%">ฟัน</span>
+    <span class="th-thai" style="right:6.06%;top:32.80%">คอ</span>
+    <span class="th-thai" style="right:94.98%;top:36.05%">ไหล่</span>
+    <span class="th-thai" style="right:95.85%;top:41.72%">อก</span>
+    <span class="th-thai" style="right:7.01%;top:47.39%">แขน</span>
+    <span class="th-thai" style="right:94.20%;top:53.44%">ท้อง</span>
+    <span class="th-thai" style="right:6.06%;top:53.44%">หลัง</span>
+    <span class="th-thai" style="right:95.67%;top:64.78%">มือ</span>
+    <span class="th-thai" style="right:8.91%;top:65.91%">นิ้วมือ</span>
+    <span class="th-thai" style="right:95.59%;top:85.56%">เข่า</span>
+    <span class="th-thai" style="right:9.00%;top:90.85%">ขา</span>
+    <span class="th-thai" style="right:95.33%;top:97.28%">เท้า</span>
   </div>
   <script>
 (function(){
