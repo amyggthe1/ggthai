@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Months of the Year – Thai</title>
+  <title>Les mois de l’année – Thaï</title>
 <!-- Favicon and app icons: the Thai elephant (added 19 Aug 2026).
      favicon.ico carries 16/32/48 for browser tabs and bookmarks;
      apple-touch-icon is what iOS uses for Add to Home Screen, and
@@ -230,18 +230,17 @@
 .th-home-btn img{width:30px; height:30px; display:block}
 @media print{.th-home-btn{display:none}}
 </style>
-<a class="th-home-btn" href="home.html" title="Home — หน้าแรก" aria-label="Back to the main page">
+<a class="th-home-btn" href="home.html" title="Accueil — หน้าแรก" aria-label="Retour à la page principale">
   <!-- 19 Aug 2026: Antoine's own drawing (Home.png, trimmed and resized to
        home-icon.png) replaces the inline SVG house that was here before -->
   <img src="home-icon.png" alt="" width="30" height="30">
 </a>
 
 <!-- ── LANGUAGE FLAG ── added 22 Aug 2026
-     Links this English page to its French twin (mois.html), the same way
-     glyph.html and graphie.html are paired. Self-contained on purpose: its own
-     `th-lang-*` class names and its own <style> block, so the identical snippet
-     drops into any page. On the French page the flag is the British one and it
-     points back here. -->
+     French twin of months.html, mirroring the glyph.html / graphie.html pair.
+     The flag here is the British one and it links back to the English page.
+     Self-contained on purpose: its own `th-lang-*` class names and its own
+     <style> block. -->
 <style>
 .th-lang-btn{
   position:fixed; top:12px; right:12px; z-index:9999;
@@ -258,18 +257,18 @@
   font-family:'Source Sans 3',sans-serif}
 @media print{.th-lang-btn{display:none}}
 </style>
-<a class="th-lang-btn" href="mois.html" title="Version française" aria-label="Version francaise de cette page">
-  <svg viewBox="0 0 60 40" aria-hidden="true"><rect width="20" height="40" fill="#002395"/><rect x="20" width="20" height="40" fill="#fff"/><rect x="40" width="20" height="40" fill="#ED2939"/></svg>
-  <span class="lang">FR</span>
+<a class="th-lang-btn" href="months.html" title="English version" aria-label="English version of this page">
+  <svg viewBox="0 0 60 40" aria-hidden="true"><rect width="60" height="40" fill="#012169"/><path d="M0 0 60 40M60 0 0 40" stroke="#fff" stroke-width="8"/><path d="M0 0 60 40M60 0 0 40" stroke="#C8102E" stroke-width="4"/><path d="M30 0V40M0 20H60" stroke="#fff" stroke-width="13"/><path d="M30 0V40M0 20H60" stroke="#C8102E" stroke-width="8"/></svg>
+  <span class="lang">EN</span>
 </a>
 
 
   <!-- HERO -->
   <section class="hero">
     <div class="hero-text">
-      <h1>Months of the Year</h1>
+      <h1>Les mois de l’année</h1>
       <h2>เดือน <span style="font-size:0.75em; opacity:0.7; font-style:italic;">(duuean)</span></h2>
-      <a href="index.html?source=Months" class="quiz-cta">🎯 Take the quiz of this lesson →</a>
+      <a href="index.html?source=Months" class="quiz-cta">🎯 Faire le quiz de cette leçon →</a>
     </div>
   </section>
 
@@ -279,9 +278,9 @@
       <thead>
         <tr>
           <th>Thai (ภาษาไทย)</th>
-          <th>Abbrev.</th>
-          <th>Phonemic</th>
-          <th>English</th>
+          <th>Abréviation</th>
+          <th>Phonétique</th>
+          <th>Français</th>
         </tr>
       </thead>
       <tbody id="month-tbody">
@@ -292,24 +291,28 @@
 
   <!-- FOOTER -->
   <footer>
-    <span>Months of the Year</span> &nbsp;·&nbsp; Thai Language Cheat Sheet
-   &nbsp;·&nbsp; <a href="lessons.html" style="color:inherit;text-decoration:underline;opacity:0.8;">← Back to lessons</a></footer>
+    <span>Les mois de l’année</span> &nbsp;·&nbsp; Fiche de révision de thaï
+   &nbsp;·&nbsp; <a href="lessons.html" style="color:inherit;text-decoration:underline;opacity:0.8;">← Retour aux leçons</a></footer>
 
   <script>
     // ── Data ────────────────────────────────────────────────────────────
+    // 22 Aug 2026 — version française de months.html.
+    // `phonemic` reprend la transcription adaptée au lecteur francophone
+    // (H = h aspiré après la consonne, dj = จ, ou = อุ), comme sur graphie.html.
+    // La colonne anglaise d'origine devient la colonne « français ».
     const months = [
-      { thai: "มกราคม",   abbrev: "ม.ค.",  phonemic: "mók-ga-raa-khom",    english: "January"   },
-      { thai: "กุมภาพันธ์", abbrev: "ก.พ.",  phonemic: "gum-phaa-phan",      english: "February"  },
-      { thai: "มีนาคม",   abbrev: "มี.ค.",  phonemic: "mii-naa-khom",       english: "March"     },
-      { thai: "เมษายน",   abbrev: "เม.ย.",  phonemic: "mee-sǎa-yon",        english: "April"     },
-      { thai: "พฤษภาคม",  abbrev: "พ.ค.",   phonemic: "phrúet-sà-phaa-khom", english: "May"       },
-      { thai: "มิถุนายน",  abbrev: "มิ.ย.",  phonemic: "mí-thù-naa-yon",     english: "June"      },
-      { thai: "กรกฎาคม",  abbrev: "ก.ค.",   phonemic: "gà-rák-ga-daa-khom", english: "July"      },
-      { thai: "สิงหาคม",  abbrev: "ส.ค.",   phonemic: "sǐng-hǎa-khom",      english: "August"    },
-      { thai: "กันยายน",  abbrev: "ก.ย.",   phonemic: "gan-yaa-yon",        english: "September" },
-      { thai: "ตุลาคม",   abbrev: "ต.ค.",   phonemic: "dtù-laa-khom",       english: "October"   },
-      { thai: "พฤศจิกายน", abbrev: "พ.ย.",  phonemic: "phrúet-sà-jì-gaa-yon", english: "November" },
-      { thai: "ธันวาคม",  abbrev: "ธ.ค.",   phonemic: "than-waa-khom",      english: "December"  },
+      { thai: "มกราคม",   abbrev: "ม.ค.",  phonemic: "mók-ka-raa-kHom",      english: "janvier"   },
+      { thai: "กุมภาพันธ์", abbrev: "ก.พ.",  phonemic: "koum-pHaa-pHan",       english: "février"   },
+      { thai: "มีนาคม",   abbrev: "มี.ค.",  phonemic: "mii-naa-kHom",         english: "mars"      },
+      { thai: "เมษายน",   abbrev: "เม.ย.",  phonemic: "mee-sǎa-yon",          english: "avril"     },
+      { thai: "พฤษภาคม",  abbrev: "พ.ค.",   phonemic: "pHrúet-sà-pHaa-kHom",  english: "mai"       },
+      { thai: "มิถุนายน",  abbrev: "มิ.ย.",  phonemic: "mí-tHòu-naa-yon",      english: "juin"      },
+      { thai: "กรกฎาคม",  abbrev: "ก.ค.",   phonemic: "ka-rák-ka-daa-kHom",   english: "juillet"   },
+      { thai: "สิงหาคม",  abbrev: "ส.ค.",   phonemic: "sǐng-Hǎa-kHom",        english: "août"      },
+      { thai: "กันยายน",  abbrev: "ก.ย.",   phonemic: "kan-yaa-yon",          english: "septembre" },
+      { thai: "ตุลาคม",   abbrev: "ต.ค.",   phonemic: "tòu-laa-kHom",         english: "octobre"   },
+      { thai: "พฤศจิกายน", abbrev: "พ.ย.",  phonemic: "pHrúet-sà-djì-kaa-yon", english: "novembre" },
+      { thai: "ธันวาคม",  abbrev: "ธ.ค.",   phonemic: "tHan-waa-kHom",        english: "décembre"  },
     ];
 
     // ── TTS ─────────────────────────────────────────────────────────────
@@ -370,8 +373,8 @@
 
         const btn = document.createElement('button');
         btn.className = 'speak-btn';
-        btn.title = `Play: ${m.thai}`;
-        btn.setAttribute('aria-label', `Play Thai pronunciation of ${m.english}`);
+        btn.title = `Écouter : ${m.thai}`;
+        btn.setAttribute('aria-label', `Écouter la prononciation thaïe de ${m.english}`);
         btn.innerHTML = speakerSVG();
         btn.addEventListener('click', () => speakThai(m.thai, btn));
 
