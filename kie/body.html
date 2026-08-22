@@ -267,7 +267,7 @@
    printed answer box used to occupy (percentages, so it stays aligned at any
    width). Sizes are percentages of the plate too — 5.8% wide and 2.95% tall is
    the footprint of the old box in the scan. */
-.th-plate{position:relative; display:inline-block; width:100%; max-width:680px; line-height:0}
+.th-plate{position:relative; display:inline-block; width:100%; max-width:770px; line-height:0}
 .th-plate img{display:block; width:100%; height:auto}
 .th-hot{
   position:absolute; width:5.8%; height:2.95%; transform:translate(-50%,-50%);
@@ -287,13 +287,23 @@
   from{transform:translate(-50%,-50%) scale(1)}
   to{transform:translate(-50%,-50%) scale(1.18)}
 }
+/* 22 Aug 2026 — the English plate carried no Thai at all, so the Thai word is
+   drawn here as real text, in the outer margin of each label (the scan was
+   widened by 120px each side to make room). Same treatment as corps.html:
+   page font stack, so it matches the Thai in the vocabulary tables below;
+   sizes in cqw = percent of the plate width, so they scale with the drawing;
+   each word is anchored to the English label it belongs to, on its baseline. */
+.th-plate{container-type:inline-size}
+.th-thai{position:absolute; transform:translateY(-0.80em); white-space:nowrap;
+  font-size:2.24cqw; font-weight:600; line-height:1; color:#1a1a1a;
+  pointer-events:none; user-select:none}
 .th-readout{font-family:'Source Sans 3',sans-serif; font-size:.92rem; line-height:1.5;
   color:#2c3e50; margin-top:10px; min-height:1.5em}
 .th-readout .w{font-size:1.15rem; font-weight:600; color:#1a7a6e}
 .th-readout .p{font-style:italic; color:#555; margin-left:6px}
 .th-readout .t{color:#2a5fa5; font-weight:600; margin-left:6px}
 .th-readout .hint{font-size:.78rem; font-style:italic; opacity:.6; letter-spacing:.04em}
-.th-fig{margin:30px auto 6px; padding:0 40px; max-width:820px; text-align:center}
+.th-fig{margin:30px auto 6px; padding:0 40px; max-width:890px; text-align:center}
 @media (max-width:600px){.th-fig{margin:22px auto 4px; padding:0 14px}
   .th-hot{width:7%; height:3.4%}}
 @media print{.th-hot{display:none}}
@@ -301,44 +311,63 @@
 <figure class="th-fig">
   <div class="th-plate">
     <img src="pics/body.png" alt="Plate of the parts of the body in Thai, each label has a listen button" loading="lazy">
-  <button type="button" class="th-hot" style="left:89.96%;top:13.91%"
+  <button type="button" class="th-hot" style="left:83.09%;top:13.91%"
     data-say="ผม" data-ph="(Phôme) pʰôːm" data-tr="hair" title="ผม · (Phôme) pʰôːm — hair" aria-label="Listen: ผม, hair"></button>
-  <button type="button" class="th-hot" style="left:11.17%;top:15.80%"
+  <button type="button" class="th-hot" style="left:17.85%;top:15.80%"
     data-say="หัว" data-ph="(Hua) hǔa" data-tr="head" title="หัว · (Hua) hǔa — head" aria-label="Listen: หัว, head"></button>
-  <button type="button" class="th-hot" style="left:90.74%;top:18.82%"
+  <button type="button" class="th-hot" style="left:83.73%;top:18.82%"
     data-say="หู" data-ph="(Hou) hǔː" data-tr="ear" title="หู · (Hou) hǔː — ear" aria-label="Listen: หู, ear"></button>
-  <button type="button" class="th-hot" style="left:15.41%;top:20.71%"
+  <button type="button" class="th-hot" style="left:21.36%;top:20.71%"
     data-say="คิ้ว" data-ph="(khíw) kʰíw" data-tr="eyebrow" title="คิ้ว · (khíw) kʰíw — eyebrow" aria-label="Listen: คิ้ว, eyebrow"></button>
-  <button type="button" class="th-hot" style="left:88.92%;top:23.20%"
+  <button type="button" class="th-hot" style="left:82.22%;top:23.20%"
     data-say="จมูก" data-ph="(Ja-mouk) tɕa-mûk" data-tr="nose" title="จมูก · (Ja-mouk) tɕa-mûk — nose" aria-label="Listen: จมูก, nose"></button>
-  <button type="button" class="th-hot" style="left:9.26%;top:24.87%"
+  <button type="button" class="th-hot" style="left:16.27%;top:24.87%"
     data-say="ตา" data-ph="(Taa) taː" data-tr="eye" title="ตา · (Taa) taː — eye" aria-label="Listen: ตา, eye"></button>
-  <button type="button" class="th-hot" style="left:86.58%;top:27.51%"
+  <button type="button" class="th-hot" style="left:80.29%;top:27.51%"
     data-say="ปาก" data-ph="(Paak) pàːk" data-tr="mouth" title="ปาก · (Paak) pàːk — mouth" aria-label="Listen: ปาก, mouth"></button>
-  <button type="button" class="th-hot" style="left:11.52%;top:29.02%"
+  <button type="button" class="th-hot" style="left:18.14%;top:29.02%"
     data-say="ฟัน" data-ph="(Fun) fan" data-tr="teeth" title="ฟัน · (Fun) fan — teeth" aria-label="Listen: ฟัน, teeth"></button>
-  <button type="button" class="th-hot" style="left:89.09%;top:31.82%"
+  <button type="button" class="th-hot" style="left:82.36%;top:31.82%"
     data-say="คอ" data-ph="(Khor) kʰɔː" data-tr="neck" title="คอ · (Khor) kʰɔː — neck" aria-label="Listen: คอ, neck"></button>
-  <button type="button" class="th-hot" style="left:15.93%;top:35.07%"
+  <button type="button" class="th-hot" style="left:21.79%;top:35.07%"
     data-say="ไหล่" data-ph="(laï) lǎi" data-tr="shoulder" title="ไหล่ · (laï) lǎi — shoulder" aria-label="Listen: ไหล่, shoulder"></button>
-  <button type="button" class="th-hot" style="left:11.60%;top:40.74%"
+  <button type="button" class="th-hot" style="left:18.21%;top:40.74%"
     data-say="อก" data-ph="(ok) ʔòk" data-tr="chest" title="อก · (ok) ʔòk — chest" aria-label="Listen: อก, chest"></button>
-  <button type="button" class="th-hot" style="left:89.78%;top:46.41%"
+  <button type="button" class="th-hot" style="left:82.94%;top:46.41%"
     data-say="แขน" data-ph="(Khène) kʰɛ̌ːn" data-tr="arm" title="แขน · (Khène) kʰɛ̌ːn — arm" aria-label="Listen: แขน, arm"></button>
-  <button type="button" class="th-hot" style="left:15.58%;top:52.46%"
+  <button type="button" class="th-hot" style="left:21.50%;top:52.46%"
     data-say="ท้อง" data-ph="(Thǒng) tʰɔ̌ŋ" data-tr="stomach" title="ท้อง · (Thǒng) tʰɔ̌ŋ — stomach" aria-label="Listen: ท้อง, stomach"></button>
-  <button type="button" class="th-hot" style="left:89.09%;top:52.46%"
+  <button type="button" class="th-hot" style="left:82.36%;top:52.46%"
     data-say="หลัง" data-ph="(lǎng) lǎŋ" data-tr="back" title="หลัง · (lǎng) lǎŋ — back" aria-label="Listen: หลัง, back"></button>
-  <button type="button" class="th-hot" style="left:11.34%;top:63.79%"
+  <button type="button" class="th-hot" style="left:17.99%;top:63.79%"
     data-say="มือ" data-ph="(mue) mɯː" data-tr="hand" title="มือ · (mue) mɯː — hand" aria-label="Listen: มือ, hand"></button>
-  <button type="button" class="th-hot" style="left:86.23%;top:64.93%"
+  <button type="button" class="th-hot" style="left:80.00%;top:64.93%"
     data-say="นิ้วมือ" data-ph="(Niw mue) níw mɯː" data-tr="fingers" title="นิ้วมือ · (Niw mue) níw mɯː — fingers" aria-label="Listen: นิ้วมือ, fingers"></button>
-  <button type="button" class="th-hot" style="left:11.00%;top:84.58%"
+  <button type="button" class="th-hot" style="left:17.71%;top:84.58%"
     data-say="เข่า" data-ph="(khào) kʰàw" data-tr="knee" title="เข่า · (khào) kʰàw — knee" aria-label="Listen: เข่า, knee"></button>
-  <button type="button" class="th-hot" style="left:91.00%;top:89.87%"
+  <button type="button" class="th-hot" style="left:83.95%;top:89.87%"
     data-say="ขา" data-ph="(kha) kʰǎː" data-tr="leg" title="ขา · (kha) kʰǎː — leg" aria-label="Listen: ขา, leg"></button>
-  <button type="button" class="th-hot" style="left:10.04%;top:96.30%"
+  <button type="button" class="th-hot" style="left:16.91%;top:96.30%"
     data-say="เท้า" data-ph="(Thǎo) tʰâːw" data-tr="foot" title="เท้า · (Thǎo) tʰâːw — foot" aria-label="Listen: เท้า, foot"></button>
+    <span class="th-thai" style="left:91.61%;top:14.81%">ผม</span>
+    <span class="th-thai" style="right:91.47%;top:16.70%">หัว</span>
+    <span class="th-thai" style="left:91.61%;top:19.73%">หู</span>
+    <span class="th-thai" style="right:91.54%;top:21.62%">คิ้ว</span>
+    <span class="th-thai" style="left:91.47%;top:24.11%">จมูก</span>
+    <span class="th-thai" style="right:91.54%;top:25.77%">ตา</span>
+    <span class="th-thai" style="left:91.40%;top:28.42%">ปาก</span>
+    <span class="th-thai" style="right:91.61%;top:29.93%">ฟัน</span>
+    <span class="th-thai" style="left:91.54%;top:32.73%">คอ</span>
+    <span class="th-thai" style="right:91.54%;top:35.98%">ไหล่</span>
+    <span class="th-thai" style="right:91.54%;top:41.65%">อก</span>
+    <span class="th-thai" style="left:91.40%;top:47.32%">แขน</span>
+    <span class="th-thai" style="right:91.54%;top:53.36%">ท้อง</span>
+    <span class="th-thai" style="left:91.54%;top:53.36%">หลัง</span>
+    <span class="th-thai" style="right:91.47%;top:64.70%">มือ</span>
+    <span class="th-thai" style="left:91.54%;top:65.84%">นิ้วมือ</span>
+    <span class="th-thai" style="right:91.47%;top:85.49%">เข่า</span>
+    <span class="th-thai" style="left:91.40%;top:90.78%">ขา</span>
+    <span class="th-thai" style="right:91.61%;top:97.20%">เท้า</span>
   </div>
   <script>
 (function(){
